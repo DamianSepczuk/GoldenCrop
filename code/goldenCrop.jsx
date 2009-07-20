@@ -1,5 +1,5 @@
-ï»¿/*****************************************
- * Golden crop tool, v0.5 beta
+/*****************************************
+ * Golden crop tool, v0.52 beta
  *
  * Copyright 2009, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
  * 
@@ -61,7 +61,7 @@ if ( lang != "auto" )
 $.level = debug?1:0;
 
 const szAppName = "Golden Crop",
-	  szVersion = "0.5 beta";
+	  szVersion = "0.52 beta";
 // ---------------------------------------------------------------------
 function GoldenCrop( _doc ) {
 	this.doc = _doc;
@@ -411,8 +411,8 @@ GoldenCrop.prototype.chooseCropMethod = function() {
 	var strings = new Array();
 	strings[0] = {en:"Choose crop style", pl:"Wybierz styl przycinania"};
 	strings[1] = strings[0];
-	strings[2] = {en:"Crop canvas", pl:"Przytnij pÅ‚Ã³tno"};
-	strings[3] = {en:"Make crop mask", pl:"StwÃ³rz maskÄ™ kadrujÄ…cÄ…"};
+	strings[2] = {en:"Crop canvas", pl:"Przytnij p³ótno"};
+	strings[3] = {en:"Make crop mask", pl:"Stwórz maskê kadruj¹c¹"};
 	strings[4] = {en:"Cancel", pl:"Anuluj"};
 	// Localization doesn't work in dialogs?!
 	// BEGIN: localize fix
@@ -438,7 +438,7 @@ GoldenCrop.prototype.chooseCropMethod = function() {
 	   
 	   defaultElement = op1;
 	   addEventListener('keydown', function foo(e) {
-			// w przyszÅ‚oÅ›ci przeszukiwaÄ‡ labele na &(.)
+			// w przysz³oœci przeszukiwaæ labele na &(.)
 			switch ( e.keyName )
 			{
 				case '1':
@@ -648,8 +648,11 @@ if (isPS7()) {  // this does not work for eval-includes
   app = this; 
 }
 
-cTID = function(s) { return app.charIDToTypeID(s); };
-sTID = function(s) { return app.stringIDToTypeID(s); };
+cTID_global_array = new Array();
+cTID = function(s) { return cTID_global_array[s] || cTID_global_array[s]=app.charIDToTypeID(s); };
+sTID_global_array = new Array();
+sTID = function(s) { return sTID_global_array[s] || sTID_global_array[s]=app.stringIDToTypeID(s); };
+
 Stdlib = function Stdlib() {};
 
 Stdlib.createRGBColor = function(r, g, b) {
@@ -902,46 +905,58 @@ Stdlib.wrapLCLayer = function(doc, layer, ftn) {
   return res;
 };
 
-// by Damian SzopeN Sepczuk <damian[d0t]sepczuk[a7]o2{do7}pl>
-Stdlib.getVectorMaskBounds_cornerPointsOnly = function(round, doc, layer) {
-  function _ftn() {
-    var ref = new ActionReference();
-    ref.putEnumerated( cTID('Path'), cTID('Path'), sTID('vectorMask') );
-    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
-    var vMaskDescr = executeActionGet(ref);
-    var pathContents = vMaskDescr.getObjectValue(sTID('pathContents'));
-    var pathList = pathContents.getList(sTID('pathComponents'));
+// by Damian SzopeN Sepczuk <damian[d0t]sepczuk[a7]o2{do7}pl> 
+// [in] round (bool) -- whether returned values should be rounded to the nearest pixel, def: false 
+// [in] doc -- document containing layer with vector mask 
+// [in] layer -- layer with vector mask 
+// returns array [left, top, right, bottom, width, height] 
+Stdlib.getVectorMaskBounds_cornerPointsOnly = function(round, doc, layer) { 
+  round = !!round; 
+  function _ftn() { 
+    var ref = new ActionReference(); 
+    ref.putEnumerated( cTID('Path'), cTID('Path'), sTID('vectorMask') ); 
+    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt")); 
+    var vMaskDescr = executeActionGet(ref); 
+    var pathContents = vMaskDescr.getObjectValue(sTID('pathContents')); 
+    var pathList = pathContents.getList(sTID('pathComponents')); 
 
-    // for each path in current layer
-    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-    for ( cPath=0; cPath<pathList.count; ++cPath )
-    {
-      var curPath = pathList.getObjectValue(cPath).getList(sTID("subpathListKey"));
-      var points = curPath.getObjectValue(0).getList(sTID("points"));
-      // for each point
+    // for each path in current layer 
+    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
+    // using separate variables gives speed gain 
+    var _id1 = sTID("subpathListKey"), 
+        _id2 = sTID("points"), 
+        _id3 = sTID("anchor"), 
+        _id4 = sTID('horizontal'), 
+        _id5 = sTID('vertical'); 
+       
+    for ( cPath=0; cPath<pathList.count; ++cPath ) 
+    { 
+      var curPath = pathList.getObjectValue(cPath).getList(_id1); 
+      var points = curPath.getObjectValue(0).getList(_id2); 
+      // for each point 
       for (cPoint=0; cPoint < points.count; ++cPoint ) 
-      {	
-        var point = points.getObjectValue(cPoint).getObjectValue(sTID("anchor"));
-        var x = point.getUnitDoubleValue(sTID('horizontal'));
-        var y = point.getUnitDoubleValue(sTID('vertical'));
-        if ( x < minX ) minX = x; // it is faster than if/else block (benchmarked on PSCS4)
-        if ( x > maxX ) maxX = x;
-        if ( y < minY ) minY = y;
-        if ( y > maxY ) maxY = y;
-      }
-    }
-    res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY];
-    if (round)
-    {
-      for ( i=0; i<res.length; ++i )
-      {
-        res[i] = Math.round(res[i]);
-      }
-    }
-    return res;
-  }
-  var bnds = Stdlib.wrapLCLayer(doc, layer, _ftn);
-  return bnds;
+      {    
+        var point = points.getObjectValue(cPoint).getObjectValue(_id3); 
+        var x = point.getUnitDoubleValue(_id4); 
+        var y = point.getUnitDoubleValue(_id5); 
+        if ( x < minX ) minX = x; // it is faster than if/else block (benchmarked on PSCS4) 
+        if ( x > maxX ) maxX = x; 
+        if ( y < minY ) minY = y; 
+        if ( y > maxY ) maxY = y; 
+      } 
+    } 
+    res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY]; 
+    if (round) 
+    { 
+      for ( i=0; i<res.length; ++i ) 
+      { 
+        res[i] = Math.round(res[i]); 
+      } 
+    } 
+    return res; 
+  } 
+  var bnds = Stdlib.wrapLCLayer(doc, layer, _ftn); 
+  return bnds; 
 }
 
 if ( isCS4() || isCS3() ) { 
@@ -981,7 +996,7 @@ try {
    if ( app.documents.length == 0 )
    {
       throw new Error( { en: "Open the document in which you want the script to run.",
-                         pl: "OtwÃ³rz dokument, w ktÃ³rym chcesz uruchomiÄ‡ ten skrypt."
+                         pl: "Otwórz dokument, w którym chcesz uruchomiæ ten skrypt."
                        }
                      );
    }
