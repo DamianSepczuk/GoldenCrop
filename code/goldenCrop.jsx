@@ -1,5 +1,5 @@
 /*****************************************
- * Golden crop tool, v0.61 beta
+ * Golden crop tool, v0.62 beta
  *
  * Copyright 2009, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
  * 
@@ -61,7 +61,7 @@ if ( lang != "auto" )
 $.level = debug?1:0;
 
 const szAppName = "Golden Crop",
-	  szVersion = "0.61 beta";
+	  szVersion = "0.62 beta";
 // ---------------------------------------------------------------------
 function GoldenCrop( _doc ) {
 	this.doc = _doc;
@@ -513,31 +513,29 @@ GoldenCrop.prototype.chooseOutsideCropAction = function() {
 }
 
 GoldenCrop.prototype.go = function() {
-	with ( this ) {
-		doc.suspendHistory(szAppName + " - grid", 'makeGrid()');
-		Stdlib.NOP();
-		doc.suspendHistory(szAppName + " - resize", 'freeTransform()');
-		Stdlib.NOP();
+	this.doc.suspendHistory(szAppName + " - grid", 'this.makeGrid()');
+	Stdlib.NOP();
+	this.doc.suspendHistory(szAppName + " - resize", 'this.freeTransform()');
+	Stdlib.NOP();
+	if (this.doCrop) {
+		var croppingOutsideFrameFunction = this.chooseOutsideCropAction();
+		var cropFunction = null;
+		if (!this.onlyReveal)
+			var cropFunction = this.chooseCropMethod();
 		if (this.doCrop) {
-			var croppingOutsideFrameFunction = this.chooseOutsideCropAction();
-			var cropFunction = null;
-			if (!this.onlyReveal)
-				var cropFunction = this.chooseCropMethod();
-			if (this.doCrop) {
-				if (croppingOutsideFrameFunction) {
-					doc.suspendHistory(szAppName + " - reveal", croppingOutsideFrameFunction);
-					Stdlib.NOP();
-				}
-				if (!this.onlyReveal) {
-					doc.suspendHistory(szAppName + " - crop", cropFunction);
-					Stdlib.NOP();
-				}
+			if (croppingOutsideFrameFunction) {
+				this.doc.suspendHistory(szAppName + " - reveal", croppingOutsideFrameFunction);
+				Stdlib.NOP();
 			}
-		} else {
-			// remove resize entry from history -- it does nothing
-			executeAction( cTID( "undo" ), undefined, DialogModes.NO );
-			this.doc.activeLayer = this.gCrop;
+			if (!this.onlyReveal) {
+				this.doc.suspendHistory(szAppName + " - crop", cropFunction);
+				Stdlib.NOP();
+			}
 		}
+	} else {
+		// remove resize entry from history -- it does nothing
+		executeAction( cTID( "undo" ), undefined, DialogModes.NO );
+		this.doc.activeLayer = this.gCrop;
 	}
 }
 
