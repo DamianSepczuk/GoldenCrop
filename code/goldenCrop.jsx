@@ -143,7 +143,7 @@ GoldenCrop.prototype.makeStrips = function( position, stripSize, color ) {
  * thick, even if computed thickness is lower than 1px.
  */
 GoldenCrop.prototype.makeDiagStrip = function( direction, stripSize, color ) {
-	var layer = Stdlib.createSolidFillLayer(undefined, color, 'Golden diagonal at direction ' + direction?'upwards':'downwards');
+	var layer = Stdlib.createSolidFillLayer(undefined, color, 'Golden diagonal ' + (direction?'upwards':'downwards'));
 	Stdlib.removeLayerMask();
 	Stdlib.addVectorMask(true);	
 	
@@ -481,13 +481,12 @@ GoldenCrop.prototype.doRevealPopBackround = function() {
 	
 	this.doc.resizeCanvas(new UnitValue(docW+addLeft,"px"),new UnitValue(docH+addTop,"px"),AnchorPosition.BOTTOMRIGHT);
 	this.doc.resizeCanvas(new UnitValue(docW+addLeft+addRight,"px"),new UnitValue(docH+addTop+addBottom,"px"),AnchorPosition.TOPLEFT);
-	/*
+
 	if ( this.onlyReveal) {
-		this.outerFrame.remove();
+		this.doc.activeLayer = this.gCrop;
+		this.doc.activeLayer.visible = false;
+		// this.outerFrame.remove();
 	}
-	//*/
-	this.doc.activeLayer = this.gCrop;
-	this.doc.activeLayer.visible = false;
 
 }
 
@@ -524,11 +523,11 @@ GoldenCrop.prototype.go = function() {
 			var cropFunction = this.chooseCropMethod();
 		if (this.doCrop) {
 			if (croppingOutsideFrameFunction) {
-				this.doc.suspendHistory(szAppName + " - reveal", croppingOutsideFrameFunction);
+				this.doc.suspendHistory(szAppName + " - reveal", 'this.'+croppingOutsideFrameFunction);
 				Stdlib.NOP();
 			}
 			if (!this.onlyReveal) {
-				this.doc.suspendHistory(szAppName + " - crop", cropFunction);
+				this.doc.suspendHistory(szAppName + " - crop", 'this.'+cropFunction);
 				Stdlib.NOP();
 			}
 		}
