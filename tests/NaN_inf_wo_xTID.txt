@@ -1,0 +1,278 @@
+Testcase (test_case_vectorMaskBounds.psd) 10000 iterations
+
+Version Infinity:                 (11921003+11902229+11907602)/3=11910278
+Version w/o xTID:                 (7033363+6994813+7054897)/3   = 7027691
+Version w/ xTID before loop var:   (7600072+7580678+7547901)/3  = 7576217
+Version w/ xTID before loop arrNum:(7709093+7725437+7697937)/3  = 7710822
+Version w/ xTID before loop arrStr:(7798030+7776608+7772954)/3  = 7782531
+Version w/ xTID before loop Obj:   (7782374+7793718+7775850)/3  = 7783980
+Version Inf w/ buffered xTID:   (10440350+10377560+10423510)/3  =10413807
+Version w/ buf xTID and opt loop var:(7560101+7567488+7582057)/3= 7569882
+
+
+// ---------------------------------------------------------------
+Wersja Inf: (3078658+3284928+3122102)/3 =   3161896
+Wersja z NaN: (3337579+3313040+3348670)/3 = 3333096
+Wersja bez c/sTID:                          2100000
+Wersja z xTID przed pêtl¹
+
+Test code
+[code]
+var iter=1000000;
+for ( var i=0; i<iter; ++i ) {
+	sTID('vectorMask');
+	sTID('pathContents');
+	sTID('subpathListKey');
+	sTID('anchor');
+}
+[/code]
+
+[code]
+NoOfIter    w/o buffering   w/ buffering    time diff   % speedup
+      1          32              40              -8     -25%
+      2          40              45              -5     -13%
+      5          66              58               8      12%
+     10         111              82              29      26%
+    100         895             445             450      50%
+   1000       10255            4298            5957      58%
+  10000      105075           42208           62867      59%
+ 100000      944331          426956          517375      55%
+1000000     8994127         4125196         4868931      54%
+[/code]
+
+$.writeln(cTID('Path')); 1348564072
+$.writeln(sTID('vectorMask')); 1117
+$.writeln(cTID("Lyr ")); 1283027488
+$.writeln(cTID("Ordn")); 1332896878
+$.writeln(cTID("Trgt")); 1416783732
+$.writeln(sTID('pathContents')); 1349806147
+$.writeln(sTID('pathComponents')); 623
+$.writeln(sTID("subpathListKey")); 1398960204
+$.writeln(sTID("points")); 1349808928 
+$.writeln(sTID("anchor")); 1097753448
+$.writeln(sTID('horizontal')); 1215461998
+$.writeln(sTID('vertical')); 1450341475
+
+
+
+
+// ========================================================= Version w/o c/sTID
+function getVectorMaskBounds_onlyCornerPoints(round) {
+    var ref = new ActionReference();
+    ref.putEnumerated( 1348564072, 1348564072, 1117 );
+    ref.putEnumerated(1283027488, 1332896878, 1416783732);
+	var vMaskDescr = executeActionGet(ref);
+	var pathContents = vMaskDescr.getObjectValue(1349806147);
+	var pathList = pathContents.getList(623);
+
+	// for each path in current layer
+	var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+	for ( cPath=0; cPath<pathList.count; ++cPath )
+	{
+		var curPath = pathList.getObjectValue(cPath).getList(1398960204);
+		var points = curPath.getObjectValue(0).getList(1349808928);
+		// for each point
+		for (cPoint=0; cPoint < points.count; ++cPoint ) 
+		{	
+			var point = points.getObjectValue(cPoint).getObjectValue(1097753448);
+			var x = point.getUnitDoubleValue(1215461998);
+			var y = point.getUnitDoubleValue(1450341475);
+			if ( x < minX ) minX = x;
+			if ( x > maxX ) maxX = x;
+			if ( y < minY ) minY = y;
+			if ( y > maxY ) maxY = y;
+		}
+	}
+	res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY];
+	if (round)
+	{
+		for ( i=0; i<res.length; ++i )
+		{
+			res[i] = Math.round(res[i]);
+		}
+	}
+	return res;
+}
+
+// ========================================================= Version w xTID befor loop
+	var ref = new ActionReference(); 
+    ref.putEnumerated( cTID('Path'), cTID('Path'), sTID('vectorMask') ); 
+    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt")); 
+    var vMaskDescr = executeActionGet(ref); 
+    var pathContents = vMaskDescr.getObjectValue(sTID('pathContents')); 
+    var pathList = pathContents.getList(sTID('pathComponents')); 
+
+    // for each path in current layer 
+    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
+	// using separate varibles gives speed gain
+	var _id1 = sTID("subpathListKey"),
+	    _id2 = sTID("points"),
+		_id3 = sTID("anchor"),
+		_id4 = sTID('horizontal'),
+		_id5 = sTID('vertical');
+		
+    for ( cPath=0; cPath<pathList.count; ++cPath ) 
+    { 
+      var curPath = pathList.getObjectValue(cPath).getList(_id1); 
+      var points = curPath.getObjectValue(0).getList(_id2); 
+      // for each point 
+      for (cPoint=0; cPoint < points.count; ++cPoint ) 
+      {    
+        var point = points.getObjectValue(cPoint).getObjectValue(_id3); 
+        var x = point.getUnitDoubleValue(_id4); 
+        var y = point.getUnitDoubleValue(_id5); 
+        if ( x < minX ) minX = x; // it is faster than if/else block (benchmarked on PSCS4) 
+        if ( x > maxX ) maxX = x; 
+        if ( y < minY ) minY = y; 
+        if ( y > maxY ) maxY = y; 
+      } 
+    } 
+    res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY]; 
+    if (round) 
+    { 
+      for ( i=0; i<res.length; ++i ) 
+      { 
+        res[i] = Math.round(res[i]); 
+      } 
+    } 
+    return res; 
+
+// ========================================================= Version Inf
+function cTID(s) { return app.charIDToTypeID(s); };
+function sTID(s) { return app.stringIDToTypeID(s); };
+
+function getVectorMaskBounds_onlyCornerPoints(round) {
+    var ref = new ActionReference();
+    ref.putEnumerated( cTID('Path'), cTID('Path'), sTID('vectorMask') );
+    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
+	var vMaskDescr = executeActionGet(ref);
+	var pathContents = vMaskDescr.getObjectValue(sTID('pathContents'));
+	var pathList = pathContents.getList(sTID('pathComponents'));
+
+	// for each path in current layer
+	var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+	for ( cPath=0; cPath<pathList.count; ++cPath )
+	{
+		var curPath = pathList.getObjectValue(cPath).getList(sTID("subpathListKey"));
+		var points = curPath.getObjectValue(0).getList(sTID("points"));
+		// for each point
+		for (cPoint=0; cPoint < points.count; ++cPoint ) 
+		{	
+			var point = points.getObjectValue(cPoint).getObjectValue(sTID("anchor"));
+			var x = point.getUnitDoubleValue(sTID('horizontal'));
+			var y = point.getUnitDoubleValue(sTID('vertical'));
+			if ( x < minX ) minX = x;
+			if ( x > maxX ) maxX = x;
+			if ( y < minY ) minY = y;
+			if ( y > maxY ) maxY = y;
+		}
+	}
+	res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY];
+	if (round)
+	{
+		for ( i=0; i<res.length; ++i )
+		{
+			res[i] = Math.round(res[i]);
+		}
+	}
+	return res;
+}
+for (i=0; i<10000; ++i)
+   getVectorMaskBounds_onlyCornerPoints();
+   
+   
+   // =================
+   	var ref = new ActionReference(); 
+    ref.putEnumerated( cTID('Path'), cTID('Path'), sTID('vectorMask') ); 
+    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt")); 
+    var vMaskDescr = executeActionGet(ref); 
+    var pathContents = vMaskDescr.getObjectValue(sTID('pathContents')); 
+    var pathList = pathContents.getList(sTID('pathComponents')); 
+
+    // for each path in current layer 
+    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
+	// using separate variables gives speed gain 
+	_ids = new Array();
+	_ids["subpathListKey"] = sTID("subpathListKey")
+	_ids["points"] = sTID("points");
+	_ids["anchor"] = sTID("anchor");
+	_ids["horizontal"] = sTID('horizontal');
+	_ids["vertical"] = sTID('vertical');
+		
+    for ( cPath=0; cPath<pathList.count; ++cPath ) 
+    { 
+      var curPath = pathList.getObjectValue(cPath).getList(_ids['subpathListKey']); 
+      var points = curPath.getObjectValue(0).getList(_ids['points']); 
+      // for each point 
+      for (cPoint=0; cPoint < points.count; ++cPoint ) 
+      {    
+        var point = points.getObjectValue(cPoint).getObjectValue(_ids['anchor']); 
+        var x = point.getUnitDoubleValue(_ids['horizontal']); 
+        var y = point.getUnitDoubleValue(_ids['vertical']); 
+        if ( x < minX ) minX = x; // it is faster than if/else block (benchmarked on PSCS4) 
+        if ( x > maxX ) maxX = x; 
+        if ( y < minY ) minY = y; 
+        if ( y > maxY ) maxY = y; 
+      } 
+    } 
+    res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY]; 
+    if (round) 
+    { 
+      for ( i=0; i<res.length; ++i ) 
+      { 
+        res[i] = Math.round(res[i]); 
+      } 
+    } 
+    return res; 
+	
+	// ==========================
+		var ref = new ActionReference(); 
+    ref.putEnumerated( cTID('Path'), cTID('Path'), sTID('vectorMask') ); 
+    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt")); 
+    var vMaskDescr = executeActionGet(ref); 
+    var pathContents = vMaskDescr.getObjectValue(sTID('pathContents')); 
+    var pathList = pathContents.getList(sTID('pathComponents')); 
+
+    // for each path in current layer 
+    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
+	// using separate varibles gives speed gain
+	var _ids = [sTID("subpathListKey"), sTID("points"), sTID("anchor"), sTID('horizontal'), sTID('vertical')];
+		
+    for ( cPath=0; cPath<pathList.count; ++cPath ) 
+    { 
+      var curPath = pathList.getObjectValue(cPath).getList(_ids[0]); 
+      var points = curPath.getObjectValue(0).getList(_ids[1]); 
+      // for each point 
+      for (cPoint=0; cPoint < points.count; ++cPoint ) 
+      {    
+        var point = points.getObjectValue(cPoint).getObjectValue(_ids[2]); 
+        var x = point.getUnitDoubleValue(_ids[3]); 
+        var y = point.getUnitDoubleValue(_ids[4]); 
+        if ( x < minX ) minX = x; // it is faster than if/else block (benchmarked on PSCS4) 
+        if ( x > maxX ) maxX = x; 
+        if ( y < minY ) minY = y; 
+        if ( y > maxY ) maxY = y; 
+      } 
+    } 
+    res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY]; 
+    if (round) 
+    { 
+      for ( i=0; i<res.length; ++i ) 
+      { 
+        res[i] = Math.round(res[i]); 
+      } 
+    } 
+    return res; 
+	
+	// ==========================================================
+// 92	
+	if ( sta2_global_array[param] )
+	  return sta2_global_array[param]
+	else
+	  return sta2_global_array[param]=param;
+	  
+// 88
+return sta2_global_array[param] || sta2_global_array[param]=param;
+
+// 108
+return (typeof sta2_global_array[param])?(sta2_global_array[param]=param):(sta2_global_array[param]);

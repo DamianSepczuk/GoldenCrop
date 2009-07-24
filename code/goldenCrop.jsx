@@ -1,5 +1,5 @@
 /*****************************************
- * Golden crop tool, v0.62 beta
+ * Golden crop tool, v0.75 beta
  *
  * Copyright 2009, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
  * 
@@ -25,11 +25,12 @@
  ************************/
 
 
-var debug = true;//false;
-var lang = "pl"; // set to "en"   for English, 
-                 //        "pl"   for Polish
-                 //        "auto" to use Photoshop language
+var debug = true;
 
+// set to "en"   for English, 
+//        "pl"   for Polish
+//        "auto" to use Photoshop language
+var lang = "en";
 /************************
  *  END OF USER CONFIG  *
  ************************/
@@ -57,19 +58,306 @@ var lang = "pl"; // set to "en"   for English,
 
 $.localize = true;
 if ( lang != "auto" )
-	$.locale = lang;
+    $.locale = lang;
 $.level = debug?1:0;
 
 const szAppName = "Golden Crop",
-	  szVersion = "0.62 beta";
+      szVersion = "0.75 beta";
 // ---------------------------------------------------------------------
-function GoldenCrop( _doc ) {
-	this.doc = _doc;
-	this.doCrop = false;
+function localizator(secretNumber) {
+    if ( secretNumber != 314159 ) {
+        throw new Error('Do not construct localizator using new keyword. To get localizator objcet use localizator.getInstance() instead.');
+    }
+    this.use_locale = 'auto';
+    $.localize = true;
+    $.localization = true; // ?
+    this.initStrings();
 };
 
+localizator.instance = null;
+
+localizator.getInstance = function() {
+    return localizator.instance || localizator.instance = new localizator(314159);
+}
+
+localizator.prototype.setLocale = function( locale ) {
+    $.locale = locale;
+}
+
+localizator.prototype.initStrings = function() {
+    var str = this.str = new Array();
+    
+    // Entries below were generated using localizator.loadCVSsaveAsJSCodeFile function
+    str['chCropMethod'] = {en:'Choose crop style', pl:'Wybierz styl przycinania'};
+    str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania'};
+    str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij p³ótno'};
+    str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskê kadruj¹c¹'};
+    str['cancelCrop'] = {en:'Return to cropping', pl:'Wróæ do przycinania'};
+    str['bgOnLayer'] = {en:'Background on layer', pl:'T³o na warstwie'};
+    str['bgFill'] = {en:'Background fill', pl:'Wype³nienie t³a'};
+    str['-grid'] = {en:' - grid', pl:' - siatka'};
+    str['-resize'] = {en:' - resize', pl:' - przeskalowanie'};
+    str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie'};
+    str['-crop'] = {en:' - crop', pl:' - przycinanie'};
+    str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN'};
+    str['cropMask'] = {en:'Crop mask', pl:'Maska kadruj¹ca'};
+    str['divRules'] = {en:'Dividing rules', pl:'Regu³y podzia³u'};
+    str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%'};
+    str['goldenDiagUp'] = {en:'Golden diagonal upwards', pl:'Z³ota przek¹tna w górê'};
+    str['goldenDiagDown'] = {en:'Golden diagonal downwards', pl:'Z³ota przek¹tna w dó³'};
+    str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomiæ ten skrypt.'};
+    str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie p³ótna.'};
+    str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobiæ z p³ótnem?'};
+    str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz p³ótno'};
+    str['dontExtCanv'] = {en:'Crop without extension', pl:'Przytnij bez rozszerzania'};
+    str['retToCropping'] = {en:'Return to cropping', pl:'Wróæ do kadrowania'};
+}
+
+// Returns translations in CVS format
+localizator.prototype.getCSVStrings = function() {
+    var out = '';
+    var availLangs = new Array();
+
+    // get available languages
+    out += 'AvailLangs'
+    for ( var i in this.str ) {
+        for ( var j in this.str[i] ) {
+            if ( this.str[i][j] != '' && !availLangs[j] ) {
+                availLangs[j] = j;
+                out+=';'+j
+            }
+        }
+    }
+    out += "\n";
+    
+    // get all translations in the same order
+    for ( var i in this.str ) {
+        out += '"'+i+'"';
+        for ( var j in availLangs ) {
+            out += ';"'+(this.str[i][j]||'')+'"';
+        }
+        out += "\n"
+    }
+    
+    return out;
+}
+
+localizator.prototype.saveAsCSVFile = function() {
+    var of = File.saveDialog('Save as CSV file','CSV:*.csv');
+    if (!of) return;
+    try {
+        of.open("w");
+        if (!of) throw new Error("Can't open file for writing: " + of );
+        of.write(this.getCSVStrings());
+    } finally {
+        of.close();
+    }
+}
+
+localizator.getInitSequenceFromCSVSFile = function () {
+    var input = File.openDialog("Select CSV file with translations", "CSV Comma Separated Values:*.csv,All files:*.*", false);
+    if ( !input ) {
+        return false;
+    }
+    if ( !input.open('r') ) {
+        throw new Error("Can't open file for reading!");
+    }
+
+    var availLangs = input.readln().replace(/"/g,'').split(';');
+    availLangs.shift();
+    var out = "\n    // Entries below were generated using localizator.loadCVSsaveAsJSCodeFile function\n";
+    var line = null;
+    while ( line = input.readln() ) {
+        var translations = new Array();
+        var inText = false;
+        var prevEndIdx = 0;
+        var currentLangIndex = 0;
+        for ( var i = 0; i<line.length; ++i )
+        {
+            var actChr = line[i];
+            if ( inText ) {
+                if ( actChr == '"' ) {
+                    var nextChr = line[i+1];
+                    if ( nextChr != '"' ) {
+                        if ( nextChr != ';' && nextChr ) {
+                            throw new Error("Malformed data!, line: " + line + " position: " + i);
+                        } else {
+                            // end of cell detected
+                            translations.push(line.substring(prevEndIdx, i).replace(/""/g,'"'));
+                            ++i; // skip ';' char
+                            prevEndIdx = i+1;
+                            inText = false;
+                        }
+                    } else {
+                        // " char in quoted string
+                        ++i;
+                    }
+                }
+            } else {
+                if ( actChr == '"' ) {
+                    if ( i == prevEndIdx ) {
+                        // start of quoted string
+                        prevEndIdx = i+1;
+                        inText = true;
+                    } else {
+                        // '"' char in the middle of non quoted text. It is an error, but do not throw
+                    }
+                } else  if ( actChr == ';' ) {
+                    translations.push(line.substring(prevEndIdx, Math.max(i-1,prevEndIdx)));
+                    // end of cell detected
+                    prevEndIdx = i+1;
+                }
+            }
+        }
+        var engTranslFound = false;
+        var trId = translations.shift();
+        var numOfLangWritten = 0;
+        out += "    str['" + trId + "'] = {";
+        for ( var i = 0; i < availLangs.length && translations.length; ++i )
+        {
+            var t = translations.shift();
+            if ( t.length != 0 ) {
+                if (availLangs[i].search(/^en/) == 0 ) engTranslFound = true;
+                out += (numOfLangWritten++?', ':'') + availLangs[i] + ":'" + t.replace(/\\/g,'\\\\').replace(/'/g,'\\\'') + "'";
+            }
+        }
+        if (!engTranslFound) {
+            throw new Error("No english translation found for: " + trId + ".\nEach string MUST have an english translation");
+        }
+        out += "};\n";
+    }
+
+    return out;
+}
+
+localizator.loadCVSsaveAsJSCodeFile = function() {
+    var tmp = localizator.getInitSequenceFromCSVSFile();
+    if ( tmp ) {
+        var of = File.saveDialog('Save as JSX file','JSX:*.jsx');
+        if (!of) return false;
+        try {
+            of.open("w");
+            if (!of) throw new Error("Can't open file for writing: " + of );
+            of.write(tmp);
+        } finally {
+            of.close();
+        }
+    }
+}
+
+
+localizator.prototype.get = function( id, otherParameters ) {
+    arguments[0]=this.str[ id ];
+    return localize.apply({},arguments);
+}
+// ---------------------------------------------------------------------
+function dialogMenu( menuDesc ) {
+    this.desc = menuDesc;
+}
+
+dialogMenu.prototype.show = function () {
+    // helper function
+    function _repeatString( str, n ) {
+        var out = '';
+        while ( n-- > 0) {
+            out += str;
+        }
+        return out;
+    }
+
+    var menuDesc = this.desc;
+    var elements = menuDesc.elements;
+    var dlg = new Window('dialog', menuDesc.caption);
+    dlg.preferredSize.width = 155;
+    
+    with (dlg)
+    {
+       orientation = 'column';
+       alignChildren = 'fill';
+       
+       add('statictext', undefined, menuDesc.question);
+       var maxCaptionLen = -Infinity;
+       for ( var i = 0; i<elements.length; ++i ) {
+           var capLen = elements[i].text.length + elements[i].key.length + 3;
+           if ( capLen > maxCaptionLen ) maxCaptionLen = capLen;
+        }
+
+       for ( var i = 0; i<elements.length; ++i ) {
+            var key = elements[i].key.toLowerCase();
+            var btnName = (key == 'esc')?'cancel':((!!elements[i].def)?'ok':('op'+i));
+            var caption = '['+(key=='esc'?'':'&')+elements[i].key+'] ' + elements[i].text;
+            var capLen = caption.length + (key=='esc'?-1:0);
+            var e = add('button', undefined, caption + _repeatString(' ', (maxCaptionLen-capLen)*1.4), {name: btnName, justify: 'left'});
+            if ( btnName=='ok' || !!elements[i].def ) {
+                defaultElement = e;
+            }
+            if (btnName=='cancel') {
+                cancelElement = e;
+            } else {
+               e.onClick = new Function('this.parent.close('+(10+i+1)+')');
+            }
+            elements[i].obj = e;
+       }
+       if( isCS4() ){
+           addEventListener('keydown', function (e) {
+               for ( var i = 0; i<elements.length; ++i )
+               {
+                   if ( e.keyName == elements[i].key.toUpperCase() ) {
+                       elements[i].obj.notify();
+                       break;
+                   }
+               }
+           }, false);
+        } else {
+           var edShcut = add('edittext', undefined, '...', {name: 'edShcut'});
+           edShcut.active = true;
+           edShcut.onChanging = function ()  {
+               if ( edShcut.text == ' ' ) {
+                   defaultElement.notify();
+                   return;
+               }
+               var found = false;
+                for ( var i = 0; i<elements.length; ++i )
+                {
+                    $.writeln(edShcut.text.toUpperCase() + ' = ' + elements[i].key.toUpperCase());
+                    if ( edShcut.text.toUpperCase() == elements[i].key.toUpperCase() ) {
+                        elements[i].obj.notify();
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    edShcut.text = 'Stroke a key';
+                    edShcut.active = false; // on CS3 makes the event to occur one again, with
+                    edShcut.active = true;  // edShcut.text == the single char last enetered (!)
+                }
+           }
+        }
+    }
+    dlg.center();
+    var result = dlg.show();
+    if ( result < 10 ) {
+        return false;
+    } else {
+        return result-11;
+    }
+}
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+
+function GoldenCrop( _doc ) {
+    this.doc = _doc;
+    this.doCrop = false;
+};
+
+/*
+ * Basic configuration. In further versions it ill be user-interactive and action-recordable.
+ */
 GoldenCrop.prototype.loadConfig = function() {
-	this.ifApplyFX = true;
+    this.ifApplyFX = true;
+    this.ifSuspendHistory = true;
+    this.loc = localizator.getInstance();
 }
 
 /*
@@ -96,29 +384,29 @@ GoldenCrop.prototype.loadConfig = function() {
  */
 GoldenCrop.prototype.makeStrips = function( position, stripSize, color ) {
 
-	var StripLayer = Stdlib.createSolidFillLayer(undefined,color,'Strip at ' + Math.round(position*100) + '%' );
-	Stdlib.removeLayerMask(); // no error if there is no (raster) mask
-	
-	Stdlib.addVectorMask(true); // true => 'hide all' mode
-	
-	const oneMinusPosition = 1 - position;
-	const docWidth  = this.doc.width.as("px"),
-		  docHeight = this.doc.height.as("px");
-	const halfStripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSize) / 2;
-	
-	// add horizontal strips
-	var tmp = docHeight*position;
-	Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, tmp-halfStripSize, 0, tmp+halfStripSize, docWidth);
-	tmp = docHeight*oneMinusPosition;
-	Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, tmp-halfStripSize, 0, tmp+halfStripSize, docWidth);
+    var StripLayer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('stripAtPrc', Math.round(position*100)) );
+    Stdlib.removeLayerMask(); // no error if there is no (raster) mask
+    
+    Stdlib.addVectorMask(true); // true => 'hide all' mode
+    
+    const oneMinusPosition = 1 - position;
+    const docWidth  = this.doc.width.as("px"),
+          docHeight = this.doc.height.as("px");
+    const halfStripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSize) / 2;
+    
+    // add horizontal strips
+    var tmp = docHeight*position;
+    Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, tmp-halfStripSize, 0, tmp+halfStripSize, docWidth);
+    tmp = docHeight*oneMinusPosition;
+    Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, tmp-halfStripSize, 0, tmp+halfStripSize, docWidth);
 
-	// add vertical strips
-	tmp = docWidth*position;
-	Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, 0, tmp-halfStripSize, docHeight, tmp+halfStripSize);
-	tmp = docWidth*oneMinusPosition;
-	Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, 0, tmp-halfStripSize, docHeight, tmp+halfStripSize);
-	
-	return StripLayer;
+    // add vertical strips
+    tmp = docWidth*position;
+    Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, 0, tmp-halfStripSize, docHeight, tmp+halfStripSize);
+    tmp = docWidth*oneMinusPosition;
+    Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, 0, tmp-halfStripSize, docHeight, tmp+halfStripSize);
+    
+    return StripLayer;
 }
 
 
@@ -143,145 +431,101 @@ GoldenCrop.prototype.makeStrips = function( position, stripSize, color ) {
  * thick, even if computed thickness is lower than 1px.
  */
 GoldenCrop.prototype.makeDiagStrip = function( direction, stripSize, color ) {
-	var layer = Stdlib.createSolidFillLayer(undefined, color, 'Golden diagonal ' + (direction?'upwards':'downwards'));
-	Stdlib.removeLayerMask();
-	Stdlib.addVectorMask(true);	
-	
-	const docWidth  = this.doc.width.as("px"),
-		  docHeight = this.doc.height.as("px");
-	const stripSizePx = Math.min(docWidth, docHeight) * stripSize;
+    var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get( direction?'goldenDiagUp':'goldenDiagDown') );
+    Stdlib.removeLayerMask();
+    Stdlib.addVectorMask(true);    
+    
+    const docWidth  = this.doc.width.as("px"),
+          docHeight = this.doc.height.as("px");
+    const stripSizePx = Math.min(docWidth, docHeight) * stripSize;
 
-	var w = docWidth,
-	    h = docHeight;
-	
-	if (direction) {
-		// left-2-right
-		Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, 0, h, w, 0);
-		var x = h/((w/h)+(h/w)),
-	        y = (w/h)*x;
-	    Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, 0, 0, x, y);
-		    x = (w*(w/h))/((w/h)+(h/w)),
-	        y = (-h/w)*x + h;
-	    Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, x, y, w, h);
-	} else {
-		// right-2-left
-		Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, 0, 0, w, h);
-		var x = (h/((w/h)+(h/w))),
-	        y = (w/h)*x;
-			x=w-x;
-	    Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, w, 0, x, y);
-		    x = (w*(w/h))/((w/h)+(h/w)),
-	        y = (-h/w)*x + h;
-			x=w-x;
-	    Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, x, y, 0, h);
-	}
-	
-	/* 
-		Normalize -- make sure that whole path is contained by image frame (esp. corner problem)	
-		
-		       / \
-	          /---\---- - part of diagonal line is outside of image frame
-			  \|   \
-			   \    \
-			   |\
-	    make it to be inside
-	           ---.----- - part of diagonal line is outside of image frame
-			   | / \
-			   |/   \
-			   |\    \
+    var w = docWidth,
+        h = docHeight;
+    
+    if (direction) {
+        // left-2-right
+        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, 0, h, w, 0);
+        var x = h/((w/h)+(h/w)),
+            y = (w/h)*x;
+        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, 0, 0, x, y);
+            x = (w*(w/h))/((w/h)+(h/w)),
+            y = (-h/w)*x + h;
+        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, x, y, w, h);
+    } else {
+        // right-2-left
+        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, 0, 0, w, h);
+        var x = (h/((w/h)+(h/w))),
+            y = (w/h)*x;
+            x=w-x;
+        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, w, 0, x, y);
+            x = (w*(w/h))/((w/h)+(h/w)),
+            y = (-h/w)*x + h;
+            x=w-x;
+        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, x, y, 0, h);
+    }
+    
+    /* 
+        Normalize -- make sure that whole path is contained by image frame (esp. corner problem)    
+        
+               / \
+              /---\---- - part of diagonal line is outside of image frame
+              \|   \
+               \    \
+               |\
+        make it to be inside
+               ---.----- - part of diagonal line is outside of image frame
+               | / \
+               |/   \
+               |\    \
 
     */
-	/* // Get size from selection doesn't work (it's clipped to document boundaries)
-	Stdlib.loadVectorMaskSelection();
-	var layerW = (this.doc.selection.bounds[2]-this.doc.selection.bounds[0]).as("px"),
-	    layerH = (this.doc.selection.bounds[3]-this.doc.selection.bounds[1]).as("px");
-	doc.selection.deselect();
-	layer.resize(docWidth/layerW*100, docHeight/layerH*100, AnchorPosition.MIDDLECENTER);
-	//*/
-	//* // Get size from layer bounds works fine
-	var layerW = (layer.bounds[2]-layer.bounds[0]).as("px"),
-	    layerH = (layer.bounds[3]-layer.bounds[1]).as("px");
-	layer.resize(docWidth/layerW*100, docHeight/layerH*100, AnchorPosition.MIDDLECENTER);
-	//*/
-	return layer;
+    /* // Get size from selection doesn't work (it's clipped to document boundaries)
+    Stdlib.loadVectorMaskSelection();
+    var layerW = (this.doc.selection.bounds[2]-this.doc.selection.bounds[0]).as("px"),
+        layerH = (this.doc.selection.bounds[3]-this.doc.selection.bounds[1]).as("px");
+    doc.selection.deselect();
+    layer.resize(docWidth/layerW*100, docHeight/layerH*100, AnchorPosition.MIDDLECENTER);
+    //*/
+    //* // Get size from layer bounds works fine
+    var layerW = (layer.bounds[2]-layer.bounds[0]).as("px"),
+        layerH = (layer.bounds[3]-layer.bounds[1]).as("px");
+    layer.resize(docWidth/layerW*100, docHeight/layerH*100, AnchorPosition.MIDDLECENTER);
+    //*/
+    return layer;
 }
 
 /*
  * Applies "strip" layer styles (drop shadow) on active layer
  * Returns: void
- * Spetialized function for srtip effect.
+ * Spetialized function for srtip effect.. Stripped out default values.
  */
 GoldenCrop.prototype.applyStripFX = function() {
-	var idsetd = cTID( "setd" );
-		var desc484 = new ActionDescriptor();
-		var idnull = cTID( "null" );
-			var ref440 = new ActionReference();
-			var idPrpr = cTID( "Prpr" );
-			var idLefx = cTID( "Lefx" );
-			ref440.putProperty( idPrpr, idLefx );
-			var idLyr = cTID( "Lyr " );
-			var idOrdn = cTID( "Ordn" );
-			var idTrgt = cTID( "Trgt" );
-			ref440.putEnumerated( idLyr, idOrdn, idTrgt );
-		desc484.putReference( idnull, ref440 );
-		var idT = cTID( "T   " );
-			var desc485 = new ActionDescriptor();
-			var idScl = cTID( "Scl " );
-			var idPrc = cTID( "#Prc" );
-			desc485.putUnitDouble( idScl, idPrc, 333.333333 );
-			var idDrSh = cTID( "DrSh" );
-				var desc486 = new ActionDescriptor();
-				var idenab = cTID( "enab" );
-				desc486.putBoolean( idenab, true );
-				var idMd = cTID( "Md  " );
-				var idBlnM = cTID( "BlnM" );
-				var idScrn = cTID( "Scrn" );
-				desc486.putEnumerated( idMd, idBlnM, idScrn );
-				var idClr = cTID( "Clr " );
-					var desc487 = new ActionDescriptor();
-					var idRd = cTID( "Rd  " );
-					desc487.putDouble( idRd, 255.000000 );
-					var idGrn = cTID( "Grn " );
-					desc487.putDouble( idGrn, 255.000000 );
-					var idBl = cTID( "Bl  " );
-					desc487.putDouble( idBl, 255.000000 );
-				var idRGBC = cTID( "RGBC" );
-				desc486.putObject( idClr, idRGBC, desc487 );
-				var idOpct = cTID( "Opct" );
-				var idPrc = cTID( "#Prc" );
-				desc486.putUnitDouble( idOpct, idPrc, 75.000000 );
-				var iduglg = cTID( "uglg" );
-				desc486.putBoolean( iduglg, false );
-				var idlagl = cTID( "lagl" );
-				var idAng = cTID( "#Ang" );
-				desc486.putUnitDouble( idlagl, idAng, 120.000000 );
-				var idDstn = cTID( "Dstn" );
-				var idPxl = cTID( "#Pxl" );
-				desc486.putUnitDouble( idDstn, idPxl, 0.000000 );
-				var idCkmt = cTID( "Ckmt" );
-				var idPxl = cTID( "#Pxl" );
-				desc486.putUnitDouble( idCkmt, idPxl, 0.000000 );
-				var idblur = cTID( "blur" );
-				var idPxl = cTID( "#Pxl" );
-				desc486.putUnitDouble( idblur, idPxl, 3.000000 );
-				var idNose = cTID( "Nose" );
-				var idPrc = cTID( "#Prc" );
-				desc486.putUnitDouble( idNose, idPrc, 0.000000 );
-				var idAntA = cTID( "AntA" );
-				desc486.putBoolean( idAntA, false );
-				var idTrnS = cTID( "TrnS" );
-					var desc488 = new ActionDescriptor();
-					var idNm = cTID( "Nm  " );
-					desc488.putString( idNm, "Linear" );
-				var idShpC = cTID( "ShpC" );
-				desc486.putObject( idTrnS, idShpC, desc488 );
-				var idlayerConceals = sTID( "layerConceals" );
-				desc486.putBoolean( idlayerConceals, true );
-			var idDrSh = cTID( "DrSh" );
-			desc485.putObject( idDrSh, idDrSh, desc486 );
-		var idLefx = cTID( "Lefx" );
-		desc484.putObject( idT, idLefx, desc485 );
-	executeAction( idsetd, desc484, DialogModes.NO );
+var id11 = cTID( "setd" );
+    var desc5 = new ActionDescriptor();
+    var id12 = cTID( "null" );
+        var ref3 = new ActionReference();
+        ref3.putProperty( cTID( "Prpr" ),  cTID( "Lefx" ));
+        ref3.putEnumerated( cTID( "Lyr " ), cTID( "Ordn" ), cTID( "Trgt" ) );
+    desc5.putReference( id12, ref3 );
+    var id18 = cTID( "T   " );
+        var desc6 = new ActionDescriptor();
+    var id21 = cTID( "DrSh" );
+            var desc7 = new ActionDescriptor();
+            desc7.putBoolean( cTID( "enab" ), true );
+            desc7.putEnumerated( cTID( "Md  " ), cTID( "BlnM" ), cTID( "Scrn" ) );
+            var id26 = cTID( "Clr " );
+                var desc8 = new ActionDescriptor();
+                desc8.putDouble( cTID( "Rd  " ), 255 );
+                desc8.putDouble( cTID( "Grn " ), 255 );
+                desc8.putDouble( cTID( "Bl  " ), 255 );
+            desc7.putObject( id26, cTID( "RGBC" ), desc8 );
+            desc7.putBoolean( cTID( "uglg" ), false );
+            desc7.putUnitDouble( cTID( "Dstn" ), cTID( "#Pxl" ), 0 );
+            desc7.putUnitDouble( cTID( "Ckmt" ), cTID( "#Pxl" ), 0 );
+            desc7.putUnitDouble( cTID( "blur" ), cTID( "#Pxl" ), 3 );
+        desc6.putObject( id21, cTID( "DrSh" ), desc7 );
+    desc5.putObject( id18, cTID( "Lefx" ), desc6 );
+executeAction( id11, desc5, DialogModes.NO );
 }
 
 
@@ -290,7 +534,7 @@ GoldenCrop.prototype.applyStripFX = function() {
  * [*] denotes optional parameter
  *   [in][*] basicStripSize | from range (0.0, 1.0) -- basic thickness of a strip (as part of shorter edge)
  *   [in][*] maskOpacity    | integer from range [0,100] -- opacity of mask (hiding outside of selected display frame)
- *   [in][*] colors	     | Array of instances of SolidColor -- colors of mask and strips (for each dividing rule)
+ *   [in][*] colors         | Array of instances of SolidColor -- colors of mask and strips (for each dividing rule)
  *   [in][*] stripsThickScale | Array of doubles -- the multiple of basic thickness (for each dividing rule)
  * 
  * basicStripSize -- default value: 0.01 (1%)
@@ -306,46 +550,51 @@ GoldenCrop.prototype.applyStripFX = function() {
  *                          golden diagonal rule (up): 1/3
  *                          golden diagonal rule (down): 1/3
  * Returns: void
-*/
+ * TODO: move parameters to user config
+ */
 GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, stripsThickScale) {
-	if (!basicStripSize) {
-		basicStripSize = .01; // 1%
-	}
-	if (!maskOpacity) {
-		maskOpacity = 70;
-	}
-	if (!colors) {
-		colors = [Stdlib.createRGBColor(0,0,0), Stdlib.createRGBColor(0,0,0), Stdlib.createRGBColor(0x33,0x33,0x33), Stdlib.createRGBColor(255,0,0), Stdlib.createRGBColor(0,0,255)];
-	}
-	if (!stripsThickScale) {
-		stripsThickScale = [1, 1/2, 1/3, 1/3];
-	}
-	
-	this.gCrop = Stdlib.createLayerGroup('Golden Crop by SzopeN');
+    if (!basicStripSize) {
+        basicStripSize = .01; // 1%
+    }
+    if (!maskOpacity) {
+        maskOpacity = 70;
+    }
+    if (!colors) {
+        colors = [Stdlib.createRGBColor(0,0,0), Stdlib.createRGBColor(0,0,0), Stdlib.createRGBColor(0x33,0x33,0x33), Stdlib.createRGBColor(255,0,0), Stdlib.createRGBColor(0,0,255)];
+    }
+    if (!stripsThickScale) {
+        stripsThickScale = [1, 1/2, 1/3, 1/3];
+    }
+    
+    this.gCrop = Stdlib.createLayerGroup(this.loc.get('GCbySzN'));
 
-	
-	// Add crop-mask
-	this.outerFrame = Stdlib.createSolidFillLayer(undefined, colors[0], 'Crop mask', maskOpacity);
-	Stdlib.removeLayerMask();
-	Stdlib.addVectorMask(true);
-	Stdlib.rectPath( ShapeOperation.SHAPESUBTRACT, Units.PERCENT, 0,0,100,100);
-	
-	// Add dividing rules
-	this.gCropDivRules = Stdlib.createLayerGroup('Dividing rules', 50);
-	// ----- Golden rule
-	const phi = (Math.sqrt(5)-1)/2; // Inv Golden number, ca. 0.6180339887498948482045868343656
-	this.phiStrips = this.makeStrips(phi, basicStripSize*stripsThickScale[0], colors[1]);
-	if (this.ifApplyFX) this.applyStripFX();
-	// ----- One-third rule
-	const third = 1.0/3;
-	this.thirdStrips = this.makeStrips(third, basicStripSize*stripsThickScale[1], colors[2]);
-	if (this.ifApplyFX) this.applyStripFX();
-	// ----- Golden diagonal rule (up)
-	this.diagGoldUp = this.makeDiagStrip(true, basicStripSize*stripsThickScale[2], colors[3]);
-	if (this.ifApplyFX) this.applyStripFX();
-	// ----- Golden diagonal rule (down)
-	this.diagGoldDown = this.makeDiagStrip(false, basicStripSize*stripsThickScale[3], colors[4]);
-	if (this.ifApplyFX) this.applyStripFX();
+    
+    // Add crop-mask
+    this.outerFrame = Stdlib.createSolidFillLayer(undefined, colors[0], this.loc.get('cropMask'), maskOpacity);
+    Stdlib.removeLayerMask();
+    Stdlib.addVectorMask(true);
+    Stdlib.rectPath( ShapeOperation.SHAPESUBTRACT, Units.PERCENT, 0,0,100,100);
+    
+    // Add dividing rules
+    this.gCropDivRules = Stdlib.createLayerGroup(this.loc.get('divRules'), 50);
+    
+    // ----- Golden rule
+    const phi = (Math.sqrt(5)-1)/2; // Inv Golden number, ca. 0.6180339887498948482045868343656
+    this.phiStrips = this.makeStrips(phi, basicStripSize*stripsThickScale[0], colors[1]);
+    if (this.ifApplyFX) this.applyStripFX();
+    
+    // ----- One-third rule
+    const third = 1.0/3;
+    this.thirdStrips = this.makeStrips(third, basicStripSize*stripsThickScale[1], colors[2]);
+    if (this.ifApplyFX) this.applyStripFX();
+
+    // ----- Golden diagonal rule (up)
+    this.diagGoldUp = this.makeDiagStrip(true, basicStripSize*stripsThickScale[2], colors[3]);
+    if (this.ifApplyFX) this.applyStripFX();
+    
+    // ----- Golden diagonal rule (down)
+    this.diagGoldDown = this.makeDiagStrip(false, basicStripSize*stripsThickScale[3], colors[4]);
+    if (this.ifApplyFX) this.applyStripFX();
 }
 
 /*
@@ -356,249 +605,285 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
  * If the user cancelled the transformation -- do not crop but keep all created layers
  */
 GoldenCrop.prototype.freeTransform = function() {
-	this.doc.activeLayer = this.gCrop;
-	var dialogMode = app.displayDialogs;
-	app.displayDialogs = DialogModes.ALL;
+    this.doc.activeLayer = this.gCrop;
+    var dialogMode = app.displayDialogs;
+    app.displayDialogs = DialogModes.ALL;
     var debugLevel = $.level; // save debug level
     $.level = 0;              // turn off debugging
-	try {
-		Stdlib.userGoToFreeTransform();
-	} catch (e) {
-		this.doCrop = false;
-		return;
-	} finally {
-		app.displayDialogs = dialogMode;
-	}
-    $.level = debugLevel; // restore debug level
-	this.doCrop = true;
+    try {
+        Stdlib.userGoToFreeTransform();
+    } catch (e) {
+        // user canceled crop OR crop mash has not beed moved
+        this.doCrop = false;
+        return;
+    } finally {
+        $.level = debugLevel;             // restore debug level
+        app.displayDialogs = dialogMode;  // ... and dialog mode
+    }
+    this.doCrop = true;
 }
 
 /*
- * 
+ * Crops canvas and deletes all Golden Crop layers
  */
 GoldenCrop.prototype.simpleCrop = function() {
-	this.doc.activeLayer = this.outerFrame;
-	Stdlib.loadVectorMaskSelection(); // could be empty but it is no problem
-	if ( Stdlib.hasSelection() ) {
-		this.doc.selection.invert();
-		// crop to selection
-		executeAction( cTID( "Crop" ), new ActionDescriptor(), DialogModes.NO );
-		this.doc.selection.deselect();
-	}
-	this.gCrop.remove();
+    this.doc.activeLayer = this.outerFrame;
+    Stdlib.loadVectorMaskSelection(); // could be empty but it is no problem
+    if ( Stdlib.hasSelection() ) {
+        this.doc.selection.invert();
+        // crop to selection
+        executeAction( cTID( "Crop" ), new ActionDescriptor(), DialogModes.NO );
+        this.doc.selection.deselect();
+    }
+    this.gCrop.remove();
 }
 
+/*
+ * Make cropping mask non-transparent and make active and hide Dividing Rules group
+ */
 GoldenCrop.prototype.maskOutCrop = function() {
-	this.outerFrame.opacity = 100;
-	this.doc.activeLayer = this.gCropDivRules;
-	this.doc.activeLayer.visible = false
-	/*
-	this.phiStrips.remove();
-	this.thirdStrips.remove();
-	this.diagGoldUp.remove();
-	this.diagGoldDown.remove();
-	*/
+    this.outerFrame.opacity = 100;
+    this.doc.activeLayer = this.gCropDivRules;
+    this.doc.activeLayer.visible = false
+    /*
+    this.phiStrips.remove();
+    this.thirdStrips.remove();
+    this.diagGoldUp.remove();
+    this.diagGoldDown.remove();
+    */
 }
 
+/*
+ * Display user-interactive menu allowing to choose cropping method.
+ * Cropping methods are member functions of GoldenCrop object instance
+ */
 GoldenCrop.prototype.chooseCropMethod = function() {
-	var cropFunctions = {SIMPLE:'simpleCrop()', MASK:'maskOutCrop()', NONE:''};
-
-	var strings = new Array();
-	strings[0] = {en:"Choose crop style", pl:"Wybierz styl przycinania"};
-	strings[1] = strings[0];
-	strings[2] = {en:"Crop canvas", pl:"Przytnij p³ótno"};
-	strings[3] = {en:"Make crop mask", pl:"Stwórz maskê kadruj¹c¹"};
-	strings[4] = {en:"Cancel", pl:"Anuluj"};
-	// Localization doesn't work in dialogs?!
-	// BEGIN: localize fix
-	for ( var i = 0; i < strings.length; ++i ) {
-		strings[i] = localize( strings[i] );
-	}
-	// END: localize fix
-
-	var dlg = new Window('dialog', strings[0]);
-	dlg.preferredSize[0] = 155;
-
-	with (dlg)
-	{
-	   orientation = 'column';
-	   alignChildren = 'fill';
-	   
-	   add('statictext', undefined, strings[1]);
-	   add('button', undefined, '[&1] ' + strings[2], {name: 'op1'});
-	   op1.onClick = function() {this.parent.close(11)};
-	   add('button', undefined, '[&2] ' + strings[3], {name: 'op2'});
-	   op2.onClick = function() {this.parent.close(12)};
-	   add('button', undefined, '[Esc] '+strings[4], {name: 'cancel'});
-	   
-	   defaultElement = op1;
-	   addEventListener('keydown', function foo(e) {
-			// w przysz³oœci przeszukiwaæ labele na &(.)
-			switch ( e.keyName )
-			{
-				case '1':
-					op1.notify();
-					break;
-				case '2':
-					op2.notify();
-					break;
-			}
-		}, false);   
-	}
-	dlg.center();
-	var result = dlg.show();
-	
-	switch ( result ) {
-		case 11:
-			return cropFunctions.SIMPLE;
-		case 12:
-			return cropFunctions.MASK;
-		case 2:
-		default:
-			this.doCrop = false;
-			return cropFunctions.NONE;
-	}
+    var cropFunctions = {SIMPLE:'simpleCrop()', MASK:'maskOutCrop()'};
+    var menuDesc = {caption:this.loc.get('chCropMethod'),
+                question:this.loc.get('chCropMethodQ'),
+                elements:[{key:'1', text:this.loc.get('cropCanvas'), def:true},
+                          {key:'2', text:this.loc.get('mkCropMask')},
+                          {key:'Esc', text:this.loc.get('cancelCrop')}
+                         ]
+               };
+    
+    var dlg = new dialogMenu(menuDesc);
+    var result = dlg.show();
+    switch ( result ) {
+        case 0:
+            return cropFunctions.SIMPLE;
+        case 1:
+            return cropFunctions.MASK;
+        case false:
+        default:
+            //this.doCrop = false;
+            return false;
+    }
 }
 
+/*
+ * Convert background to normal layer and place solid fill layer below it.
+ * Color of the solid fill layer is determined by current foreground color
+ */
 GoldenCrop.prototype.doRevealPopBackround = function() {
-	var docW = this.doc.width.as("px"),
-	    docH = this.doc.height.as("px");
-	var cb = this.cropBounds;
-	
-	var addTop    = Math.max(-cb[1],0),
-	    addLeft   = Math.max(-cb[0],0),
-		addBottom = Math.max(cb[3]-docH,0),
-		addRight  = Math.max(cb[2]-docW,0);
+    var docW = this.doc.width.as("px"),
+        docH = this.doc.height.as("px");
+    var cb = this.cropBounds;
+    
+    var addTop    = Math.max(-cb[1],0),
+        addLeft   = Math.max(-cb[0],0),
+        addBottom = Math.max(cb[3]-docH,0),
+        addRight  = Math.max(cb[2]-docW,0);
 
-	if ( Stdlib.hasBackground(this.doc) ) {
-		this.bgLayer = this.doc.backgroundLayer;
-		this.bgLayer.isBackgroundLayer = false;
-		this.bgLayer.name = "Background on layer";
-		this.backgroundFill = Stdlib.createSolidFillLayer(undefined, app.foregroundColor, 'Background fill');
-		Stdlib.removeLayerMask();
-		this.backgroundFill.move(this.bgLayer, ElementPlacement.PLACEAFTER);
-	}
-	
-	this.doc.resizeCanvas(new UnitValue(docW+addLeft,"px"),new UnitValue(docH+addTop,"px"),AnchorPosition.BOTTOMRIGHT);
-	this.doc.resizeCanvas(new UnitValue(docW+addLeft+addRight,"px"),new UnitValue(docH+addTop+addBottom,"px"),AnchorPosition.TOPLEFT);
+    if ( Stdlib.hasBackground(this.doc) ) {
+        this.bgLayer = this.doc.backgroundLayer;
+        this.bgLayer.isBackgroundLayer = false;
+        this.bgLayer.name = this.loc.get('bgOnLayer');
+    }
+    this.backgroundFill = Stdlib.createSolidFillLayer(undefined, app.foregroundColor, this.loc.get('bgFill'));
+    Stdlib.removeLayerMask();
+    this.backgroundFill.move(this.bgLayer||this.doc.layers[this.doc.layers.length-1], ElementPlacement.PLACEAFTER);
+    
+    this.doc.resizeCanvas(new UnitValue(docW+addLeft,"px"),new UnitValue(docH+addTop,"px"),AnchorPosition.BOTTOMRIGHT);
+    this.doc.resizeCanvas(new UnitValue(docW+addLeft+addRight,"px"),new UnitValue(docH+addTop+addBottom,"px"),AnchorPosition.TOPLEFT);
 
-	if ( this.onlyReveal) {
-		this.doc.activeLayer = this.gCrop;
-		this.doc.activeLayer.visible = false;
-		// this.outerFrame.remove();
-	}
+    // if there is no cropping hide whole Golden Crop group
+    if ( this.onlyReveal ) {
+        this.doc.activeLayer = this.gCrop;
+        this.doc.activeLayer.visible = false;
+        // this.outerFrame.remove();
+    }
 
 }
 
+/*
+ * Determine if revealing occures and display user-interactive menu allowing to choose whether to extend canvas.
+ * Check if there is also cropping and set this.onlyReveal accordingly.
+ * Revealing methods are member functions of GoldenCrop object instance.
+ */
 GoldenCrop.prototype.chooseOutsideCropAction = function() {
-	var cb = this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.outerFrame);
-	var docW = this.doc.width.as("px"),
-	    docH = this.doc.height.as("px");
-	if ( ! (cb[0] < 0 || cb[1] < 0 || cb[2] > docW || cb[3] > docH )) {
-		return 0; // no outside crop
-	}
+    var cb = this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.outerFrame);
+	/*cb[0] = parseInt(cb[0]);
+	cb[1] = parseInt(cb[1]);
+	cb[2] = parseInt(cb[2]);
+	cb[3] = parseInt(cb[3]);
+	debugger;*/
+    var docW = parseInt(this.doc.width.as("px")),
+        docH = parseInt(this.doc.height.as("px"));
+    if ( cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
+        return 0; // no outside crop
+    }
 
-	if ( cb[0] <= 0 && cb[1] <= 0 && cb[2] >= docW && cb[3] >= docH ) {
-		// if there's no cropping no confirmation is needed
-		this.onlyReveal = true;
-	} else {
-		// choose whether extend canvas before cropping
-		if ( !confirm("Do outside cropping (YSE), or crop without extending canvas (NO)") ) {
-			return 0;
-		}
-	}
+    if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) {
+        // if there's no cropping no confirmation is needed
+        this.onlyReveal = true;
+    } else {
+        // choose whether extend canvas before cropping
+        var menuDesc = {caption:this.loc.get('canvExtDet'), //Canvas extension detected.
+            question:this.loc.get('canvExtDetQ'), //What to do with canvas?
+            elements:[{key:'A', text:this.loc.get('extendCanvas'), def:true}, // Extend canvas
+                      {key:'Z', text:this.loc.get('dontExtCanv')}, // Crop without extension
+                      {key:'Esc', text:this.loc.get('retToCropping')} // Return to cropping
+                     ]
+           };
 
-	return('doRevealPopBackround()');
+        var dlg = new dialogMenu(menuDesc);
+        var result = dlg.show();
+        switch ( result ) {
+            case 0:
+                // reveal, nothing to be done
+                break;
+            case 1:
+                return 0; // Don't ctop
+                break;
+            case false:
+            default:
+                return false; // Return to cropping
+                break;
+        }
+    }
+
+    return('doRevealPopBackround()');
 }
-
+    
+/*
+ * Logical heart of the script. Invoke each phase of script w/ or w/o suspending history.
+ */
 GoldenCrop.prototype.go = function() {
-	this.doc.suspendHistory(szAppName + " - grid", 'this.makeGrid()');
-	Stdlib.NOP();
-	this.doc.suspendHistory(szAppName + " - resize", 'this.freeTransform()');
-	Stdlib.NOP();
-	if (this.doCrop) {
-		var croppingOutsideFrameFunction = this.chooseOutsideCropAction();
-		var cropFunction = null;
-		if (!this.onlyReveal)
-			var cropFunction = this.chooseCropMethod();
-		if (this.doCrop) {
-			if (croppingOutsideFrameFunction) {
-				this.doc.suspendHistory(szAppName + " - reveal", 'this.'+croppingOutsideFrameFunction);
-				Stdlib.NOP();
-			}
-			if (!this.onlyReveal) {
-				this.doc.suspendHistory(szAppName + " - crop", 'this.'+cropFunction);
-				Stdlib.NOP();
-			}
-		}
-	} else {
-		// remove resize entry from history -- it does nothing
-		executeAction( cTID( "undo" ), undefined, DialogModes.NO );
-		this.doc.activeLayer = this.gCrop;
-	}
+    if ( this.ifSuspendHistory ) {
+        this.doc.suspendHistory(szAppName + this.loc.get('-grid'), 'this.makeGrid()');
+        Stdlib.NOP();
+    } else {
+        this.makeGrid();
+    }
+
+    var croppingOutsideFrameFunction = null;
+    var cropFunction = null;
+    this.tmpFctn = function () {
+        do {
+            this.freeTransform();
+            if (this.doCrop) {
+                croppingOutsideFrameFunction = this.chooseOutsideCropAction();
+                if ( croppingOutsideFrameFunction !== false && !this.onlyReveal) {
+                    cropFunction = this.chooseCropMethod();
+                }
+            }
+        } while (this.doCrop!==false && (croppingOutsideFrameFunction === false || cropFunction === false) )
+    };
+
+    if ( this.ifSuspendHistory ) {
+        this.doc.suspendHistory(szAppName + this.loc.get('-resize'), 'this.tmpFctn()');
+        Stdlib.NOP();
+    } else {
+        this.tmpFctn();
+    }
+
+    if (this.doCrop) {
+        if (croppingOutsideFrameFunction) {
+            if ( this.ifSuspendHistory ) {
+                this.doc.suspendHistory(szAppName + this.loc.get('-reveal'), 'this.'+croppingOutsideFrameFunction);
+                Stdlib.NOP();
+            } else {
+                eval('this.'+croppingOutsideFrameFunction);
+            }
+        }
+        if (!this.onlyReveal) {
+            if ( this.ifSuspendHistory ) {
+                this.doc.suspendHistory(szAppName + this.loc.get('-crop'), 'this.'+cropFunction);
+                Stdlib.NOP();
+            } else {
+                eval('this.'+cropFunction);
+            }
+        }
+    } else {
+        // remove resize entry from history -- it does nothing
+        executeAction( cTID( "undo" ), undefined, DialogModes.NO );
+        this.doc.activeLayer = this.gCrop;
+    }
 }
 
 GoldenCrop.prototype._unused_function__MakeBogusLayer = function() {
-	var MakeWhat = new ActionDescriptor();
-		var ref120 = new ActionReference();
-		ref120.putClass( cTID( "Lyr " ) );
-	MakeWhat.putReference( cTID( "null" ), ref120 );
-	
-	var layerDesc = new ActionDescriptor();
-	layerDesc.putString( cTID( "Nm  " ), "Bogus" );
-	layerDesc.putUnitDouble( cTID( "Opct" ), cTID( "#Prc" ), 0 );
-	layerDesc.putEnumerated( cTID( "Md  " ), cTID( "BlnM" ), cTID( "Lghn" ) );
-	layerDesc.putBoolean( cTID( "FlNt" ), true );
-	MakeWhat.putObject( cTID( "Usng" ), cTID( "Lyr " ), layerDesc );
-	executeAction( cTID( "Mk  " ), MakeWhat, DialogModes.NO );
-	return app.activeDocument.activeLayer;
+    var MakeWhat = new ActionDescriptor();
+        var ref120 = new ActionReference();
+        ref120.putClass( cTID( "Lyr " ) );
+    MakeWhat.putReference( cTID( "null" ), ref120 );
+    
+    var layerDesc = new ActionDescriptor();
+    layerDesc.putString( cTID( "Nm  " ), "Bogus" );
+    layerDesc.putUnitDouble( cTID( "Opct" ), cTID( "#Prc" ), 0 );
+    layerDesc.putEnumerated( cTID( "Md  " ), cTID( "BlnM" ), cTID( "Lghn" ) );
+    layerDesc.putBoolean( cTID( "FlNt" ), true );
+    MakeWhat.putObject( cTID( "Usng" ), cTID( "Lyr " ), layerDesc );
+    executeAction( cTID( "Mk  " ), MakeWhat, DialogModes.NO );
+    return app.activeDocument.activeLayer;
 }
 
 
 GoldenCrop.prototype._unused_function__fillFullCanvas = function() {
-	const docWidth  = this.doc.width.as("px"),
-		  docHeight = this.doc.height.as("px");
-	var idTrnf = cTID( "Trnf" );
-		var desc120 = new ActionDescriptor();
-		var idnull = cTID( "null" );
-			var ref73 = new ActionReference();
-			var idLyr = cTID( "Lyr " );
-			var idOrdn = cTID( "Ordn" );
-			var idTrgt = cTID( "Trgt" );
-			ref73.putEnumerated( idLyr, idOrdn, idTrgt );
-		desc120.putReference( idnull, ref73 );
-		var idFTcs = cTID( "FTcs" );
-		var idQCSt = cTID( "QCSt" );
-		var idQcsa = cTID( "Qcsa" );
-		desc120.putEnumerated( idFTcs, idQCSt, idQcsa );
-		var idOfst = cTID( "Ofst" );
-			var desc121 = new ActionDescriptor();
-			var idHrzn = cTID( "Hrzn" );
-			var idPxl = cTID( "#Pxl" );
-			desc121.putUnitDouble( idHrzn, idPxl, 0.000000 );
-			var idVrtc = cTID( "Vrtc" );
-			var idPxl = cTID( "#Pxl" );
-			desc121.putUnitDouble( idVrtc, idPxl, 0.000000 );
-		var idOfst = cTID( "Ofst" );
-		desc120.putObject( idOfst, idOfst, desc121 );
-		var idWdth = cTID( "Wdth" );
-		var idPrc = cTID( "#Prc" );
-		desc120.putUnitDouble( idWdth, idPrc, docWidth );
-		var idHght = cTID( "Hght" );
-		var idPrc = cTID( "#Prc" );
-		desc120.putUnitDouble( idHght, idPrc, docHeight );
-	executeAction( idTrnf, desc120, DialogModes.NO );	
+    const docWidth  = this.doc.width.as("px"),
+          docHeight = this.doc.height.as("px");
+    var idTrnf = cTID( "Trnf" );
+        var desc120 = new ActionDescriptor();
+        var idnull = cTID( "null" );
+            var ref73 = new ActionReference();
+            var idLyr = cTID( "Lyr " );
+            var idOrdn = cTID( "Ordn" );
+            var idTrgt = cTID( "Trgt" );
+            ref73.putEnumerated( idLyr, idOrdn, idTrgt );
+        desc120.putReference( idnull, ref73 );
+        var idFTcs = cTID( "FTcs" );
+        var idQCSt = cTID( "QCSt" );
+        var idQcsa = cTID( "Qcsa" );
+        desc120.putEnumerated( idFTcs, idQCSt, idQcsa );
+        var idOfst = cTID( "Ofst" );
+            var desc121 = new ActionDescriptor();
+            var idHrzn = cTID( "Hrzn" );
+            var idPxl = cTID( "#Pxl" );
+            desc121.putUnitDouble( idHrzn, idPxl, 0.000000 );
+            var idVrtc = cTID( "Vrtc" );
+            var idPxl = cTID( "#Pxl" );
+            desc121.putUnitDouble( idVrtc, idPxl, 0.000000 );
+        var idOfst = cTID( "Ofst" );
+        desc120.putObject( idOfst, idOfst, desc121 );
+        var idWdth = cTID( "Wdth" );
+        var idPrc = cTID( "#Prc" );
+        desc120.putUnitDouble( idWdth, idPrc, docWidth );
+        var idHght = cTID( "Hght" );
+        var idPrc = cTID( "#Prc" );
+        desc120.putUnitDouble( idHght, idPrc, docHeight );
+    executeAction( idTrnf, desc120, DialogModes.NO );    
 }
 
 function main() {
-	var gc = new GoldenCrop( app.activeDocument );
-	gc.loadConfig('tu_bedzie_jakis_konfig');
-	gc.go();
+    var gc = new GoldenCrop( app.activeDocument );
+    // TODO: below
+    gc.loadConfig('here comes some fancy config');
+    gc.go();
 }
 
 // ---------------------------------------------------------------------
 // Between ===START: stdlib.js=== and ===END: stdlib.js===, there is my
-// modified (stripped) version o xbytor's stdlib from xtools.
+// modified (stripped and extended) version o xbytor's stdlib from xtools.
 // ===START: stdlib.js===
 // 
 // stdlib.js
@@ -614,9 +899,7 @@ function main() {
 // License: http://creativecommons.org/licenses/LGPL/2.1
 // Contact: xbytor@gmail.com
 // Mod: Damian Sepczuk <damian.sepczuk@o2.pl>
-// 
-// Simple checks for photoshop version 
-// 
+
 var psVersion; 
 try { 
   var lvl = $.level; 
@@ -668,7 +951,7 @@ Stdlib.createRGBColor = function(r, g, b) {
 
 Stdlib.createSolidFillLayer = function(doc, color, name, opacity, layerColor, blendMode, clipToPrevious) {
   if(doc instanceof SolidColor) { 
-	  color=doc; doc=app.activeDocument};
+      color=doc; doc=app.activeDocument};
   if(!doc)doc=activeDocument;
   if (!color) {
     color = Stdlib.createRGBColor(0, 0, 0);
@@ -679,21 +962,21 @@ Stdlib.createSolidFillLayer = function(doc, color, name, opacity, layerColor, bl
     clref.putClass(sTID('contentLayer'));
     desc.putReference(cTID('null'), clref);
     var tdesc = new ActionDescriptor();
-	if (name) {
-		tdesc.putString( cTID( "Nm  " ), name );
-	}
-	if (opacity) {
-		tdesc.putUnitDouble( cTID( "Opct" ), cTID( "#Prc" ), opacity );
-	}
-	if (layerColor) {
-		tdesc.putEnumerated( cTID( "Clr " ), cTID( "Clr " ), cTID( layerColor ) );
-	}
-	if (blendMode) {
-		tdesc.putEnumerated( cTID( "Md  " ), cTID( "BlnM" ), cTID( "Nrml" ) );
-	}
-	if (clipToPrevious) {
-		tdesc.putBoolean( cTID( "Grup" ), !!clipToPrevious );
-	}
+    if (name) {
+        tdesc.putString( cTID( "Nm  " ), name );
+    }
+    if (opacity) {
+        tdesc.putUnitDouble( cTID( "Opct" ), cTID( "#Prc" ), opacity );
+    }
+    if (layerColor) {
+        tdesc.putEnumerated( cTID( "Clr " ), cTID( "Clr " ), cTID( layerColor ) );
+    }
+    if (blendMode) {
+        tdesc.putEnumerated( cTID( "Md  " ), cTID( "BlnM" ), cTID( "Nrml" ) );
+    }
+    if (clipToPrevious) {
+        tdesc.putBoolean( cTID( "Grup" ), !!clipToPrevious );
+    }
 
     var scldesc = new ActionDescriptor();
     var rgbdesc = new ActionDescriptor();
@@ -710,166 +993,174 @@ Stdlib.createSolidFillLayer = function(doc, color, name, opacity, layerColor, bl
 };
 // from discussions with Mike Hale
 Stdlib.hasLayerMask = function() {
-	var ref = new ActionReference();
-	ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
-	var desc = executeActionGet(ref);
-	return desc.hasKey(cTID("UsrM"));
+    var ref = new ActionReference();
+    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
+    var desc = executeActionGet(ref);
+    return desc.hasKey(cTID("UsrM"));
 };
 
 //
 // Remove the mask from the layer. Apply the mask if 'apply' is true
 //
 Stdlib.removeLayerMask = function(apply) {
-	if ( Stdlib.hasLayerMask() ) {
-		var desc = new ActionDescriptor();     // Delete
-		var ref = new ActionReference();       // Mask Channel
-		ref.putEnumerated(cTID("Chnl"), cTID("Chnl"), cTID("Msk "));
-		desc.putReference(cTID("null"), ref);
-		desc.putBoolean(cTID("Aply"), (apply == true));  // Apply Mask
-		executeAction(cTID("Dlt "), desc, DialogModes.NO);
-		return true;
-	} else {
-		return false;
-	}
+    if ( Stdlib.hasLayerMask() ) {
+        var desc = new ActionDescriptor();     // Delete
+        var ref = new ActionReference();       // Mask Channel
+        ref.putEnumerated(cTID("Chnl"), cTID("Chnl"), cTID("Msk "));
+        desc.putReference(cTID("null"), ref);
+        desc.putBoolean(cTID("Aply"), (apply == true));  // Apply Mask
+        executeAction(cTID("Dlt "), desc, DialogModes.NO);
+        return true;
+    } else {
+        return false;
+    }
 };
 
 Stdlib.addVectorMask = function( hide ) {
-	var desc = new ActionDescriptor();
+    var desc = new ActionDescriptor();
 
-	var arMode = new ActionReference();
-	arMode.putClass( cTID( "Path" ) );
-	
-	var arKind = new ActionReference();
-	arKind.putEnumerated( cTID( "Path" ), cTID( "Path" ), sTID( "vectorMask" ) );
-	
-	var mode = cTID(hide?"HdAl":"RvlA");
-	desc.putReference( cTID( "null" ), arMode );	
-	desc.putReference( cTID( "At  " ), arKind );	
-	desc.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), mode);
+    var arMode = new ActionReference();
+    arMode.putClass( cTID( "Path" ) );
+    
+    var arKind = new ActionReference();
+    arKind.putEnumerated( cTID( "Path" ), cTID( "Path" ), sTID( "vectorMask" ) );
+    
+    var mode = cTID(hide?"HdAl":"RvlA");
+    desc.putReference( cTID( "null" ), arMode );    
+    desc.putReference( cTID( "At  " ), arKind );    
+    desc.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), mode);
 
-	executeAction( cTID( "Mk  " ), desc, DialogModes.NO );
+    executeAction( cTID( "Mk  " ), desc, DialogModes.NO );
 }
 
 Stdlib.decodePathMode = function( mode ) {
-	var pathMode = null;
-	switch ( mode ) {
-		case ShapeOperation.SHAPEADD:
-			pathMode = cTID("AddT");
-			break;
-		case ShapeOperation.SHAPEINTERSECT:
-			pathMode = cTID();
-			break;
-		case ShapeOperation.SHAPESUBTRACT:
-			pathMode = cTID("SbtF");
-			break;
-		case ShapeOperation.SHAPEXOR:
-			pathMode = cTID();
-			break;
-		default:
-			Error.runtimeError(1, "Shape mode not supported");
-	}
-	return pathMode;
+    var pathMode = null;
+    switch ( mode ) {
+        case ShapeOperation.SHAPEADD:
+            pathMode = cTID("AddT");
+            break;
+        case ShapeOperation.SHAPEINTERSECT:
+            pathMode = cTID();
+            break;
+        case ShapeOperation.SHAPESUBTRACT:
+            pathMode = cTID("SbtF");
+            break;
+        case ShapeOperation.SHAPEXOR:
+            pathMode = cTID();
+            break;
+        default:
+            Error.runtimeError(1, "Shape mode not supported");
+    }
+    return pathMode;
 }
 
 Stdlib.decodeUnit = function( unit ) {
-	var pathUnit = null;
-	switch ( unit ) {
-		case Units.PERCENT:
-			pathUnit = cTID("#Prc");
-			break;
-		case Units.PIXELS:
-			pathUnit = cTID("#Pxl");
-			break;
-		case Units.CM:
-		case Units.INCHES:
-		case Units.MM:
-		case Units.PICAS:
-		case Units.POINTS:
-		default:
-			Error.runtimeError(1, "Unit not supported");
-	}
-	return pathUnit;
+    var pathUnit = null;
+    switch ( unit ) {
+        case Units.PERCENT:
+            pathUnit = cTID("#Prc");
+            break;
+        case Units.PIXELS:
+            pathUnit = cTID("#Pxl");
+            break;
+        case Units.CM:
+        case Units.INCHES:
+        case Units.MM:
+        case Units.PICAS:
+        case Units.POINTS:
+        default:
+            Error.runtimeError(1, "Unit not supported");
+    }
+    return pathUnit;
 }
 
 // by SzopeN
 Stdlib.rectPath = function( mode, unit, top, left, bottom, right )
 {
-	var pathMode = Stdlib.decodePathMode(mode);
-	var pathUnit = Stdlib.decodeUnit(unit);
+    var pathMode = Stdlib.decodePathMode(mode);
+    var pathUnit = Stdlib.decodeUnit(unit);
 
-	var desc = new ActionDescriptor();
-	
-	var arStyle = new ActionReference();
-		arStyle.putEnumerated( cTID( "Path" ), cTID( "Ordn" ), cTID( "Trgt" ) );
+    var desc = new ActionDescriptor();
+    
+    var arStyle = new ActionReference();
+        arStyle.putEnumerated( cTID( "Path" ), cTID( "Ordn" ), cTID( "Trgt" ) );
 
-	var adBounds = new ActionDescriptor();
-		adBounds.putUnitDouble( cTID( "Top " ), pathUnit, top );
-		adBounds.putUnitDouble( cTID( "Left" ), pathUnit, left );
-		adBounds.putUnitDouble( cTID( "Btom" ), pathUnit, bottom );
-		adBounds.putUnitDouble( cTID( "Rght" ), pathUnit, right );
-	
-	desc.putReference( cTID( "null" ), arStyle );
-	desc.putObject( cTID( "T   " ), cTID( "Rctn" ), adBounds );
+    var adBounds = new ActionDescriptor();
+        adBounds.putUnitDouble( cTID( "Top " ), pathUnit, top );
+        adBounds.putUnitDouble( cTID( "Left" ), pathUnit, left );
+        adBounds.putUnitDouble( cTID( "Btom" ), pathUnit, bottom );
+        adBounds.putUnitDouble( cTID( "Rght" ), pathUnit, right );
+    
+    desc.putReference( cTID( "null" ), arStyle );
+    desc.putObject( cTID( "T   " ), cTID( "Rctn" ), adBounds );
 
-	executeAction( pathMode, desc, DialogModes.NO );
+    executeAction( pathMode, desc, DialogModes.NO );
 }
 
 Stdlib.linePath = function( mode, unit, width, x1, y1, x2, y2 ) {
-	var pathMode = Stdlib.decodePathMode(mode);
-	var pathUnit = Stdlib.decodeUnit(unit);
+    var pathMode = Stdlib.decodePathMode(mode);
+    var pathUnit = Stdlib.decodeUnit(unit);
 
-	var idAddT = pathMode;
-		var desc90 = new ActionDescriptor();
-		var idnull = cTID( "null" );
-			var ref47 = new ActionReference();
-			var idPath = cTID( "Path" );
-			var idOrdn = cTID( "Ordn" );
-			var idTrgt = cTID( "Trgt" );
-			ref47.putEnumerated( idPath, idOrdn, idTrgt );
-		desc90.putReference( idnull, ref47 );
-		var idT = cTID( "T   " );
-			var desc91 = new ActionDescriptor();
-			var idStrt = cTID( "Strt" );
-				var desc92 = new ActionDescriptor();
-				var idHrzn = cTID( "Hrzn" );
-				var idPxl = pathUnit;
-				desc92.putUnitDouble( idHrzn, idPxl, x1 );
-				var idVrtc = cTID( "Vrtc" );
-				var idPxl = pathUnit;
-				desc92.putUnitDouble( idVrtc, idPxl, y1 );
-			var idPnt = cTID( "Pnt " );
-			desc91.putObject( idStrt, idPnt, desc92 );
-			var idEnd = cTID( "End " );
-				var desc93 = new ActionDescriptor();
-				var idHrzn = cTID( "Hrzn" );
-				var idPxl = pathUnit;
-				desc93.putUnitDouble( idHrzn, idPxl, x2 );
-				var idVrtc = cTID( "Vrtc" );
-				var idPxl = pathUnit;
-				desc93.putUnitDouble( idVrtc, idPxl, y2 );
-			var idPnt = cTID( "Pnt " );
-			desc91.putObject( idEnd, idPnt, desc93 );
-			var idWdth = cTID( "Wdth" );
-			var idPxl = pathUnit;
-			desc91.putUnitDouble( idWdth, idPxl, width );
-		var idLn = cTID( "Ln  " );
-		desc90.putObject( idT, idLn, desc91 );
-	executeAction( idAddT, desc90, DialogModes.NO );
+    var idAddT = pathMode;
+        var desc90 = new ActionDescriptor();
+        var idnull = cTID( "null" );
+            var ref47 = new ActionReference();
+            var idPath = cTID( "Path" );
+            var idOrdn = cTID( "Ordn" );
+            var idTrgt = cTID( "Trgt" );
+            ref47.putEnumerated( idPath, idOrdn, idTrgt );
+        desc90.putReference( idnull, ref47 );
+        var idT = cTID( "T   " );
+            var desc91 = new ActionDescriptor();
+            var idStrt = cTID( "Strt" );
+                var desc92 = new ActionDescriptor();
+                var idHrzn = cTID( "Hrzn" );
+                var idPxl = pathUnit;
+                desc92.putUnitDouble( idHrzn, idPxl, x1 );
+                var idVrtc = cTID( "Vrtc" );
+                var idPxl = pathUnit;
+                desc92.putUnitDouble( idVrtc, idPxl, y1 );
+            var idPnt = cTID( "Pnt " );
+            desc91.putObject( idStrt, idPnt, desc92 );
+            var idEnd = cTID( "End " );
+                var desc93 = new ActionDescriptor();
+                var idHrzn = cTID( "Hrzn" );
+                var idPxl = pathUnit;
+                desc93.putUnitDouble( idHrzn, idPxl, x2 );
+                var idVrtc = cTID( "Vrtc" );
+                var idPxl = pathUnit;
+                desc93.putUnitDouble( idVrtc, idPxl, y2 );
+            var idPnt = cTID( "Pnt " );
+            desc91.putObject( idEnd, idPnt, desc93 );
+            var idWdth = cTID( "Wdth" );
+            var idPxl = pathUnit;
+            desc91.putUnitDouble( idWdth, idPxl, width );
+        var idLn = cTID( "Ln  " );
+        desc90.putObject( idT, idLn, desc91 );
+    executeAction( idAddT, desc90, DialogModes.NO );
 }
 // by SzopeN
 Stdlib.userGoToFreeTransform = function() {
-	executeAction( cTID( "Trnf" ), new ActionDescriptor(), DialogModes.ALL );
+	var desc = new ActionDescriptor();
+    var lref = new ActionReference();
+    lref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
+    desc.putReference(cTID("null"), lref);
+    desc.putEnumerated(cTID("FTcs"), cTID("QCSt"), cTID("Qcsa"));
+    desc.putUnitDouble( cTID('Wdth'), cTID('#Prc'), 99.9999999999999 );
+    desc.putUnitDouble( cTID('Hght'), cTID('#Prc'), 99.9999999999999 );
+    executeAction(cTID("Trnf"), desc, DialogModes.ALL);
+//    executeAction( cTID( "Trnf" ), new ActionDescriptor(), DialogModes.ALL );
 }
 
 // by SzopeN
 // heplful with multiple suspendHistory
 // is there a better candidate?
 Stdlib.NOP = function() {
-	activeDocument = activeDocument;
-	/*
-	executeAction( cTID( "undo" ), undefined, DialogModes.NO );
-	executeAction( cTID( "undo" ), undefined, DialogModes.NO );
-	*/
+    activeDocument = activeDocument;
+    /*
+    executeAction( cTID( "undo" ), undefined, DialogModes.NO );
+    executeAction( cTID( "undo" ), undefined, DialogModes.NO );
+    */
 }
 
 Stdlib.loadVectorMaskSelection = function() {
@@ -972,12 +1263,12 @@ Stdlib.getVectorMaskBounds_cornerPointsOnly = function(round, doc, layer) {
         _id4 = sTID('horizontal'), 
         _id5 = sTID('vertical'); 
        
-    for ( cPath=0; cPath<pathList.count; ++cPath ) 
+    for ( var cPath=0; cPath<pathList.count; ++cPath ) 
     { 
       var curPath = pathList.getObjectValue(cPath).getList(_id1); 
       var points = curPath.getObjectValue(0).getList(_id2); 
       // for each point 
-      for (cPoint=0; cPoint < points.count; ++cPoint ) 
+      for ( var cPoint=0; cPoint < points.count; ++cPoint ) 
       {    
         var point = points.getObjectValue(cPoint).getObjectValue(_id3); 
         var x = point.getUnitDoubleValue(_id4); 
@@ -988,7 +1279,7 @@ Stdlib.getVectorMaskBounds_cornerPointsOnly = function(round, doc, layer) {
         if ( y > maxY ) maxY = y; 
       } 
     } 
-    res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY]; 
+    var res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY]; 
     if (round) 
     { 
       for ( i=0; i<res.length; ++i ) 
@@ -1003,19 +1294,19 @@ Stdlib.getVectorMaskBounds_cornerPointsOnly = function(round, doc, layer) {
 }
 
 if ( isCS4() || isCS3() ) { 
-	// SzopeN's version -- do NOT use history (becouse it can be suspended!)
-	Stdlib.hasSelection = function(doc) {
-	  var debugLevel = $.level; // save debug level
-	  $.level = 0; // turn off debugging
-	  var res = true;
-	  try {
-		  activeDocument.selection.bounds // throws if there's no selection
-	  } catch(e) {
-		  res = false; // error thrown => no selection
-	  }
-	  $.level = debugLevel; // restore debug level
-	  return res;
-	};
+    // SzopeN's version -- do NOT make use of history (because it can be suspended!)
+    Stdlib.hasSelection = function(doc) {
+      var debugLevel = $.level; // save debug level
+      $.level = 0; // turn off debugging
+      var res = true;
+      try {
+          activeDocument.selection.bounds // throws if there's no selection
+      } catch(e) {
+          res = false; // error thrown => no selection
+      }
+      $.level = debugLevel; // restore debug level
+      return res;
+    };
 } else { 
   Stdlib.hasSelection = function(doc) { 
     var res = false; 
@@ -1067,168 +1358,167 @@ Stdlib.maskModesEnum = {noMask:false, revealAll:1, hideAll:2, revealSelection:3,
  * Example: Stdlib.createLayerGroup('my group', 50, Stdlib.colorsEnum.red, Stdlib.blendModesEnum.passThrough);
  */
 Stdlib.createLayerGroup = function(name, opacity, color, blendMode, userMask, vectorMask, restrictChannels) {
-	var doc = app.activeDocument;
-	// Make layer
-	var idMk = cTID( "Mk  " );
-		var desc54 = new ActionDescriptor();
-		
-		var idnull = cTID( "null" );
-			var ref49 = new ActionReference();
-			var idlayerSection = sTID( "layerSection" );
-			ref49.putClass( idlayerSection );
-		desc54.putReference( idnull, ref49 );
-		
-		var idUsng = cTID( "Usng" );
-			var desc55 = new ActionDescriptor();
-			if (name) {
-				desc55.putString( cTID( "Nm  " ), name );
-			}
-			if (opacity) {
-				desc55.putUnitDouble( cTID( "Opct" ), cTID( "#Prc" ), opacity );
-			}
-			if (color) {
-				desc55.putEnumerated( cTID( "Clr " ), cTID( "Clr " ), cTID( color ) );
-			}
-			if (blendMode) {
-				desc55.putEnumerated( cTID( "Md  " ), cTID( "BlnM" ), cTID( "Nrml" ) );
-			}
-		desc54.putObject( idUsng, sTID( "layerSection" ), desc55 );
-	executeAction( idMk, desc54, DialogModes.NO );
-	if ( userMask ) {
-		var desc = new ActionDescriptor();
-		desc.putClass(cTID("Nw  "), cTID("Chnl"));
-		var ref = new ActionReference();
-		ref.putEnumerated(cTID("Chnl"), cTID("Chnl"), cTID("Msk "));
-		desc.putReference(cTID("At  "), ref);
-		switch ( userMask ) {
-			case Stdlib.maskModesEnum.revealAll:
-				desc.putEnumerated(cTID("Usng"), cTID("UsrM"), cTID("RvlA"));
-				break;
-			case Stdlib.maskModesEnum.hideAll:
-				desc.putEnumerated(cTID("Usng"), cTID("UsrM"), cTID("HdAl"));
-				break;
-			case Stdlib.maskModesEnum.revealPath:
-				Stdlib.makeSelectionFromPath();
-				// NO BREAK
-			case Stdlib.maskModesEnum.revealSelection:
-				desc.putEnumerated(cTID("Usng"), cTID("UsrM"), cTID("RvlS"));
-				break;
-			case Stdlib.maskModesEnum.hidePath:
-				Stdlib.makeSelectionFromPath();
-				doc.selection.invert();
-				// NO BREAK
-			case Stdlib.maskModesEnum.hideSelection:
-				desc.putEnumerated(cTID("Usng"), cTID("UsrM"), cTID("HdSl"));
-				break;
+    var doc = app.activeDocument;
+    // Make layer
+    var idMk = cTID( "Mk  " );
+        var desc54 = new ActionDescriptor();
+        
+        var idnull = cTID( "null" );
+            var ref49 = new ActionReference();
+            var idlayerSection = sTID( "layerSection" );
+            ref49.putClass( idlayerSection );
+        desc54.putReference( idnull, ref49 );
+        
+        var idUsng = cTID( "Usng" );
+            var desc55 = new ActionDescriptor();
+            if (name) {
+                desc55.putString( cTID( "Nm  " ), name );
+            }
+            if (opacity) {
+                desc55.putUnitDouble( cTID( "Opct" ), cTID( "#Prc" ), opacity );
+            }
+            if (color) {
+                desc55.putEnumerated( cTID( "Clr " ), cTID( "Clr " ), cTID( color ) );
+            }
+            if (blendMode) {
+                desc55.putEnumerated( cTID( "Md  " ), cTID( "BlnM" ), cTID( "Nrml" ) );
+            }
+        desc54.putObject( idUsng, sTID( "layerSection" ), desc55 );
+    executeAction( idMk, desc54, DialogModes.NO );
+    if ( userMask ) {
+        var desc = new ActionDescriptor();
+        desc.putClass(cTID("Nw  "), cTID("Chnl"));
+        var ref = new ActionReference();
+        ref.putEnumerated(cTID("Chnl"), cTID("Chnl"), cTID("Msk "));
+        desc.putReference(cTID("At  "), ref);
+        switch ( userMask ) {
+            case Stdlib.maskModesEnum.revealAll:
+                desc.putEnumerated(cTID("Usng"), cTID("UsrM"), cTID("RvlA"));
+                break;
+            case Stdlib.maskModesEnum.hideAll:
+                desc.putEnumerated(cTID("Usng"), cTID("UsrM"), cTID("HdAl"));
+                break;
+            case Stdlib.maskModesEnum.revealPath:
+                Stdlib.makeSelectionFromPath();
+                // NO BREAK
+            case Stdlib.maskModesEnum.revealSelection:
+                desc.putEnumerated(cTID("Usng"), cTID("UsrM"), cTID("RvlS"));
+                break;
+            case Stdlib.maskModesEnum.hidePath:
+                Stdlib.makeSelectionFromPath();
+                doc.selection.invert();
+                // NO BREAK
+            case Stdlib.maskModesEnum.hideSelection:
+                desc.putEnumerated(cTID("Usng"), cTID("UsrM"), cTID("HdSl"));
+                break;
 
-		}
-		executeAction(cTID("Mk  "), desc, DialogModes.NO);
-	}
+        }
+        executeAction(cTID("Mk  "), desc, DialogModes.NO);
+    }
 
-	// Add masks...
-	if ( vectorMask ) {
-		var idMk = cTID( "Mk  " );
-			var desc287 = new ActionDescriptor();
-			var idnull = cTID( "null" );
-				var ref145 = new ActionReference();
-				ref145.putClass( cTID( "Path" ) );
-			desc287.putReference( idnull, ref145 );
-			var idAt = cTID( "At  " );
-				var ref146 = new ActionReference();
-				var idPath = cTID( "Path" );
-				ref146.putEnumerated( idPath, idPath, sTID( "vectorMask" ) );
-			desc287.putReference( idAt, ref146 );
-			
-		switch ( vectorMask ) {
-			case Stdlib.maskModesEnum.revealAll:
-				desc287.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), cTID( "RvlA" ) );
-				break;
-			case Stdlib.maskModesEnum.hideAll:
-				desc287.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), cTID( "HdAl" ) );
-				break;
-			case Stdlib.maskModesEnum.revealSelection:
-				Stdlib.makeWorkPath();
-				desc287.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), cTID( "RvlA" ) );
-				break;
-			case Stdlib.maskModesEnum.hideSelection:
-				Stdlib.makeWorkPath();
-				desc287.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), cTID( "HdAl" ) );
-				break;
-			case Stdlib.maskModesEnum.revealPath:
-					var ref171 = new ActionReference();
-					ref171.putEnumerated( cTID( "Path" ), cTID( "Ordn" ), cTID( "Trgt" ) );
-				desc591.putReference( cTID( "Usng" ), ref171 );
-				break;
-			case Stdlib.maskModesEnum.hidePath:
-				// TO DO
-				throw new Error("Operation Stdlib.maskModesEnum.hidePath not implemented in vector mask yet!");
-				break;
-		}
-		executeAction( idMk, desc287, DialogModes.NO );
-	}
+    // Add masks...
+    if ( vectorMask ) {
+        var idMk = cTID( "Mk  " );
+            var desc287 = new ActionDescriptor();
+            var idnull = cTID( "null" );
+                var ref145 = new ActionReference();
+                ref145.putClass( cTID( "Path" ) );
+            desc287.putReference( idnull, ref145 );
+            var idAt = cTID( "At  " );
+                var ref146 = new ActionReference();
+                var idPath = cTID( "Path" );
+                ref146.putEnumerated( idPath, idPath, sTID( "vectorMask" ) );
+            desc287.putReference( idAt, ref146 );
+            
+        switch ( vectorMask ) {
+            case Stdlib.maskModesEnum.revealAll:
+                desc287.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), cTID( "RvlA" ) );
+                break;
+            case Stdlib.maskModesEnum.hideAll:
+                desc287.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), cTID( "HdAl" ) );
+                break;
+            case Stdlib.maskModesEnum.revealSelection:
+                Stdlib.makeWorkPath();
+                desc287.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), cTID( "RvlA" ) );
+                break;
+            case Stdlib.maskModesEnum.hideSelection:
+                Stdlib.makeWorkPath();
+                desc287.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), cTID( "HdAl" ) );
+                break;
+            case Stdlib.maskModesEnum.revealPath:
+                    var ref171 = new ActionReference();
+                    ref171.putEnumerated( cTID( "Path" ), cTID( "Ordn" ), cTID( "Trgt" ) );
+                desc591.putReference( cTID( "Usng" ), ref171 );
+                break;
+            case Stdlib.maskModesEnum.hidePath:
+                // TO DO
+                throw new Error("Operation Stdlib.maskModesEnum.hidePath not implemented in vector mask yet!");
+                break;
+        }
+        executeAction( idMk, desc287, DialogModes.NO );
+    }
 
-	// Restrict channels
-	if ( restrictChannels ) {
-		var idsetd = cTID( "setd" );
-			var desc162 = new ActionDescriptor();
-			var idnull = cTID( "null" );
-				var ref126 = new ActionReference();
-				ref126.putEnumerated( cTID( "Lyr " ), cTID( "Ordn" ), cTID( "Trgt" ) );
-			desc162.putReference( idnull, ref126 );
-			var idT = cTID( "T   " );
-				var desc163 = new ActionDescriptor();
-				var idchannelRestrictions = sTID( "channelRestrictions" );
-					var idChnl = cTID( "Chnl" );
-					var list3 = new ActionList();
+    // Restrict channels
+    if ( restrictChannels ) {
+        var idsetd = cTID( "setd" );
+            var desc162 = new ActionDescriptor();
+            var idnull = cTID( "null" );
+                var ref126 = new ActionReference();
+                ref126.putEnumerated( cTID( "Lyr " ), cTID( "Ordn" ), cTID( "Trgt" ) );
+            desc162.putReference( idnull, ref126 );
+            var idT = cTID( "T   " );
+                var desc163 = new ActionDescriptor();
+                var idchannelRestrictions = sTID( "channelRestrictions" );
+                    var idChnl = cTID( "Chnl" );
+                    var list3 = new ActionList();
 
-					if ( restrictChannels & Stdlib.restrictChannelsEnum.red ) {
-						list3.putEnumerated( idChnl, cTID( 'Rd  ' ) );
-					}
-					if ( restrictChannels & Stdlib.restrictChannelsEnum.green ) {
-						list3.putEnumerated( idChnl, cTID( 'Grn ' ) );
-					}
-					if ( restrictChannels & Stdlib.restrictChannelsEnum.blue ) {
-						list3.putEnumerated( idChnl, cTID( 'Bl  ' ) );
-					}
-					if ( restrictChannels & Stdlib.restrictChannelsEnum.cyan ) {
-						list3.putEnumerated( idChnl, cTID( 'Cyn ' ) );
-					}
-					if ( restrictChannels & Stdlib.restrictChannelsEnum.magenta ) {
-						list3.putEnumerated( idChnl, cTID( 'Mgnt' ) );
-					}
-					if ( restrictChannels & Stdlib.restrictChannelsEnum.yellow ) {
-						list3.putEnumerated( idChnl, cTID( 'Yllw' ) );
-					}
-					if ( restrictChannels & Stdlib.restrictChannelsEnum.black ) {
-						list3.putEnumerated( idChnl, cTID( 'Blck' ) );
-					}
-					if ( restrictChannels & Stdlib.restrictChannelsEnum.L ) {
-						list3.putEnumerated( idChnl, cTID( 'Lght' ) );
-					}
-					if ( restrictChannels & Stdlib.restrictChannelsEnum.A ) {
-						list3.putEnumerated( idChnl, cTID( 'A   ' ) );
-					}
-					if ( restrictChannels & Stdlib.restrictChannelsEnum.B ) {
-						list3.putEnumerated( idChnl, cTID( 'B   ' ) );
-					}
-				desc163.putList( idchannelRestrictions, list3 );
-			var idLyr = cTID( "Lyr " );
-			desc162.putObject( idT, idLyr, desc163 );
-		executeAction( idsetd, desc162, DialogModes.NO );
-	}
-	return doc.activeLayer;
+                    if ( restrictChannels & Stdlib.restrictChannelsEnum.red ) {
+                        list3.putEnumerated( idChnl, cTID( 'Rd  ' ) );
+                    }
+                    if ( restrictChannels & Stdlib.restrictChannelsEnum.green ) {
+                        list3.putEnumerated( idChnl, cTID( 'Grn ' ) );
+                    }
+                    if ( restrictChannels & Stdlib.restrictChannelsEnum.blue ) {
+                        list3.putEnumerated( idChnl, cTID( 'Bl  ' ) );
+                    }
+                    if ( restrictChannels & Stdlib.restrictChannelsEnum.cyan ) {
+                        list3.putEnumerated( idChnl, cTID( 'Cyn ' ) );
+                    }
+                    if ( restrictChannels & Stdlib.restrictChannelsEnum.magenta ) {
+                        list3.putEnumerated( idChnl, cTID( 'Mgnt' ) );
+                    }
+                    if ( restrictChannels & Stdlib.restrictChannelsEnum.yellow ) {
+                        list3.putEnumerated( idChnl, cTID( 'Yllw' ) );
+                    }
+                    if ( restrictChannels & Stdlib.restrictChannelsEnum.black ) {
+                        list3.putEnumerated( idChnl, cTID( 'Blck' ) );
+                    }
+                    if ( restrictChannels & Stdlib.restrictChannelsEnum.L ) {
+                        list3.putEnumerated( idChnl, cTID( 'Lght' ) );
+                    }
+                    if ( restrictChannels & Stdlib.restrictChannelsEnum.A ) {
+                        list3.putEnumerated( idChnl, cTID( 'A   ' ) );
+                    }
+                    if ( restrictChannels & Stdlib.restrictChannelsEnum.B ) {
+                        list3.putEnumerated( idChnl, cTID( 'B   ' ) );
+                    }
+                desc163.putList( idchannelRestrictions, list3 );
+            var idLyr = cTID( "Lyr " );
+            desc162.putObject( idT, idLyr, desc163 );
+        executeAction( idsetd, desc162, DialogModes.NO );
+    }
+    return doc.activeLayer;
 }
 // ===END: stdlib.js===
 
 app.bringToFront();
+if ( app.documents.length == 0 )
+{
+    var loc = localizator.getInstance();
+    throw new Error( loc.get('openB4Run') );
+}
+
 try {
-   if ( app.documents.length == 0 )
-   {
-      throw new Error( { en: "Open the document in which you want the script to run.",
-                         pl: "Otwórz dokument, w którym chcesz uruchomiæ ten skrypt."
-                       }
-                     );
-   }
    var oldRulerUnit = app.preferences.rulerUnits; // Save ruler unit
    app.preferences.rulerUnits = Units.PIXELS;     // Set it to PIXEL
    main();
