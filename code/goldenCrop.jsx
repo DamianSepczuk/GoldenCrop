@@ -1,5 +1,5 @@
 /*****************************************
- * Golden crop tool, v0.75 beta
+ * Golden crop tool, v0.77 beta
  *
  * Copyright 2009, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
  * 
@@ -62,7 +62,7 @@ if ( lang != "auto" )
 $.level = debug?1:0;
 
 const szAppName = "Golden Crop",
-      szVersion = "0.75 beta";
+      szVersion = "0.77 beta";
 // ---------------------------------------------------------------------
 function localizator(secretNumber) {
     if ( secretNumber != 314159 ) {
@@ -606,21 +606,8 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
  */
 GoldenCrop.prototype.freeTransform = function() {
     this.doc.activeLayer = this.gCrop;
-    var dialogMode = app.displayDialogs;
-    app.displayDialogs = DialogModes.ALL;
-    var debugLevel = $.level; // save debug level
-    $.level = 0;              // turn off debugging
-    try {
-        Stdlib.userGoToFreeTransform();
-    } catch (e) {
-        // user canceled crop OR crop mash has not beed moved
-        this.doCrop = false;
-        return;
-    } finally {
-        $.level = debugLevel;             // restore debug level
-        app.displayDialogs = dialogMode;  // ... and dialog mode
-    }
-    this.doCrop = true;
+	this.doCrop = Stdlib.userGoToFreeTransform();
+	return;
 }
 
 /*
@@ -1141,15 +1128,49 @@ Stdlib.linePath = function( mode, unit, width, x1, y1, x2, y2 ) {
 }
 // by SzopeN
 Stdlib.userGoToFreeTransform = function() {
-	var desc = new ActionDescriptor();
-    var lref = new ActionReference();
-    lref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
-    desc.putReference(cTID("null"), lref);
-    desc.putEnumerated(cTID("FTcs"), cTID("QCSt"), cTID("Qcsa"));
-    desc.putUnitDouble( cTID('Wdth'), cTID('#Prc'), 99.9999999999999 );
-    desc.putUnitDouble( cTID('Hght'), cTID('#Prc'), 99.9999999999999 );
-    executeAction(cTID("Trnf"), desc, DialogModes.ALL);
-//    executeAction( cTID( "Trnf" ), new ActionDescriptor(), DialogModes.ALL );
+	function preMove() {
+		var desc = new ActionDescriptor();
+		var lref = new ActionReference();
+		lref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
+		desc.putReference(cTID("null"), lref);
+		desc.putEnumerated(cTID("FTcs"), cTID("QCSt"), cTID("Qcsa"));
+			 var desc75 = new ActionDescriptor();
+			 desc75.putUnitDouble( cTID('Hrzn'), cTID('#Pxl'), 1.000000 );
+			 desc75.putUnitDouble( cTID('Vrtc'), cTID('#Pxl'), 1.000000 );
+		desc.putObject( cTID('Ofst'), cTID('Ofst'), desc75 );
+		executeAction(cTID("Trnf"), desc, DialogModes.NO);
+	}
+	function retPostMoveDesc() {
+		var desc = new ActionDescriptor();
+		var lref = new ActionReference();
+		lref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
+		desc.putReference(cTID("null"), lref);
+		desc.putEnumerated(cTID("FTcs"), cTID("QCSt"), cTID("Qcsa"));
+			 var desc75 = new ActionDescriptor();
+			 desc75.putUnitDouble( cTID('Hrzn'), cTID('#Pxl'), -1.000000 );
+			 desc75.putUnitDouble( cTID('Vrtc'), cTID('#Pxl'), -1.000000 );
+		desc.putObject( cTID('Ofst'), cTID('Ofst'), desc75 );
+		return desc;
+	}
+	var state = true;
+	preMove();
+
+	var lvl = $.level;
+    $.level = 0;
+    try {
+      executeAction(cTID("Trnf"), retPostMoveDesc(), DialogModes.ALL);///ALL
+    } catch (e) {
+	  state = false;
+	  // $.writeln('' + new Date() + '-------> ' + $.level);
+      if (e.number != 8007) { // if not "User cancelled"
+        throw e;
+      }
+      executeAction(cTID("Trnf"), retPostMoveDesc(), DialogModes.NO);
+    } finally {
+      $.level = lvl;
+	}
+	
+	return state;
 }
 
 // by SzopeN
