@@ -356,7 +356,7 @@ function GoldenCrop( _doc ) {
  */
 GoldenCrop.prototype.loadConfig = function() {
     this.ifApplyFX = true;
-    this.ifSuspendHistory = true; 
+    this.ifSuspendHistory = false;
     this.loc = localizator.getInstance();
 }
 
@@ -613,7 +613,7 @@ GoldenCrop.prototype.freeTransform = function() {
  * Crops canvas and deletes all Golden Crop layers
  */
 GoldenCrop.prototype.simpleCrop = function() {
-	// TODO get selection bounds from this.croppingBounds
+    // TODO get selection bounds from this.croppingBounds
     this.doc.activeLayer = this.outerFrame;
     Stdlib.loadVectorMaskSelection(); // could be empty but it is no problem
     if ( Stdlib.hasSelection() ) {
@@ -698,12 +698,11 @@ GoldenCrop.prototype.doRevealPopBackround = function() {
         addLeft   = Math.max(-cb[0],0),
         addBottom = Math.max(cb[3]-docH,0),
         addRight  = Math.max(cb[2]-docW,0);
-		
-	if (this.popBackground) {
+        
+    if (this.popBackground) {
         this.doPopBackground();
-	}
+    }
     
-	// TODO what if addX < 0 ?
     this.doc.resizeCanvas(new UnitValue(docW+addLeft,"px"),new UnitValue(docH+addTop,"px"),AnchorPosition.BOTTOMRIGHT);
     this.doc.resizeCanvas(new UnitValue(docW+addLeft+addRight,"px"),new UnitValue(docH+addTop+addBottom,"px"),AnchorPosition.TOPLEFT);
 
@@ -719,12 +718,21 @@ GoldenCrop.prototype.doRotateCanvas = function() {
     if ( this.popBackground ) {
         this.doPopBackground();
     }
-
-    Stdlib.rotateCannvas(this.rotateCanvasA);
+	var angle = this.rotateCanvasA;
+	if ( angle > 45 ) {
+		Stdlib.rotateCannvas(-90);
+	} else if (angle < -45 ) {
+		Stdlib.rotateCannvas(90);
+	}
+    Stdlib.rotateCannvas(angle);
     // update cropping bounds and document dimentions
     this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.outerFrame);         
     this.docW = parseInt(this.doc.width.as("px")),
     this.docH = parseInt(this.doc.height.as("px"));
+    $.writeln('################# after rotate');
+    $.writeln('docW:' +this.docW);
+    $.writeln('docH:' +this.docH);
+
 }
 
 
@@ -795,18 +803,48 @@ GoldenCrop.prototype.go = function() {
         do {
             this.cropAccepted = Stdlib.userGoToFreeTransform(this.doc, this.gCrop);
             if ( !this.cropAccepted ) break;
+            
+            this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.outerFrame);
+            var cb = this.cropBounds;
+
             // Detect angle
             var threshold = 0.0001;
             var angle = Stdlib.getVectorMaskAngle_cornerPointsOnly(false, this.doc, this.outerFrame);
             this.rotateCanvasA = ( Math.abs(angle)%90 > threshold )?-angle:false;
             if ( this.rotateCanvasA ) {
                 this.popBackground = true; // default, could be changed in the following code
+                var anRad = ((this.rotateCanvasA)*Math.PI)/180;
+                var sinAb = Math.sin(Math.abs(anRad)), cosAb = Math.cos(Math.abs(anRad)),
+				    sinAn =Math.sin(anRad), cosAn = Math.cos(anRad);
+                var mid = {x:(cb[0]+cb[2])/2,y:(cb[1]+cb[3])/2};
+                //var dist = Math.sqrt(mid.x*mid.x+mid.y*mid.y);
+                var cbRot = cb.clone();
+				var newDocW = Math.ceil(docW * cosAb + docH * sinAb),
+				    newDocH = Math.ceil(docW * sinAb + docH * cosAb);
+			    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
+				var minXp, maxXp, minYp, maxYp; 
+				// translate to 0,0, rotate, and translate back
+                for (var i=6; i<10; ++i) {
+					var x = cbRot[i].x - mid.x,
+					    y = cbRot[i].y - mid.y;
+                    var xrot = x * cosAn - y * sinAn,
+                        yrot = x * sinAn + y * cosAn;
+                    x = cbRot[i].x = xrot+mid.x+(newDocW-docW)/2;
+                    y = cbRot[i].y = yrot+mid.y+(newDocH-docH)/2;
+				    if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
+				    if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
+				    if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
+				    if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
+                }
+                this.afterRotate = {cb: [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp, cbRot],
+								   docW: newDocW,
+								   docH: newDocH};
+                $.writeln('~~~~~~~~~~~~~');
+                $.writeln('afterRotate:' +this.afterRotate);
+				//debugger;
             }
             
             // Detect cropping mode
-            this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.outerFrame);
-            var cb = this.cropBounds;
-            
             if ( cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
                 // cropping only inside picture frame
                 this.cropMethod = this.chooseCropMethod();
@@ -815,56 +853,29 @@ GoldenCrop.prototype.go = function() {
                     this.popBackground = false;
                 }
             } else {
-                // cropping outside frame
-                if (this.rotateCanvasA)
-                {
-                    // there is a rotation
-                    // x,y -- tested point; xi -- points from line
-                    function _linePointSide( x, y, x1, y1, x2, y2 ) {
-                        //$.writeln('_linePointDist ' + x + ' ' + y + ' ' + x1 + ' ' + y1 + ' ' + x2 + ' ' + y2 );
-                        return (x - x1)*(y2 - y1) - (x2 - x1)*(y - y1);
-                    }
-                    //             0      1     2      3     4      5           6      7       8       9
-                    //var res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp]; 
-                    // <0 if there is no real picture crop
-                    var pList = cb[10];
-                    var c1 = _linePointSide( 0, 0, cb[6].x, cb[6].y, cb[8].x, cb[8].y),
-                        c2 = _linePointSide( docW, 0, cb[8].x, cb[8].y, cb[7].x, cb[7].y),
-                        c3 = _linePointSide( docW, docH, cb[7].x, cb[7].y, cb[9].x, cb[9].y),
-                        c4 = _linePointSide( 0, docH, cb[9].x, cb[9].y, cb[6].x, cb[6].y);
-                    $.writeln('--------------------');
-                    $.writeln(c1);
-                    $.writeln(c2);
-                    $.writeln(c3);
-                    $.writeln(c4);
-                    if ( c1<0 && c1<0 && c1<0 && c1<0 ) {
-                        // no image crop
-                        this.cropMethod = false;
-                        this.revealMethod = 'EXTCANVAS';
-                    } else {
-                        // image crop occures
-						this.revealMethod = this.chooseRevealAction();
-                        if ( this.revealMethod !== 0 ) {
-                            this.cropMethod = this.chooseCropMethod();
-                        }
-                    }
-                } else {
-                    // there is no rotation
-                    if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) { // no image crop
-                        this.cropMethod = false;
-                        this.revealMethod = 'EXTCANVAS';
-                        this.popBackground = true;
-                    } else {
-						debugger;
-					   this.revealMethod = this.chooseRevealAction();
-                        if ( this.revealMethod !== 0 ) {
-                            if ( this.revealMethod == 'EXTCANVAS' ) {
-                                this.popBackground = true;
-                            }
-                            this.cropMethod = this.chooseCropMethod();
-                        }
-                    }
-                }
+				if ( this.rotateCanvasA ) {
+					cb = this.afterRotate.cb; // simulate rotation for further computing
+					docW = this.afterRotate.docW; docH = this.afterRotate.docH;
+				}
+				if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) { // no image crop
+					this.cropMethod = false;
+					this.revealMethod = 'EXTCANVAS';
+					this.popBackground = true;
+				} else {
+				   if ( this.rotateCanvasA && cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
+					   // rotation uncovers needed canvas, i.e. no further extension after roattion is needed
+					   this.revealMethod = 'false';
+				   } else {
+				       this.revealMethod = this.chooseRevealAction();
+				   }
+					if ( this.revealMethod !== 0 ) {
+						if ( this.revealMethod == 'EXTCANVAS' ) {
+							this.popBackground = true;
+						}
+						this.cropMethod = this.chooseCropMethod();
+					}
+				}
+
             }
         } while ( this.revealMethod === 0 || this.cropMethod === 0)
     };
@@ -876,13 +887,13 @@ GoldenCrop.prototype.go = function() {
         this.tmpFctn();
     }
 
-	$.writeln( '==========' );
+    $.writeln( '==========' );
     $.writeln( 'cropAccepted: ' + this.cropAccepted );
     $.writeln( 'cropMethod: ' + this.cropMethod );
     $.writeln( 'revealMethod: ' + this.revealMethod );
     $.writeln( 'popBackground: ' + this.popBackground );
     $.writeln( 'rotateCanvasA: ' + this.rotateCanvasA );
-	
+    
     if ( this.cropAccepted ) {
         
         if ( this.rotateCanvasA !== false ) {
@@ -1648,6 +1659,7 @@ Stdlib.getVectorMaskAngle_cornerPointsOnly = function(round, doc, layer) {
      var v_len = Math.sqrt(v[0]*v[0]+v[1]*v[1]);
      var an = Math.acos(v[1]/v_len);
     var res = 90.0-an*180.0/Math.PI;
+	if (p1x>p2x) res=-res;
     if (!round) 
     { 
         res = Math.round(res*100)/100; 
@@ -1668,6 +1680,17 @@ Stdlib.rotateCannvas = function( angle, doc ) {
   }
   Stdlib.wrapLC(doc, _ftn);
 }
+
+Object.prototype.clone = function() {
+  //debugger;
+  var newObj = (this instanceof Array) ? [] : {};
+  for (var i in this) {
+    //if(!this.hasOwnProperty(i)) continue;
+    if (this[i] && typeof this[i] == "object") {
+      newObj[i] = this[i].clone();
+    } else newObj[i] = this[i]
+  } return newObj;
+};
 // ===END: stdlib.js===
 
 app.bringToFront();

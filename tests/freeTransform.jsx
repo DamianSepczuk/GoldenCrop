@@ -31,21 +31,25 @@ function foo() {
 		desc.putObject( cTID('Ofst'), cTID('Ofst'), desc75 );
 		return desc;
 	}
-
+	var state = true;
 	preMove();
-    var lvl = $.level;
+
+	var lvl = $.level;
     $.level = 0;
     try {
       executeAction(cTID("Trnf"), retPostMoveDesc(), DialogModes.ALL);///ALL
     } catch (e) {
-      $.level = lvl;
-	  $.writeln('' + new Date() + '-------> ' + $.level);
+	  state = false;
+	  // $.writeln('' + new Date() + '-------> ' + $.level);
       if (e.number != 8007) { // if not "User cancelled"
         throw e;
       }
       executeAction(cTID("Trnf"), retPostMoveDesc(), DialogModes.NO);
-    }
-    $.level = lvl;
+    } finally {
+      $.level = lvl;
+	}
+	
+	return state;
 }
 
 //for ( var i=0; i<10000; ++i )
