@@ -99,6 +99,7 @@ localizator.prototype.initStrings = function() {
     str['-resize'] = {en:' - resize', pl:' - przeskalowanie'};
     str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie'};
     str['-crop'] = {en:' - crop', pl:' - przycinanie'};
+    str['-rotate'] = {en:' - rotate', pl:' - obróæ'};
     str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN'};
     str['cropMask'] = {en:'Crop mask', pl:'Maska kadruj¹ca'};
     str['divRules'] = {en:'Dividing rules', pl:'Regu³y podzia³u'};
@@ -348,7 +349,6 @@ dialogMenu.prototype.show = function () {
 
 function GoldenCrop( _doc ) {
     this.doc = _doc;
-    this.doCrop = false;
 };
 
 /*
@@ -356,7 +356,7 @@ function GoldenCrop( _doc ) {
  */
 GoldenCrop.prototype.loadConfig = function() {
     this.ifApplyFX = true;
-    this.ifSuspendHistory = true;
+    this.ifSuspendHistory = true; 
     this.loc = localizator.getInstance();
 }
 
@@ -606,14 +606,14 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
  */
 GoldenCrop.prototype.freeTransform = function() {
     this.doc.activeLayer = this.gCrop;
-    this.doCrop = Stdlib.userGoToFreeTransform();
-    return;
+    throw new Error('deprecated');
 }
 
 /*
  * Crops canvas and deletes all Golden Crop layers
  */
 GoldenCrop.prototype.simpleCrop = function() {
+	// TODO get selection bounds from this.croppingBounds
     this.doc.activeLayer = this.outerFrame;
     Stdlib.loadVectorMaskSelection(); // could be empty but it is no problem
     if ( Stdlib.hasSelection() ) {
@@ -645,7 +645,6 @@ GoldenCrop.prototype.maskOutCrop = function() {
  * Cropping methods are member functions of GoldenCrop object instance
  */
 GoldenCrop.prototype.chooseCropMethod = function() {
-    var cropFunctions = {SIMPLE:'simpleCrop()', MASK:'maskOutCrop()'};
     var menuDesc = {caption:this.loc.get('chCropMethod'),
                 question:this.loc.get('chCropMethodQ'),
                 elements:[{key:'1', text:this.loc.get('cropCanvas'), def:true},
@@ -658,13 +657,12 @@ GoldenCrop.prototype.chooseCropMethod = function() {
     var result = dlg.show();
     switch ( result ) {
         case 0:
-            return cropFunctions.SIMPLE;
+            return 'SIMPLE';
         case 1:
-            return cropFunctions.MASK;
+            return 'MASK';
         case false:
         default:
-            //this.doCrop = false;
-            return false;
+            return 0;
     }
 }
 
@@ -672,16 +670,10 @@ GoldenCrop.prototype.chooseCropMethod = function() {
  * Convert background to normal layer and place solid fill layer below it.
  * Color of the solid fill layer is determined by current foreground color
  */
-GoldenCrop.prototype.doRevealPopBackround = function() {
-    var docW = this.doc.width.as("px"),
-        docH = this.doc.height.as("px");
-    var cb = this.cropBounds;
-    
-    var addTop    = Math.max(-cb[1],0),
-        addLeft   = Math.max(-cb[0],0),
-        addBottom = Math.max(cb[3]-docH,0),
-        addRight  = Math.max(cb[2]-docW,0);
-
+GoldenCrop.prototype.doPopBackground = function() {
+    if (this.backgroundPopped) return;
+    this.backgroundPopped = true;
+     
     if ( Stdlib.hasBackground(this.doc) ) {
         this.bgLayer = this.doc.backgroundLayer;
         this.bgLayer.isBackgroundLayer = false;
@@ -690,41 +682,64 @@ GoldenCrop.prototype.doRevealPopBackround = function() {
     this.backgroundFill = Stdlib.createSolidFillLayer(undefined, app.foregroundColor, this.loc.get('bgFill'));
     Stdlib.removeLayerMask();
     this.backgroundFill.move(this.bgLayer||this.doc.layers[this.doc.layers.length-1], ElementPlacement.PLACEAFTER);
+}
+
+/*
+ * Change canvas size to match crop mask boundaries
+ * Convert background to normal layer and place solid fill layer below it.
+ * Color of the solid fill layer is determined by current foreground color
+ */
+GoldenCrop.prototype.doRevealPopBackround = function() {
+    var docW = this.docW,
+        docH = this.docH;
+    var cb = this.cropBounds;
     
+    var addTop    = Math.max(-cb[1],0),
+        addLeft   = Math.max(-cb[0],0),
+        addBottom = Math.max(cb[3]-docH,0),
+        addRight  = Math.max(cb[2]-docW,0);
+		
+	if (this.popBackground) {
+        this.doPopBackground();
+	}
+    
+	// TODO what if addX < 0 ?
     this.doc.resizeCanvas(new UnitValue(docW+addLeft,"px"),new UnitValue(docH+addTop,"px"),AnchorPosition.BOTTOMRIGHT);
     this.doc.resizeCanvas(new UnitValue(docW+addLeft+addRight,"px"),new UnitValue(docH+addTop+addBottom,"px"),AnchorPosition.TOPLEFT);
 
     // if there is no cropping hide whole Golden Crop group
-    if ( this.onlyReveal ) {
+    if ( !this.cropMethod ) {
         this.doc.activeLayer = this.gCrop;
         this.doc.activeLayer.visible = false;
         // this.outerFrame.remove();
     }
-
 }
+
+GoldenCrop.prototype.doRotateCanvas = function() {
+    if ( this.popBackground ) {
+        this.doPopBackground();
+    }
+
+    Stdlib.rotateCannvas(this.rotateCanvasA);
+    // update cropping bounds and document dimentions
+    this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.outerFrame);         
+    this.docW = parseInt(this.doc.width.as("px")),
+    this.docH = parseInt(this.doc.height.as("px"));
+}
+
+
 
 /*
  * Determine if revealing occures and display user-interactive menu allowing to choose whether to extend canvas.
  * Check if there is also cropping and set this.onlyReveal accordingly.
  * Revealing methods are member functions of GoldenCrop object instance.
  */
-GoldenCrop.prototype.chooseOutsideCropAction = function() {
-    var cb = this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.outerFrame);
-    /*cb[0] = parseInt(cb[0]);
-    cb[1] = parseInt(cb[1]);
-    cb[2] = parseInt(cb[2]);
-    cb[3] = parseInt(cb[3]);
-    debugger;*/
-    var docW = parseInt(this.doc.width.as("px")),
-        docH = parseInt(this.doc.height.as("px"));
-    if ( cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
-        return 0; // no outside crop
-    }
+GoldenCrop.prototype.chooseRevealAction = function() {
+    var cb = this.cropBounds;
+    var docW = this.docW,
+        docH = this.docW;
+          
 
-    if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) {
-        // if there's no cropping no confirmation is needed
-        this.onlyReveal = true;
-    } else {
         // choose whether extend canvas before cropping
         var menuDesc = {caption:this.loc.get('canvExtDet'), //Canvas extension detected.
             question:this.loc.get('canvExtDetQ'), //What to do with canvas?
@@ -738,25 +753,25 @@ GoldenCrop.prototype.chooseOutsideCropAction = function() {
         var result = dlg.show();
         switch ( result ) {
             case 0:
-                // reveal, nothing to be done
+                return('EXTCANVAS')
                 break;
             case 1:
-                return 0; // Don't ctop
+                return false; // Don't ctop
                 break;
             case false:
             default:
-                return false; // Return to cropping
+                return 0; // Return to cropping
                 break;
         }
-    }
-
-    return('doRevealPopBackround()');
 }
     
 /*
  * Logical heart of the script. Invoke each phase of script w/ or w/o suspending history.
  */
 GoldenCrop.prototype.go = function() {
+   var docW = this.docW = parseInt(this.doc.width.as("px"));
+   var docH = this.docH = parseInt(this.doc.height.as("px"));
+          
     if ( this.ifSuspendHistory ) {
         this.doc.suspendHistory(szAppName + this.loc.get('-grid'), 'this.makeGrid()');
         Stdlib.NOP();
@@ -764,18 +779,94 @@ GoldenCrop.prototype.go = function() {
         this.makeGrid();
     }
 
-    var croppingOutsideFrameFunction = null;
-    var cropFunction = null;
+    // New action mechanizm
+    // !== false   - indicates some method
+    // false       - indicates no action
+    this.cropAccepted  = false;
+    this.cropMethod    = false;
+    this.revealMethod  = false;
+    this.popBackground = false;
+    this.rotateCanvasA = false;
+    // ---!!!
+    var cropFunctions  = {SIMPLE:'simpleCrop()', MASK:'maskOutCrop()'};
+    var revealVuncions = {EXTCANVAS:'doRevealPopBackround()'};
+
     this.tmpFctn = function () {
         do {
-            this.freeTransform();
-            if (this.doCrop) {
-                croppingOutsideFrameFunction = this.chooseOutsideCropAction();
-                if ( croppingOutsideFrameFunction !== false && !this.onlyReveal) {
-                    cropFunction = this.chooseCropMethod();
+            this.cropAccepted = Stdlib.userGoToFreeTransform(this.doc, this.gCrop);
+            if ( !this.cropAccepted ) break;
+            // Detect angle
+            var threshold = 0.0001;
+            var angle = Stdlib.getVectorMaskAngle_cornerPointsOnly(false, this.doc, this.outerFrame);
+            this.rotateCanvasA = ( Math.abs(angle)%90 > threshold )?-angle:false;
+            if ( this.rotateCanvasA ) {
+                this.popBackground = true; // default, could be changed in the following code
+            }
+            
+            // Detect cropping mode
+            this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.outerFrame);
+            var cb = this.cropBounds;
+            
+            if ( cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
+                // cropping only inside picture frame
+                this.cropMethod = this.chooseCropMethod();
+                if ( this.rotateCanvasA && this.cropMethod == 'SIMPLE' ) {
+                    // cancel background pop even when there is a rotation
+                    this.popBackground = false;
+                }
+            } else {
+                // cropping outside frame
+                if (this.rotateCanvasA)
+                {
+                    // there is a rotation
+                    // x,y -- tested point; xi -- points from line
+                    function _linePointSide( x, y, x1, y1, x2, y2 ) {
+                        //$.writeln('_linePointDist ' + x + ' ' + y + ' ' + x1 + ' ' + y1 + ' ' + x2 + ' ' + y2 );
+                        return (x - x1)*(y2 - y1) - (x2 - x1)*(y - y1);
+                    }
+                    //             0      1     2      3     4      5           6      7       8       9
+                    //var res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp]; 
+                    // <0 if there is no real picture crop
+                    var pList = cb[10];
+                    var c1 = _linePointSide( 0, 0, cb[6].x, cb[6].y, cb[8].x, cb[8].y),
+                        c2 = _linePointSide( docW, 0, cb[8].x, cb[8].y, cb[7].x, cb[7].y),
+                        c3 = _linePointSide( docW, docH, cb[7].x, cb[7].y, cb[9].x, cb[9].y),
+                        c4 = _linePointSide( 0, docH, cb[9].x, cb[9].y, cb[6].x, cb[6].y);
+                    $.writeln('--------------------');
+                    $.writeln(c1);
+                    $.writeln(c2);
+                    $.writeln(c3);
+                    $.writeln(c4);
+                    if ( c1<0 && c1<0 && c1<0 && c1<0 ) {
+                        // no image crop
+                        this.cropMethod = false;
+                        this.revealMethod = 'EXTCANVAS';
+                    } else {
+                        // image crop occures
+						this.revealMethod = this.chooseRevealAction();
+                        if ( this.revealMethod !== 0 ) {
+                            this.cropMethod = this.chooseCropMethod();
+                        }
+                    }
+                } else {
+                    // there is no rotation
+                    if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) { // no image crop
+                        this.cropMethod = false;
+                        this.revealMethod = 'EXTCANVAS';
+                        this.popBackground = true;
+                    } else {
+						debugger;
+					   this.revealMethod = this.chooseRevealAction();
+                        if ( this.revealMethod !== 0 ) {
+                            if ( this.revealMethod == 'EXTCANVAS' ) {
+                                this.popBackground = true;
+                            }
+                            this.cropMethod = this.chooseCropMethod();
+                        }
+                    }
                 }
             }
-        } while (this.doCrop!==false && (croppingOutsideFrameFunction === false || cropFunction === false) )
+        } while ( this.revealMethod === 0 || this.cropMethod === 0)
     };
 
     if ( this.ifSuspendHistory ) {
@@ -785,16 +876,36 @@ GoldenCrop.prototype.go = function() {
         this.tmpFctn();
     }
 
-    if (this.doCrop) {
-        if (croppingOutsideFrameFunction) {
+	$.writeln( '==========' );
+    $.writeln( 'cropAccepted: ' + this.cropAccepted );
+    $.writeln( 'cropMethod: ' + this.cropMethod );
+    $.writeln( 'revealMethod: ' + this.revealMethod );
+    $.writeln( 'popBackground: ' + this.popBackground );
+    $.writeln( 'rotateCanvasA: ' + this.rotateCanvasA );
+	
+    if ( this.cropAccepted ) {
+        
+        if ( this.rotateCanvasA !== false ) {
             if ( this.ifSuspendHistory ) {
-                this.doc.suspendHistory(szAppName + this.loc.get('-reveal'), 'this.'+croppingOutsideFrameFunction);
+                this.doc.suspendHistory(szAppName + this.loc.get('-rotate'), 'this.doRotateCanvas()');
                 Stdlib.NOP();
             } else {
-                eval('this.'+croppingOutsideFrameFunction);
+                this.doRotateCanvas();
             }
         }
-        if (!this.onlyReveal) {
+
+        if ( this.revealMethod ) {
+            var revealingFunction = revealVuncions[this.revealMethod];
+            if ( this.ifSuspendHistory ) {
+                this.doc.suspendHistory(szAppName + this.loc.get('-reveal'), 'this.'+revealingFunction);
+                Stdlib.NOP();
+            } else {
+                eval('this.'+revealingFunction);
+            }
+        }
+
+        if ( this.cropMethod ) {
+            var cropFunction = cropFunctions[this.cropMethod];
             if ( this.ifSuspendHistory ) {
                 this.doc.suspendHistory(szAppName + this.loc.get('-crop'), 'this.'+cropFunction);
                 Stdlib.NOP();
@@ -807,58 +918,6 @@ GoldenCrop.prototype.go = function() {
         executeAction( cTID( "undo" ), undefined, DialogModes.NO );
         this.doc.activeLayer = this.gCrop;
     }
-}
-
-GoldenCrop.prototype._unused_function__MakeBogusLayer = function() {
-    var MakeWhat = new ActionDescriptor();
-        var ref120 = new ActionReference();
-        ref120.putClass( cTID( "Lyr " ) );
-    MakeWhat.putReference( cTID( "null" ), ref120 );
-    
-    var layerDesc = new ActionDescriptor();
-    layerDesc.putString( cTID( "Nm  " ), "Bogus" );
-    layerDesc.putUnitDouble( cTID( "Opct" ), cTID( "#Prc" ), 0 );
-    layerDesc.putEnumerated( cTID( "Md  " ), cTID( "BlnM" ), cTID( "Lghn" ) );
-    layerDesc.putBoolean( cTID( "FlNt" ), true );
-    MakeWhat.putObject( cTID( "Usng" ), cTID( "Lyr " ), layerDesc );
-    executeAction( cTID( "Mk  " ), MakeWhat, DialogModes.NO );
-    return app.activeDocument.activeLayer;
-}
-
-
-GoldenCrop.prototype._unused_function__fillFullCanvas = function() {
-    const docWidth  = this.doc.width.as("px"),
-          docHeight = this.doc.height.as("px");
-    var idTrnf = cTID( "Trnf" );
-        var desc120 = new ActionDescriptor();
-        var idnull = cTID( "null" );
-            var ref73 = new ActionReference();
-            var idLyr = cTID( "Lyr " );
-            var idOrdn = cTID( "Ordn" );
-            var idTrgt = cTID( "Trgt" );
-            ref73.putEnumerated( idLyr, idOrdn, idTrgt );
-        desc120.putReference( idnull, ref73 );
-        var idFTcs = cTID( "FTcs" );
-        var idQCSt = cTID( "QCSt" );
-        var idQcsa = cTID( "Qcsa" );
-        desc120.putEnumerated( idFTcs, idQCSt, idQcsa );
-        var idOfst = cTID( "Ofst" );
-            var desc121 = new ActionDescriptor();
-            var idHrzn = cTID( "Hrzn" );
-            var idPxl = cTID( "#Pxl" );
-            desc121.putUnitDouble( idHrzn, idPxl, 0.000000 );
-            var idVrtc = cTID( "Vrtc" );
-            var idPxl = cTID( "#Pxl" );
-            desc121.putUnitDouble( idVrtc, idPxl, 0.000000 );
-        var idOfst = cTID( "Ofst" );
-        desc120.putObject( idOfst, idOfst, desc121 );
-        var idWdth = cTID( "Wdth" );
-        var idPrc = cTID( "#Prc" );
-        desc120.putUnitDouble( idWdth, idPrc, docWidth );
-        var idHght = cTID( "Hght" );
-        var idPrc = cTID( "#Prc" );
-        desc120.putUnitDouble( idHght, idPrc, docHeight );
-    executeAction( idTrnf, desc120, DialogModes.NO );    
 }
 
 function main() {
@@ -1127,7 +1186,8 @@ Stdlib.linePath = function( mode, unit, width, x1, y1, x2, y2 ) {
     executeAction( idAddT, desc90, DialogModes.NO );
 }
 // by SzopeN
-Stdlib.userGoToFreeTransform = function() {
+Stdlib.userGoToFreeTransform = function(doc, layer) {
+    function _ftn() {
         function preMove() {
             var desc = new ActionDescriptor();
             var lref = new ActionReference();
@@ -1171,6 +1231,8 @@ Stdlib.userGoToFreeTransform = function() {
         }
     
     return state;
+    }
+    return Stdlib.wrapLCLayer(doc, layer, _ftn)
 }
 
 // by SzopeN
@@ -1265,7 +1327,7 @@ Stdlib.wrapLCLayer = function(doc, layer, ftn) {
 // [in] doc -- document containing layer with vector mask 
 // [in] layer -- layer with vector mask 
 // returns array [left, top, right, bottom, width, height] 
-Stdlib.getVectorMaskBounds_cornerPointsOnly = function(round, doc, layer) { 
+Stdlib.getVectorMaskBounds_cornerPointsOnly = function(round, doc, layer, pointList) { 
   round = !!round; 
   function _ftn() { 
     var ref = new ActionReference(); 
@@ -1277,33 +1339,58 @@ Stdlib.getVectorMaskBounds_cornerPointsOnly = function(round, doc, layer) {
 
     // for each path in current layer 
     var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
+    var minXp, maxXp, minYp, maxYp; 
     // using separate variables gives speed gain 
     var _id1 = sTID("subpathListKey"), 
         _id2 = sTID("points"), 
         _id3 = sTID("anchor"), 
         _id4 = sTID('horizontal'), 
-        _id5 = sTID('vertical'); 
-       
-    for ( var cPath=0; cPath<pathList.count; ++cPath ) 
-    { 
-      var curPath = pathList.getObjectValue(cPath).getList(_id1); 
-      var points = curPath.getObjectValue(0).getList(_id2); 
-      // for each point 
-      for ( var cPoint=0; cPoint < points.count; ++cPoint ) 
-      {    
-        var point = points.getObjectValue(cPoint).getObjectValue(_id3); 
-        var x = point.getUnitDoubleValue(_id4); 
-        var y = point.getUnitDoubleValue(_id5); 
-        if ( x < minX ) minX = x; // it is faster than if/else block (benchmarked on PSCS4) 
-        if ( x > maxX ) maxX = x; 
-        if ( y < minY ) minY = y; 
-        if ( y > maxY ) maxY = y; 
-      } 
-    } 
-    var res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY]; 
+        _id5 = sTID('vertical');
+     var pList = new Array();
+    if (pointList) {
+         for ( var cPath=0; cPath<pathList.count; ++cPath ) 
+         { 
+            var curPath = pathList.getObjectValue(cPath).getList(_id1); 
+            var points = curPath.getObjectValue(0).getList(_id2); 
+            // for each point 
+            for ( var cPoint=0; cPoint < points.count; ++cPoint ) 
+            {    
+              var point = points.getObjectValue(cPoint).getObjectValue(_id3); 
+              var x = point.getUnitDoubleValue(_id4); 
+              var y = point.getUnitDoubleValue(_id5);
+              pList.push({x:x,y:y});
+              // it is faster than if/else block (benchmarked on PSCS4) 
+              if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
+              if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
+              if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
+              if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
+            } 
+         }
+     } else {
+         for ( var cPath=0; cPath<pathList.count; ++cPath ) 
+         { 
+            var curPath = pathList.getObjectValue(cPath).getList(_id1); 
+            var points = curPath.getObjectValue(0).getList(_id2); 
+            // for each point 
+            for ( var cPoint=0; cPoint < points.count; ++cPoint ) 
+            {    
+              var point = points.getObjectValue(cPoint).getObjectValue(_id3); 
+              var x = point.getUnitDoubleValue(_id4); 
+              var y = point.getUnitDoubleValue(_id5); 
+              // it is faster than if/else block (benchmarked on PSCS4) 
+              if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
+              if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
+              if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
+              if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
+            } 
+         }
+    }
+ 
+    //          0      1     2      3     4            5           6      7       8       9       10
+    var res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp, pList]; 
     if (round) 
     { 
-      for ( i=0; i<res.length; ++i ) 
+      for ( i=0; i<6; ++i ) 
       { 
         res[i] = Math.round(res[i]); 
       } 
@@ -1529,6 +1616,57 @@ Stdlib.createLayerGroup = function(name, opacity, color, blendMode, userMask, ve
         executeAction( idsetd, desc162, DialogModes.NO );
     }
     return doc.activeLayer;
+}
+
+Stdlib.getVectorMaskAngle_cornerPointsOnly = function(round, doc, layer) { 
+  round = !!round; 
+  function _ftn() { 
+    var ref = new ActionReference(); 
+    ref.putEnumerated( cTID('Path'), cTID('Path'), sTID('vectorMask') ); 
+    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt")); 
+    var vMaskDescr = executeActionGet(ref); 
+    var pathContents = vMaskDescr.getObjectValue(sTID('pathContents')); 
+    var pathList = pathContents.getList(sTID('pathComponents')); 
+
+    // using separate variables gives speed gain 
+    var _id3 = sTID("anchor"), 
+        _id4 = sTID('horizontal'), 
+        _id5 = sTID('vertical'); 
+       
+    var cPath=0;
+    var curPath = pathList.getObjectValue(cPath).getList(sTID("subpathListKey")); 
+    var points = curPath.getObjectValue(0).getList(sTID("points")); 
+
+    var p1  = points.getObjectValue(0).getObjectValue(_id3),
+         p1x = p1.getUnitDoubleValue(_id4),
+         p1y = p1.getUnitDoubleValue(_id5),
+         p2  = points.getObjectValue(1).getObjectValue(_id3),
+         p2x = p2.getUnitDoubleValue(_id4),
+         p2y = p2.getUnitDoubleValue(_id5);
+         
+     var v = [p2x-p1x, p2y-p1y];
+     var v_len = Math.sqrt(v[0]*v[0]+v[1]*v[1]);
+     var an = Math.acos(v[1]/v_len);
+    var res = 90.0-an*180.0/Math.PI;
+    if (!round) 
+    { 
+        res = Math.round(res*100)/100; 
+    } 
+    return res; 
+  } 
+  return Stdlib.wrapLCLayer(doc, layer, _ftn); 
+}
+
+Stdlib.rotateCannvas = function( angle, doc ) {
+  function _ftn() {
+    var desc = new ActionDescriptor();
+        var ref = new ActionReference();
+        ref.putEnumerated( charIDToTypeID( "Dcmn" ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Frst" ) );
+    desc.putReference( charIDToTypeID( "null" ), ref );
+    desc.putUnitDouble( charIDToTypeID( "Angl" ), charIDToTypeID( "#Ang" ), angle );
+    executeAction( charIDToTypeID( "Rtte" ), desc, DialogModes.NO );
+  }
+  Stdlib.wrapLC(doc, _ftn);
 }
 // ===END: stdlib.js===
 
