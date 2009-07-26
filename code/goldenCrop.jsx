@@ -70,6 +70,7 @@ function localizator(secretNumber) {
     }
     this.use_locale = 'auto';
     $.localize = true;
+    $.localization = true; // ?
     this.initStrings();
 };
 
@@ -719,9 +720,9 @@ GoldenCrop.prototype.doRotateCanvas = function() {
     }
 	var angle = this.rotateCanvasA;
 	if ( angle > 45 ) {
-		Stdlib.rotateCannvas(-90);
+		angle-=90;
 	} else if (angle < -45 ) {
-		Stdlib.rotateCannvas(90);
+		angle+=90;
 	}
     Stdlib.rotateCannvas(angle);
     // update cropping bounds and document dimentions
