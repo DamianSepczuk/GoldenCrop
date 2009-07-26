@@ -70,7 +70,6 @@ function localizator(secretNumber) {
     }
     this.use_locale = 'auto';
     $.localize = true;
-    $.localization = true; // ?
     this.initStrings();
 };
 
@@ -356,7 +355,7 @@ function GoldenCrop( _doc ) {
  */
 GoldenCrop.prototype.loadConfig = function() {
     this.ifApplyFX = true;
-    this.ifSuspendHistory = false;
+    this.ifSuspendHistory = true;
     this.loc = localizator.getInstance();
 }
 
