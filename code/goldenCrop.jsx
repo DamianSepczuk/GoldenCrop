@@ -320,7 +320,7 @@ dialogMenu.prototype.show = function () {
                var found = false;
                 for ( var i = 0; i<elements.length; ++i )
                 {
-                    $.writeln(edShcut.text.toUpperCase() + ' = ' + elements[i].key.toUpperCase());
+                    // $.writeln(edShcut.text.toUpperCase() + ' = ' + elements[i].key.toUpperCase());
                     if ( edShcut.text.toUpperCase() == elements[i].key.toUpperCase() ) {
                         elements[i].obj.notify();
                         found = true;
@@ -349,6 +349,8 @@ dialogMenu.prototype.show = function () {
 
 function GoldenCrop( _doc ) {
     this.doc = _doc;
+	Stdlib.saveLayer = false;
+	Stdlib.saveDoc = false;
 };
 
 /*
@@ -729,9 +731,9 @@ GoldenCrop.prototype.doRotateCanvas = function() {
     this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.outerFrame);         
     this.docW = parseInt(this.doc.width.as("px")),
     this.docH = parseInt(this.doc.height.as("px"));
-    $.writeln('################# after rotate');
-    $.writeln('docW:' +this.docW);
-    $.writeln('docH:' +this.docH);
+    // $.writeln('################# after rotate');
+    // $.writeln('docW:' +this.docW);
+    // $.writeln('docH:' +this.docH);
 
 }
 
@@ -839,8 +841,8 @@ GoldenCrop.prototype.go = function() {
                 this.afterRotate = {cb: [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp, cbRot],
 								   docW: newDocW,
 								   docH: newDocH};
-                $.writeln('~~~~~~~~~~~~~');
-                $.writeln('afterRotate:' +this.afterRotate);
+                // $.writeln('~~~~~~~~~~~~~');
+                // $.writeln('afterRotate:' +this.afterRotate);
 				//debugger;
             }
             
@@ -887,12 +889,12 @@ GoldenCrop.prototype.go = function() {
         this.tmpFctn();
     }
 
-    $.writeln( '==========' );
-    $.writeln( 'cropAccepted: ' + this.cropAccepted );
-    $.writeln( 'cropMethod: ' + this.cropMethod );
-    $.writeln( 'revealMethod: ' + this.revealMethod );
-    $.writeln( 'popBackground: ' + this.popBackground );
-    $.writeln( 'rotateCanvasA: ' + this.rotateCanvasA );
+    // $.writeln( '==========' );
+    // $.writeln( 'cropAccepted: ' + this.cropAccepted );
+    // $.writeln( 'cropMethod: ' + this.cropMethod );
+    // $.writeln( 'revealMethod: ' + this.revealMethod );
+    // $.writeln( 'popBackground: ' + this.popBackground );
+    // $.writeln( 'rotateCanvasA: ' + this.rotateCanvasA );
     
     if ( this.cropAccepted ) {
         
@@ -994,6 +996,9 @@ sTID_global_array = new Array();
 sTID = function(s) { return sTID_global_array[s] || sTID_global_array[s]=app.stringIDToTypeID(s); };
 
 Stdlib = function Stdlib() {};
+
+Stdlib.saveLayer = true;
+Stdlib.saveDoc = true;
 
 Stdlib.createRGBColor = function(r, g, b) {
   var c = new RGBColor();
@@ -1232,7 +1237,7 @@ Stdlib.userGoToFreeTransform = function(doc, layer) {
           executeAction(cTID("Trnf"), retPostMoveDesc(), DialogModes.ALL);///ALL
         } catch (e) {
           state = false;
-          // $.writeln('' + new Date() + '-------> ' + $.level);
+          // // $.writeln('' + new Date() + '-------> ' + $.level);
           if (e.number != 8007) { // if not "User cancelled"
             throw e;
           }
@@ -1272,60 +1277,60 @@ Stdlib.loadVectorMaskSelection = function() {
 };
 
 Stdlib.wrapLC = function(doc, ftn) {
+
   var ad = app.activeDocument;
   if (doc) {
-    if (ad != doc) {
-      app.activeDocument = doc;
-    }
+	if (ad != doc) {
+	  app.activeDocument = doc;
+	}
   } else {
-    doc = ad;
+	doc = ad;
   }
 
   var res = undefined;
   try {
-    res = ftn(doc);
+	res = ftn(doc);
   } finally {
-    if (ad && app.activeDocument != ad) {
-      app.activeDocument = ad;
-    }
+	if (  Stdlib.saveDoc && ad && app.activeDocument != ad) {
+	  app.activeDocument = ad;
+	}
   }
-
   return res;
 };
 
 Stdlib.wrapLCLayer = function(doc, layer, ftn) {
   var ad = app.activeDocument;
   if (doc) {
-    if (ad != doc) {
-      app.activeDocument = doc;
-    }
+	if (ad != doc) {
+	  app.activeDocument = doc;
+	}
   } else {
-    doc = ad;
+	doc = ad;
   }
-  
+
   var al = doc.activeLayer;
   var alvis = al.visible;
 
   if (layer && doc.activeLayer != layer) {
-    doc.activeLayer = layer;
+	doc.activeLayer = layer;
   } else {
-    layer = doc.activeLayer;
+	layer = doc.activeLayer;
   }
-
   var res = undefined;
 
   try {
     res = ftn(doc, layer);
 
   } finally {
-    if (doc.activeLayer != al) {
-      doc.activeLayer = al;
+	if ( Stdlib.saveLayer )  {
+		if (doc.activeLayer != al) {
+		  doc.activeLayer = al;
+		}
+		if (!doc.activeLayer.isBackgroundLayer) {
+		  doc.activeLayer.visible = alvis;
+		}
     }
-    if (!doc.activeLayer.isBackgroundLayer) {
-      doc.activeLayer.visible = alvis;
-    }
-
-    if (app.activeDocument != ad) {
+    if (Stdlib.saveDoc && app.activeDocument != ad) {
       app.activeDocument = ad;
     }
   }
