@@ -89,7 +89,7 @@ Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przyc
 		<a href="http://sourceforge.net/project/project_donations.php?group_id=270328"><img class="btnNormal" alt="Download button" src="img/donate_btn.png" width="274" height="146" /><img class="btnHover" alt="Download button" src="img/donate_btn_hover.png" width="274" height="146" /></a>
 	</div>
 </div>
-<p>Możesz też przejść bezpośrednio na <a href="http://sourceforge.net/projects/goldencrop">stronę projektu Golden Crop w serwisie Sourceforge: <img style="vertical-align:middle;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=270328&amp;type=11" width="120" height="30" alt="Get Golden Crop at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>.
+<p>Możesz też przejść bezpośrednio na <a href="http://sourceforge.net/projects/goldencrop">stronę projektu Golden Crop w serwisie Sourceforge: <img style="vertical-align:middle;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=270328&amp;type=11" width="120" height="30" alt="Get Golden Crop at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a> albo pobrać absolutnie najnowszą ale praktycznie NIEPRZETESTOWANĄ wersję skryptu bezpośrednio z <a href="http://goldencrop.svn.sourceforge.net/viewvc/goldencrop/trunk/code/goldenCrop.jsx?view=log">repozytorium SVN<a/>.
 </p>
 <p style="text-align: center;">
 <img alt="Positioning cropping frame" src="img/screenShot001.jpg" />

@@ -1,0 +1,34 @@
+                  =========================================
+
+                                 Golden Crop
+
+                      http://goldencrop.sourceforge.net
+                  =========================================
+
+                             C H A N G E L O G
+
+                                 -~=o=~-
+
+  ==[ Version 0.77 beta ]==
+     --{ 2009-07-28 }--
+
+  * PL and EN translation added. Now it is multi-lingual!
+  * Rotation of crop mask is now respected
+  * Auto detect horizontal and vertical crops, minimize rotation
+  * Works A LOT faster!
+  * Some fragments of code totally re-written
+  * You can now disable (from code) suspendHistory (CS2-compatible?)
+  * Some documentation (WWW, video) added
+  * Language-dependant Photoshop constants removed (Blend Mode names)
+  * Added in-code documentation
+  * Some improvements to stdlib by xbytor made :)
+
+                                 -~=o=~-
+
+  ==[ Version 0.62 beta ]==
+     --{ 2009-07-21 }--
+
+  * Initial release
+  * Mostly working :) 
+
+                                 -~=o=~-
