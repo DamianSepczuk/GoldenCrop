@@ -106,7 +106,7 @@ Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przyc
 </ol>
 <div id="faq">
 <h2>Czym jest skrypt Golden Crop?</h2>
-<p>Skrypt Golden Crop został zaprojektowany w celu ułatwienia kadrowania zdjęć zgodnie z regułami podziału. Generuje on wizualne prowadnice dla <b>Reguły Trzech</b>, <b>Złotej Reguły</b> i <b>Trójkątnej Złotej Rególy</b> w obu kierunkach. Niektórzy uważają, że umiejscowienie ważnych elementów zdjęcia zgodnie z regułami podziału sprawi, że praca stanie się bardziej interesująca i przyciągająca uwagę. Na poniższym obrazku możesz zobaczyć jak wyglądają prowadnice generowane przez skrypt:
+<p>Skrypt Golden Crop został zaprojektowany w celu ułatwienia kadrowania zdjęć zgodnie z regułami podziału. Generuje on wizualne prowadnice dla <b>Reguły Trzech</b>, <b>Złotej Reguły</b> i <b>Trójkątnej Złotej Reguły</b> w obu kierunkach. Niektórzy uważają, że umiejscowienie ważnych elementów zdjęcia zgodnie z regułami podziału sprawi, że praca stanie się bardziej interesująca i przyciągająca uwagę. Na poniższym obrazku możesz zobaczyć jak wyglądają prowadnice generowane przez skrypt:
 <img alt="guidelines" src="img/guidelines.png"/>
 </p>
 <p>Jeśli koncepcje reguł podziału są Ci obce, skorzystaj z wyszukiwarki internetowej albo zajrzyj pod jeden z linków:</p>
@@ -211,6 +211,18 @@ Ta strona jest w trakcie tworzenia. Jeśli coś nie działa, przejdź bezpośred
             alt="Poprawny CSS!" />
     </a>
 </p>
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://sourceforge.net/apps/piwik/goldencrop/" : "http://sourceforge.net/apps/piwik/goldencrop/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://sourceforge.net/apps/piwik/goldencrop/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+<!-- End Piwik Tag -->
 <p>
 All trademarks used are properties of their respective owners. Please visit the sites of the respective owners. NO warranty as to 100% accuracy is intended or implied. Any omissions are without intent to infringe. We cannot guarantee 100% accuracy of the contact information presented here. Products or trademarks named are used for reference, without any implied endorsement by their holders and without intent to infringe. This site does not condone activities and actions that breach the rights of copyright owners. As a site visitor it is your responsibility to obey all laws governing copyright in each country. This site respects copyright and other laws. This site requires all site visitors users to comply with copyright and other laws. This site does not by the supply of the information on this site authorize you to infringe the copyright or other rights of third parties. 
 </p>
