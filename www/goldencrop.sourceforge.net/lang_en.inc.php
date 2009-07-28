@@ -76,6 +76,7 @@ div#faq h2 {
 <body>
 <div id="gclogo"><img alt="Golden Crop logo" src="img/GoldenCrop_logo.png"/></div>
 <div id="contents">
+<div id="langs"><?php printLanguageChangeBar(); ?></div>
 <div id="txttitle">
 Golden Crop<br /><span class="smaller">the ultimate Photoshop<sup>®</sup> cropping solution</span>
 </div>
