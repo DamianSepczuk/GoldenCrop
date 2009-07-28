@@ -98,7 +98,7 @@ Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przyc
 <ol>
 	<li>Czym jest skrypt Golden Crop?</li>
 	<li>Kto może go używać?</li>
-	<li>Czy jest wolny? Czy jest za darmo?</li>
+	<li>Czy to wolne oprogramowanie? Czy jest za darmo?</li>
 	<li>Jak uruchomić/zainstalować/odinstalować skrypt Golden Crop?</li>
 	<li>Co potrafi skrypt Golden Crop?</li>
 	<li>Jak mogę skonfigurować skrypt Golden Crop?</li>
@@ -106,7 +106,7 @@ Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przyc
 </ol>
 <div id="faq">
 <h2>Czym jest skrypt Golden Crop?</h2>
-<p>Skrypt Golden Crop został zaprojektowany w celu ułatwienia kadrowania zdjęć zgodnie z regułami podziału. Generuje on wizualne prowadnice dla <b>Reguły Trzech</b>, <b>Złotej Reguły</b> i <b>Trójkątnej Złotej Reguły</b> w obu kierunkach. Niektórzy uważają, że umiejscowienie ważnych elementów zdjęcia zgodnie z regułami podziału sprawi, że praca stanie się bardziej interesująca i przyciągająca uwagę. Na poniższym obrazku możesz zobaczyć jak wyglądają prowadnice generowane przez skrypt:
+<p>Skrypt Golden Crop został zaprojektowany w celu ułatwienia kadrowania zdjęć zgodnie z regułami podziału. Generuje on wizualne prowadnice dla <b>Reguły Trzech</b>, <b>Złotej Reguły</b> i <b>Trójkątnej Złotej Reguły</b> w obu kierunkach. W czasach przed fotografią, w malarstwie utrwalił się kanon podziału płótna, dotyczący ważnych elementów obrazu przedstawionego. Pionierzy fotografii przenieśli te reguły do nowopowstającej sztuki. Umiejscowienie ważnych elementów zdjęcia zgodnie z regułami podziału sprawia, że praca stanie się bardziej interesująca i przyciągająca uwagę. Na poniższym obrazku możesz zobaczyć jak wyglądają prowadnice generowane przez skrypt:
 <img alt="guidelines" src="img/guidelines.png"/>
 </p>
 <p>Jeśli koncepcje reguł podziału są Ci obce, skorzystaj z wyszukiwarki internetowej albo zajrzyj pod jeden z linków:</p>
@@ -120,9 +120,9 @@ Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przyc
 
 <h2>Kto może go używać?</h2>
 <p>Każdy kto chce... i ma zainstalowany program Adobe® Photoshop® CS3 lub Adobe® Photoshop® CS4. Skrypt powinien działać w systemie operacyjnym Microsoft Windows oraz Mac OS.</p>
-<h2>Czy jest wolny? Czy jest za darmo?</h2>
+<h2>Czy to wolne oprogramowanie? Czy jest za darmo?</h2>
 <p>
-Tak, jak najbardziej! Jest zarówno wolny jak i darmowy dzięki zastosowaniu licencji GNU General Public License. Ale jeśli czerpiesz dochody korzystając z tego skryptu albo po prostu chcesz podziękować autorowi, rozważ proszę <a href="http://sourceforge.net/project/project_donations.php?group_id=270328">złożenie dotacji</a>.
+Tak, jak najbardziej! Skrypt jest zarówno wolnym oprogramowaniem jak i darmowym dzięki zastosowaniu licencji GNU General Public License. Ale jeśli czerpiesz dochody korzystając z tego skryptu albo po prostu chcesz podziękować autorowi, rozważ proszę <a href="http://sourceforge.net/project/project_donations.php?group_id=270328">złożenie dotacji</a>.
 </p>
 <h2>Jak uruchomić/zainstalować/odinstalować skrypt Golden Crop?</h2>
 <p>
@@ -148,7 +148,7 @@ Instalacja skryptu Golden Crop jest naprawdę prosta. Powiem więcej, jeśli chc
 <li>Jeśli program Photoshop® jest uruchomiony, zamknij i uruchom go ponownie. W przeciwnym wypadku uruchom program Photoshop®.</li>
 <li>W programie Photoshop® otwórz plik, który chcesz wykadrować.</li>
 <li>Uruchom skrypt wybierając z menu pozycję <strong>File>Scripts>goldenCrop</strong> lub w polskiej wersji <strong>Plik>Skypty>goldenCrop</strong>. Możesz przypisać skrót klawiszowy do skryptu korzystając z 'Edit>Keyboard Shortcuts' (Edycja>Skróty Klawiaturowe) [Alt+Shift+Ctrl+K]! Mój ulubiony skrót to [Ctrl+Shift+Q]. UWAGA! Jeśli w skład skrótu wchodzi klawisz [Alt] mogą pojawić się problemy z działaniem skryptu, objawiające się samoczynnym otwieraniem edytora.</li>
-<li>Gratulacje, właśnie uruchomiłeś skrypt! Już teraz możesz zacząć poznawać możliwości skryptu samodzielnie albo skorzystać z dalszej części dokumentacji, gdzie zawarty jest opis działania skryptu.</li>
+<li>Gratulacje, właśnie uruchomiłeś skrypt! Już teraz możesz zacząć poznawać jego możliwości samodzielnie albo skorzystać z dalszej części dokumentacji, gdzie zawarty jest opis działania skryptu.</li>
 </ol>
 <h3>Odinstalowanie / usuwanie z systemu</h3>
 <p>
@@ -167,7 +167,7 @@ Jeśli obrazek nie będzie przycinany (tylko płótno będzie rozszerzane), nie 
 <ol>
  <li>Jeśli istnieje warstwa tła (Background) zostanie przekształcona na normalną warstwę</li>
  <li>Płótno zostanie rozszerzone tak, aby pasowało do ramki przycinania. Zauważ, że oryginalna warstwa tła jest teraz zwykłą warstwą, w związku z czym nie zostały do niej dodane żadne piksele, dzięki czemu oryginalne krawędzie tła zostały zachowane.</li>
- <li>Pod warstwą tła, dodana zostaje warstwa wypełnienia kolorem, zalewając kolorem poszerzone płótno. Kolor warstwy odpowiada aktualnie wybranemu kolorowi narzędzie. Może być zmieniony w każdej chwili, poprzez dwukrotne kliknięcie na ikonę warstwy wypełnienia (tak jak kolor każdej warstwy wypełnienia).</li>
+ <li>Pod warstwą tła, dodana zostaje warstwa wypełnienia kolorem, zalewając kolorem poszerzone płótno. Kolor warstwy odpowiada aktualnie wybranemu kolorowi narzędzia. Może być zmieniony w każdej chwili, poprzez dwukrotne kliknięcie na ikonę warstwy wypełnienia (tak jak kolor każdej warstwy wypełnienia).</li>
 </ol>
 <h3>Przytnij obrazek i rozszerz płótno</h3>
 <p>
