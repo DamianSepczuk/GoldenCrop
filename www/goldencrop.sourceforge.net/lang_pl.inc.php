@@ -89,7 +89,7 @@ Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przyc
 		<a href="http://sourceforge.net/project/project_donations.php?group_id=270328"><img class="btnNormal" alt="Download button" src="img/donate_btn.png" width="274" height="146" /><img class="btnHover" alt="Download button" src="img/donate_btn_hover.png" width="274" height="146" /></a>
 	</div>
 </div>
-<p>Możesz też przejść bezpośrednio na <a href="http://sourceforge.net/projects/goldencrop">stronę projektu Golden Crop w serwisie Sourceforge: <img style="vertical-align:middle;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=270328&amp;type=11" width="120" height="30" alt="Get Golden Crop at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a> albo pobrać absolutnie najnowszą ale praktycznie NIEPRZETESTOWANĄ wersję skryptu bezpośrednio z <a href="http://goldencrop.svn.sourceforge.net/viewvc/goldencrop/trunk/code/goldenCrop.jsx?view=log">repozytorium SVN<a/>.
+<p>Możesz też przejść bezpośrednio na <a href="http://sourceforge.net/projects/goldencrop">stronę projektu Golden Crop w serwisie Sourceforge: <img style="vertical-align:middle;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=270328&amp;type=11" width="120" height="30" alt="Get Golden Crop at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a> albo pobrać absolutnie najnowszą ale praktycznie NIEPRZETESTOWANĄ wersję skryptu bezpośrednio z <a href="http://goldencrop.svn.sourceforge.net/viewvc/goldencrop/trunk/code/goldenCrop.jsx?view=log">repozytorium SVN</a>.
 </p>
 <p style="text-align: center;">
 <img alt="Positioning cropping frame" src="img/screenShot001.jpg" />
@@ -105,8 +105,23 @@ Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przyc
 	<li>W jaki sposób mogę skontaktować się z autorem?</li>
 </ol>
 <div id="faq">
+<h2>Reklama</h2>
+Dlaczego wyśwtetlana jest reklama? Żeby autor skryptu, po wyczerpujących godzinach spędzonych na kodowani, miał na piwo... raz na pół roku ;)
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-4337717722148975";
+/* 728x90_goldencrop */
+google_ad_slot = "7670161217";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
 <h2>Czym jest skrypt Golden Crop?</h2>
-<p>Skrypt Golden Crop został zaprojektowany w celu ułatwienia kadrowania zdjęć zgodnie z regułami podziału. Generuje on wizualne prowadnice dla <b>Reguły Trzech</b>, <b>Złotej Reguły</b> i <b>Trójkątnej Złotej Reguły</b> w obu kierunkach. W czasach przed fotografią, w malarstwie utrwalił się kanon podziału płótna, dotyczący ważnych elementów obrazu przedstawionego. Pionierzy fotografii przenieśli te reguły do nowopowstającej sztuki. Umiejscowienie ważnych elementów zdjęcia zgodnie z regułami podziału sprawia, że praca stanie się bardziej interesująca i przyciągająca uwagę. Na poniższym obrazku możesz zobaczyć jak wyglądają prowadnice generowane przez skrypt:
+<p>Skrypt Golden Crop został zaprojektowany w celu ułatwienia kadrowania zdjęć zgodnie z regułami podziału. Generuje on wizualne prowadnice dla <b>Reguły Trzech</b>, <b>Złotej Reguły</b> i <b>Trójkątnej Złotej Reguły</b> w obu kierunkach. W czasach przed fotografią, w malarstwie utrwalił się kanon podziału płótna, dotyczący ważnych elementów obrazu przedstawionego. Pionierzy fotografii przenieśli te reguły do nowo powstającej sztuki. Umiejscowienie ważnych elementów zdjęcia zgodnie z regułami podziału może sprawić, że praca stanie się bardziej interesująca i przyciągająca uwagę. Na poniższym obrazku możesz zobaczyć jak wyglądają prowadnice generowane przez skrypt:
 <img alt="guidelines" src="img/guidelines.png"/>
 </p>
 <p>Jeśli koncepcje reguł podziału są Ci obce, skorzystaj z wyszukiwarki internetowej albo zajrzyj pod jeden z linków:</p>
@@ -116,6 +131,7 @@ Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przyc
 	<li><a target="_blank" href="http://www.davebritzius.com/?p=115">What a Difference a Crop Makes - the Rule of Thirds</a></li>
 	<li><a target="_blank" href="http://www.photoshopessentials.com/photo-editing/rule-of-thirds.php">Add Visual Interest To Your Photos With The Rule Of Thirds</a></li>
 	<li><a target="_blank" href="http://www.sciencebuddies.org/science-fair-projects/project_ideas/Photo_p012.shtml">The Golden Rules of Photography</a></li>
+	<li>Znajdź więcej informacji o regułach podziału: <form action="http://www.google.com/cse" id="cse-search-box" target="_blank">  <div>    <input type="hidden" name="cx" value="partner-pub-4337717722148975:i51cih-eyiw" />    <input type="hidden" name="ie" value="UTF-8" />    <input type="text" name="q" size="31" />    <input type="submit" name="sa" value="Szukaj" />  </div></form><script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=pl"></script>  </li>
 </ul>
 
 <h2>Kto może go używać?</h2>
@@ -126,7 +142,9 @@ Tak, jak najbardziej! Skrypt jest zarówno wolnym oprogramowaniem jak i darmowym
 </p>
 <h2>Jak uruchomić/zainstalować/odinstalować skrypt Golden Crop?</h2>
 <p>
-<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/2-L_NgZtmg4&hl=pl&fs=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/2-L_NgZtmg4&hl=pl&fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object><br />
+<object type="application/x-shockwave-flash" style="width:425px; height:344px;" data="http://www.youtube.com/v/2-L_NgZtmg4">
+<param name="movie" value="http://www.youtube.com/v/2-L_NgZtmg4" />
+</object><br />
 Instalacja skryptu Golden Crop jest naprawdę prosta. Powiem więcej, jeśli chcesz tylko wypróbować działanie skryptu, nie jest wymagana jakakolwiek instalacja!</p>
 <h3>Uruchamianie bez instalacji</h3>
 <ol>
@@ -156,7 +174,9 @@ Aby odinstalować skrypt, zwyczajnie usuń plik 'goldenCrop.jsx', z folderu skry
 </p>
 <h2>Co potrafi skrypt Golden Crop?</h2>
 <p>
-<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/IkocL33FT_M&hl=pl&fs=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/IkocL33FT_M&hl=pl&fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object><br />
+<object type="application/x-shockwave-flash" style="width:425px; height:344px;" data="http://www.youtube.com/v/IkocL33FT_M">
+<param name="movie" value="http://www.youtube.com/v/IkocL33FT_M" />
+</object><br />
 Może przycinać obrazek i odkrywać dodatkowe płótno. Interaktywna część skryptu oparta jest na trybie 'Free Transform' ('Przekształcanie swobodne'). Działa dokładnie tak samo jak w przypadku zwykłej warstwy. Ustaw ramkę przycinania w wybranej przez siebie pozycji i naciśnij Enter aby zatwierdzić kadrowanie. Jeśli chcesz anulować kadrowanie, naciśnij Escape.</p>
 <img alt="Positioning cropping frame" src="img/screenShot001.jpg" />
 <p>
@@ -193,6 +213,7 @@ Wyświetlane jest okno wyboru trybu przycinania. Możesz w nim wybrać metodę p
 
 <h2>W jaki sposób mogę skontaktować się z autorem?</h2>
 <p>Autorem i założycielem projektu jest Damian Sepczuk. Skrobnij maila na adres goldencrop[maŁpa]o2[kr0pka]USUŃ_TO_I_NASTĘPNĄ_KROPKĘ[kropka]pl</p>
+
 </div>
 
 <p>
@@ -228,5 +249,14 @@ All trademarks used are properties of their respective owners. Please visit the 
 </p>
 </div>
 </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10000102-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
 </body>
 </html>

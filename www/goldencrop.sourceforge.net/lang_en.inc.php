@@ -89,7 +89,7 @@ Welcome to the official site of the Golden Crop script! Please choose one of the
 		<a href="http://sourceforge.net/project/project_donations.php?group_id=270328"><img class="btnNormal" alt="Download button" src="img/donate_btn.png" width="274" height="146" /><img class="btnHover" alt="Download button" src="img/donate_btn_hover.png" width="274" height="146" /></a>
 	</div>
 </div>
-<p>You can also go directly to <a href="http://sourceforge.net/projects/goldencrop">Sourceforge Golden Crop project page: <img style="vertical-align:middle;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=270328&amp;type=11" width="120" height="30" alt="Get Golden Crop at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a> or download the latest but virtually NOT TESTED version of code from <a href="http://goldencrop.svn.sourceforge.net/viewvc/goldencrop/trunk/code/goldenCrop.jsx?view=log">SVN repository<a/>.
+<p>You can also go directly to <a href="http://sourceforge.net/projects/goldencrop">Sourceforge Golden Crop project page: <img style="vertical-align:middle;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=270328&amp;type=11" width="120" height="30" alt="Get Golden Crop at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a> or download the latest but virtually NOT TESTED version of code from <a href="http://goldencrop.svn.sourceforge.net/viewvc/goldencrop/trunk/code/goldenCrop.jsx?view=log">SVN repository</a>.
 </p>
 <p style="text-align: center;">
 <img alt="Positioning cropping frame" src="img/screenShot001.jpg" />
@@ -105,6 +105,21 @@ Welcome to the official site of the Golden Crop script! Please choose one of the
 	<li>How can I contact the author?</li>
 </ol>
 <div id="faq">
+<h2>Advertisement</h2>
+Why there is an advertisement? In order to allow the developper to buy himself a beer after countless hours he spend coding. At least once a year ;)
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-4337717722148975";
+/* 728x90_goldencrop */
+google_ad_slot = "7670161217";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
 <h2>What is the Golden Crop script?</h2>
 <p>Golden Crop script designed as an aid for cropping images according to the division rules. The script generates visual guidelines for the <b>Rule of Thirds</b>, <b>Golden Rule</b> and both <b>Diagonal Golden Rules</b>. Some people think, that aligning vital elements with this guidelines creates special visual impact, making the image more interesting. You can see this guidelines on a picture below:
 <img alt="guidelines" src="img/guidelines.png"/>
@@ -116,6 +131,7 @@ Welcome to the official site of the Golden Crop script! Please choose one of the
 	<li><a target="_blank" href="http://www.davebritzius.com/?p=115">What a Difference a Crop Makes - the Rule of Thirds</a></li>
 	<li><a target="_blank" href="http://www.photoshopessentials.com/photo-editing/rule-of-thirds.php">Add Visual Interest To Your Photos With The Rule Of Thirds</a></li>
 	<li><a target="_blank" href="http://www.sciencebuddies.org/science-fair-projects/project_ideas/Photo_p012.shtml">The Golden Rules of Photography</a></li>
+	<li>Find more: <form action="http://www.google.com/cse" id="cse-search-box" target="_blank">  <div>    <input type="hidden" name="cx" value="partner-pub-4337717722148975:i51cih-eyiw" />    <input type="hidden" name="ie" value="UTF-8" />    <input type="text" name="q" size="31" />    <input type="submit" name="sa" value="Szukaj" />  </div></form><script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en"></script> 
 </ul>
 
 <h2>Who can use it?</h2>
@@ -126,7 +142,9 @@ Yes, it is! Free as in beer and free as in speech :) This software uses GNU Gene
 </p>
 <h2>How to run/install/uninstall the Golden Crop script?</h2>
 <p>
-<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/2-L_NgZtmg4&hl=pl&fs=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/2-L_NgZtmg4&hl=pl&fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object><br />
+<object type="application/x-shockwave-flash" style="width:425px; height:344px;" data="http://www.youtube.com/v/2-L_NgZtmg4">
+<param name="movie" value="http://www.youtube.com/v/2-L_NgZtmg4" />
+</object><br />
 Installing the Golden Crop script is really simple. In fact, if you only want to give it a try, you do not have to install the script at all!</p>
 <h3>Running without installation</h3>
 <ol>
@@ -158,7 +176,9 @@ To uninstall the script, simply delete 'goldenCrop.jsx' file, from Photoshop® s
 </p>
 <h2>What the Golden Crop script can do?</h2>
 <p>
-<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/IkocL33FT_M&hl=pl&fs=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/IkocL33FT_M&hl=pl&fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object><br />
+<object type="application/x-shockwave-flash" style="width:425px; height:344px;" data="http://www.youtube.com/v/IkocL33FT_M">
+<param name="movie" value="http://www.youtube.com/v/IkocL33FT_M" />
+</object><br />
 It can crop photo and reveal additional canvas. Interactive part of the script is based on 'Free Transform' mode. It works exactly the same, as free-transforming a layer. Position cropping frame according to guidelines and your taste and pres Enter. If you want to cancel -- press Esc.
 </p>
 <img alt="Positioning cropping frame" src="img/screenShot001.jpg" />
@@ -231,5 +251,14 @@ All trademarks used are properties of their respective owners. Please visit the 
 </p>
 </div>
 </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10000102-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
 </body>
 </html> 

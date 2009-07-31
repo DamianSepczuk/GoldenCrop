@@ -262,7 +262,7 @@ function saveLanguageChoice($lang) {
 function printLanguageChangeBar() {
 	global $availLangs;
 	foreach ( $availLangs as $lang ) {
-		echo '<a style="margin-right: 7px" href="/?lang='.$lang.'"><img height="12" src="img/flags/'.$lang.'.png" alt="Language "'.$lang.'"/></a>';
+		echo '<a style="margin-right: 7px" href="/?lang='.$lang.'"><img height="12" src="img/flags/'.$lang.'.png" alt="Language '.$lang.'"/></a>';
 	}
 }
  
