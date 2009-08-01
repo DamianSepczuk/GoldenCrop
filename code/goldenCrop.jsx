@@ -358,7 +358,7 @@ function GoldenCrop( _doc ) {
  */
 GoldenCrop.prototype.loadConfig = function() {
     this.ifApplyFX = true;
-    this.ifSuspendHistory = true;
+    this.ifSuspendHistory = isSC3Plus();
     this.loc = localizator.getInstance();
 }
 
@@ -791,6 +791,7 @@ GoldenCrop.prototype.go = function() {
 
     // New action mechanizm
     // !== false   - indicates some method
+    // x !== y <=> !(x === y) -- only the second form gives right value in CS2 and (CS3, CS4)
     // false       - indicates no action
     this.cropAccepted  = false;
     this.cropMethod    = false;
@@ -870,7 +871,7 @@ GoldenCrop.prototype.go = function() {
 				   } else {
 				       this.revealMethod = this.chooseRevealAction();
 				   }
-					if ( this.revealMethod !== 0 ) {
+					if ( !(this.revealMethod === 0) ) {
 						if ( this.revealMethod == 'EXTCANVAS' ) {
 							this.popBackground = true;
 						}
@@ -898,7 +899,7 @@ GoldenCrop.prototype.go = function() {
     
     if ( this.cropAccepted ) {
         
-        if ( this.rotateCanvasA !== false ) {
+        if ( !(this.rotateCanvasA === false) ) {
             if ( this.ifSuspendHistory ) {
                 this.doc.suspendHistory(szAppName + this.loc.get('-rotate'), 'this.doRotateCanvas()');
                 Stdlib.NOP();
@@ -979,7 +980,8 @@ try {
 // } 
 // if (!global["isCS2"]) { 
 //   isCS2 = function()  { return psVersion.match(/^9\./) != null; }; 
-// } 
+// }
+isSC3Plus = function()  { return isCS3() || isCS4() }; 
 isCS4 = function()  { return psVersion.match(/^11\./) != null; }; 
 isCS3 = function()  { return psVersion.match(/^10\./) != null; }; 
 isCS2 = function()  { return psVersion.match(/^9\./) != null; }; 
@@ -1432,7 +1434,8 @@ if ( isCS4() || isCS3() ) {
       return res;
     };
 } else { 
-  Stdlib.hasSelection = function(doc) { 
+  Stdlib.hasSelection = function(doc) {
+    if ( !doc ) doc = app.activeDocument;
     var res = false; 
     var as = doc.activeHistoryState; 
     doc.selection.deselect(); 
