@@ -496,6 +496,102 @@ GoldenCrop.prototype.makeDiagStrip = function( direction, stripSize, color ) {
     return layer;
 }
 
+GoldenCrop.prototype.createGoldenSpiralPath = function(numOfTurns, offset, w, h, startX, startY) {
+	// Default values
+	if (!w) w = this.docW;
+	if (!h) h = this.docH;
+	if (!startX) startX = 0;
+	if (!startY) startY = h;
+	if (!offset) offset = 0;
+	if (!numOfTurns) numOfTurns = (offset>0)?Infinity:5;
+	
+	// Frequently used constants
+	const           k = (4*(Math.sqrt(2)-1))/3; // kappa, used to draw bezier ellipse section
+	const         phi = 2/(1+Math.sqrt(5));     // phi, inverse of golden ratio
+	const        phi2 = phi*phi;                // phi square
+	const oneMinusPhi = 1-phi;                  // 1-phi
+	
+	// <=CS4; patth points coordinates must be given in current DIP (!), for example
+	//        72dpi: 1 path 'pixel' => 1 image pixel
+	//       300pdi: 1 path 'pixel' => 300/72 image pixels
+	var DPIFix = 72/this.doc.resolution; 
+	offset *= DPIFix; w *= DPIFix; h *= DPIFix; startX *= DPIFix; startY *= DPIFix;
+	
+	// Create initial point
+	var points = [Stdlib.createPathPoint([startX+offset,startY])];
+	var i=0;
+	for (; i<numOfTurns; ++i)
+	{
+		var startPoint = points[points.length-1];
+		// coordinates of starting point w/o offset
+		var x = startPoint.anchor[0]-offset,
+		    y = startPoint.anchor[1];
+		// coordinates of current segment points
+		var pA = [x+offset,y];
+		var pB = [x+phi*w, y-h+offset];
+		var pC = [x+w-offset, y-oneMinusPhi*h];
+		var pD = [x+(oneMinusPhi+phi2)*w, y-offset];
+		var pE = [x+phi*w+offset, y-oneMinusPhi*phi*h];
+
+		w = pD[0]-pE[0]+offset; // width of NEXT segment
+		h = pE[1]-pC[1];        // height of NEXT segment
+		
+		// minimal offsets in both directions whith which the curve could be drawn
+		var minOffsetY = pD[1]-pE[1]+offset;
+		var minOffset = Math.min(w, minOffsetY);
+		if ( offset > minOffset ) {
+			break;
+		}
+	
+		// correct first point's handle
+		startPoint.leftDirection = [pA[0], y-k*(pA[1]-pB[1])];
+		
+		// add points with handles
+		points.push(Stdlib.createPathPoint(pB,[pB[0]+k*(pC[0]-pB[0]),pB[1]],[pB[0]-k*(pB[0]-pA[0]),pB[1]]));
+		points.push(Stdlib.createPathPoint(pC,[pC[0],pC[1]+k*(pD[1]-pC[1])],[pC[0],pC[1]-k*(pC[1]-pB[1])]));
+		points.push(Stdlib.createPathPoint(pD,[pD[0]-k*(pD[0]-pE[0]),pD[1]],[pD[0]+k*(pC[0]-pD[0]),pD[1]]));
+		points.push(Stdlib.createPathPoint(pE,undefined,[pE[0],pE[1]+k*(pD[1]-pE[1])]));
+		
+	}
+	return {points:points, cTurns:i};
+}
+
+GoldenCrop.prototype.makeGoldenSpiral = function( orientation, stripSizePrc, color ) {
+    const docWidth  = this.docW,
+          docHeight = this.docH;
+    const stripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);
+	
+	var offsetPath = this.createGoldenSpiralPath(false, stripSize);
+	var normalPath = this.createGoldenSpiralPath(offsetPath.cTurns+1);
+	
+	var fillPath = offsetPath.points;
+	for (var i=0; i<normalPath.points.length; ++i) {
+		var tmp = normalPath.points[i].leftDirection
+		normalPath.points[i].leftDirection = normalPath.points[i].rightDirection;
+		normalPath.points[i].rightDirection = tmp;
+	}
+	fillPath = fillPath.concat(normalPath.points.reverse());
+	var spi = new SubPathInfo();
+	spi.closed = true;
+	spi.operation = ShapeOperation.SHAPEADD;
+	spi.entireSubPath = fillPath;
+
+	var GSPath = this.doc.pathItems.add('', [spi]);
+	switch (orientation) {
+		case 1:
+			Stdlib.flipPath(0,1);
+			break;
+		case 2:
+			Stdlib.flipPath(1,1);
+			break;
+		case 3:
+			Stdlib.flipPath(1,0);
+			break;
+	}
+	var SpiralLayer = Stdlib.createSolidFillLayer(undefined, color, 'Golden spiral' );
+	GSPath.remove();
+}
+
 /*
  * Applies "strip" layer styles (drop shadow) on active layer
  * Returns: void
@@ -549,8 +645,8 @@ executeAction( id11, desc5, DialogModes.NO );
  * stripsThickScale -- default value: 
  *                          golden rule: 1
  *                          one-third rule: 1/2
- *                          golden diagonal rule (up): 1/3
- *                          golden diagonal rule (down): 1/3
+ *                          golden diagonal rule (all): 1/3
+ *                          golden spiral (all): 1/3
  * Returns: void
  * TODO: move parameters to user config
  */
@@ -562,7 +658,8 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
         maskOpacity = 70;
     }
     if (!colors) {
-        colors = [Stdlib.createRGBColor(0,0,0), Stdlib.createRGBColor(0,0,0), Stdlib.createRGBColor(0x33,0x33,0x33), Stdlib.createRGBColor(255,0,0), Stdlib.createRGBColor(0,0,255)];
+        colors = [Stdlib.createRGBColor(0,0,0), Stdlib.createRGBColor(0,0,0), Stdlib.createRGBColor(0x33,0x33,0x33), Stdlib.createRGBColor(255,0,0), Stdlib.createRGBColor(0,0,255),
+                  Stdlib.createRGBColor(0,255,255), Stdlib.createRGBColor(255,0,255), Stdlib.createRGBColor(255,255,0), Stdlib.createRGBColor(128,128,255)];
     }
     if (!stripsThickScale) {
         stripsThickScale = [1, 1/2, 1/3, 1/3];
@@ -595,8 +692,24 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
     if (this.ifApplyFX) this.applyStripFX();
     
     // ----- Golden diagonal rule (down)
-    this.diagGoldDown = this.makeDiagStrip(false, basicStripSize*stripsThickScale[3], colors[4]);
+    this.diagGoldDown = this.makeDiagStrip(false, basicStripSize*stripsThickScale[2], colors[4]);
     if (this.ifApplyFX) this.applyStripFX();
+	
+	// ----- Golden spiral (starts at bottom-left)
+	this.goldenSpiralBL = this.makeGoldenSpiral(0, basicStripSize*stripsThickScale[3], colors[5]);
+	if (this.ifApplyFX) this.applyStripFX();
+	
+	// ----- Golden spiral (starts at bottom-left)
+	this.goldenSpiralBL = this.makeGoldenSpiral(1, basicStripSize*stripsThickScale[3], colors[6]);
+	if (this.ifApplyFX) this.applyStripFX();
+	
+	// ----- Golden spiral (starts at bottom-left)
+	this.goldenSpiralBL = this.makeGoldenSpiral(2, basicStripSize*stripsThickScale[3], colors[7]);
+	if (this.ifApplyFX) this.applyStripFX();
+	
+	// ----- Golden spiral (starts at bottom-left)
+	this.goldenSpiralBL = this.makeGoldenSpiral(3, basicStripSize*stripsThickScale[3], colors[8]);
+	if (this.ifApplyFX) this.applyStripFX();
 }
 
 /*
@@ -1689,8 +1802,36 @@ Stdlib.rotateCannvas = function( angle, doc ) {
   Stdlib.wrapLC(doc, _ftn);
 }
 
+Stdlib.flipPath = function(h, v) {
+	var idTrnf = cTID( "Trnf" );
+		var desc108 = new ActionDescriptor();
+			var ref101 = new ActionReference();
+			ref101.putEnumerated( cTID( "Path" ), cTID( "Ordn" ), cTID( "Trgt" ));
+		desc108.putReference(  cTID( "null" ), ref101 );
+		desc108.putEnumerated( cTID( "FTcs" ), cTID( "QCSt" ), cTID( "Qcsa" ) );
+		if (h) desc108.putUnitDouble( cTID( "Wdth" ), cTID( "#Prc" ), -100.000000 );
+		if (v) desc108.putUnitDouble( cTID( "Hght" ), cTID( "#Prc" ), -100.000000 );
+	executeAction( idTrnf, desc108, DialogModes.NO );
+}
+
+Stdlib.createPathPoint = function(point, lHandle, rHandle) {
+	var kind = (lHandle || rHandle)?PointKind.SMOOTHPOINT:PointKind.CORNERPOINT;
+	if (!lHandle) lHandle = point;
+	if (!rHandle) rHandle = point;
+	
+	var o = new PathPointInfo();
+	/*o.anchor = [new UnitValue(point[0],'px'),new UnitValue(point[1],'px')];
+	o.leftDirection = [new UnitValue(lHandle[0],'px'),new UnitValue(lHandle[1],'px')];
+	o.rightDirection = [new UnitValue(rHandle[0],'px'),new UnitValue(rHandle[1],'px')];*/
+	o.anchor = point;
+	o.leftDirection = lHandle;
+	o.rightDirection = rHandle;
+	o.kind = kind;
+	return o;
+}
+// ===END: stdlib.js====================================================================================================================
+
 Object.prototype.clone = function() {
-  //debugger;
   var newObj = (this instanceof Array) ? [] : {};
   for (var i in this) {
     //if(!this.hasOwnProperty(i)) continue;
@@ -1699,7 +1840,7 @@ Object.prototype.clone = function() {
     } else newObj[i] = this[i]
   } return newObj;
 };
-// ===END: stdlib.js===
+// ====================================================================================================================================
 
 app.bringToFront();
 if ( app.documents.length == 0 )
@@ -1712,13 +1853,9 @@ try {
    var oldRulerUnit = app.preferences.rulerUnits; // Save ruler unit
    app.preferences.rulerUnits = Units.PIXELS;     // Set it to PIXEL
    main();
-} 
-catch ( e )
-{
+} catch ( e ) {
    alert( e.message );
-}
-finally
-{
+} finally {
    app.preferences.rulerUnits = oldRulerUnit; // Restore ruler unit
 }
 // ---------------------------------------------------------------------
