@@ -532,26 +532,41 @@ GoldenCrop.prototype.createGoldenSpiralPath = function(numOfTurns, offset, w, h,
 		var pC = [x+w-offset, y-oneMinusPhi*h];
 		var pD = [x+(oneMinusPhi+phi2)*w, y-offset];
 		var pE = [x+phi*w+offset, y-oneMinusPhi*phi*h];
-
-		w = pD[0]-pE[0]+offset; // width of NEXT segment
-		h = pE[1]-pC[1];        // height of NEXT segment
+		// compute distances
+		var dAB = [pB[0]-pA[0],pA[1]-pB[1]];
+		var dBC = [pC[0]-pB[0],pC[1]-pB[1]];
+		var dCD = [pC[0]-pD[0],pD[1]-pC[1]];
+		var dDE = [pD[0]-pE[0],pD[1]-pE[1]];
 		
 		// minimal offsets in both directions whith which the curve could be drawn
-		var minOffsetY = pD[1]-pE[1]+offset;
-		var minOffset = Math.min(w, minOffsetY);
-		if ( offset > minOffset ) {
-			break;
+		if ( Math.min(dDE[0], dDE[1]) < 0 ) {
+			
+			if ( dAB[0] < 0 ) pA[0] = startPoint.anchor[0] -= offset - (offset+dAB[0])*0.7;
+			if ( dBC[1] < 0 ) pB[1] -=offset - (offset+dBC[1])*0.7;
+			if ( dCD[0] < 0 ) pC[0] +=offset - (offset+dCD[0])*0.7;
+			if ( dDE[1] < 0 ) pD[1] +=offset - (offset+dDE[1])*0.7;
+			if ( dDE[0] < 0 ) pE[0] -=offset - (offset+dDE[0])*0.7;
+
+			// recompute distances
+			dAB = [pB[0]-pA[0],pA[1]-pB[1]];
+			dBC = [pC[0]-pB[0],pC[1]-pB[1]];
+			dCD = [pC[0]-pD[0],pD[1]-pC[1]];
+			dDE = [pD[0]-pE[0],pD[1]-pE[1]];
+			numOfTurns=0;
 		}
 	
 		// correct first point's handle
-		startPoint.leftDirection = [pA[0], y-k*(pA[1]-pB[1])];
+		startPoint.leftDirection = [pA[0], y-k*dAB[1]];
+		startPoint.rightDirection[0] = pA[0];
 		
 		// add points with handles
-		points.push(Stdlib.createPathPoint(pB,[pB[0]+k*(pC[0]-pB[0]),pB[1]],[pB[0]-k*(pB[0]-pA[0]),pB[1]]));
-		points.push(Stdlib.createPathPoint(pC,[pC[0],pC[1]+k*(pD[1]-pC[1])],[pC[0],pC[1]-k*(pC[1]-pB[1])]));
-		points.push(Stdlib.createPathPoint(pD,[pD[0]-k*(pD[0]-pE[0]),pD[1]],[pD[0]+k*(pC[0]-pD[0]),pD[1]]));
-		points.push(Stdlib.createPathPoint(pE,undefined,[pE[0],pE[1]+k*(pD[1]-pE[1])]));
+		points.push(Stdlib.createPathPoint(pB,[pB[0]+k*dBC[0],pB[1]],[pB[0]-k*dAB[0],pB[1]]));
+		points.push(Stdlib.createPathPoint(pC,[pC[0],pC[1]+k*dCD[1]],[pC[0],pC[1]-k*dBC[1]]));
+		points.push(Stdlib.createPathPoint(pD,[pD[0]-k*dDE[0],pD[1]],[pD[0]+k*dCD[0],pD[1]]));
+		points.push(Stdlib.createPathPoint(pE,undefined,[pE[0],pE[1]+k*dDE[1]]));
 		
+		w = dDE[0]+offset;   // width of NEXT segment
+		h = pE[1]-pC[1];  // height of NEXT segment
 	}
 	return {points:points, cTurns:i};
 }
@@ -562,7 +577,7 @@ GoldenCrop.prototype.makeGoldenSpiral = function( orientation, stripSizePrc, col
     const stripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);
 	
 	var offsetPath = this.createGoldenSpiralPath(false, stripSize);
-	var normalPath = this.createGoldenSpiralPath(offsetPath.cTurns+1);
+	var normalPath = this.createGoldenSpiralPath(offsetPath.cTurns);
 	
 	var fillPath = offsetPath.points;
 	for (var i=0; i<normalPath.points.length; ++i) {
