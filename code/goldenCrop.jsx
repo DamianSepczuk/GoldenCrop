@@ -315,6 +315,12 @@ dialogMenu.prototype.show = function () {
        }
        if( isCS4() ){
            addEventListener('keydown', function (e) {
+			   // Next funny thing about PS CS4
+			   // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
+			   // Most curious doing nothing (NOP) helps
+			   if (e.keyName!='Escape' && e.keyName!='Enter' && e.keyName!='Return') {
+				   Stdlib.NOP();
+			   }
                for ( var i = 0; i<elements.length; ++i )
                {
                    if ( e.keyName == elements[i].key.toUpperCase() ) {
@@ -341,9 +347,10 @@ dialogMenu.prototype.show = function () {
                         break;
                     }
                 }
-                if (!found) {
-                    edShcut.text = 'Stroke a key';
-                    edShcut.active = false; // on CS3 makes the event to occur one again, with
+                edShcut.text = 'Press a key';
+                edShcut.active = false; // on CS3 makes the event to occur one again, with
+
+                if (isCS2() || !found) {
                     edShcut.active = true;  // edShcut.text == the single char last enetered (!)
                 }
            }
@@ -459,6 +466,12 @@ dialogMenuMChoice.prototype.show = function () {
        
        if( isCS4() ){
            addEventListener('keydown', function (e) {
+			   // Next funny thing about PS CS4
+			   // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
+			   // Most curious doing nothing (NOP) helps
+			   if (e.keyName!='Escape' && e.keyName!='Enter' && e.keyName!='Return') {
+				   Stdlib.NOP();
+			   }
                for ( var i = 0; i<allElements.length; ++i )
                {
                    if ( e.keyName == allElements[i].key.toUpperCase() ) {
@@ -485,9 +498,10 @@ dialogMenuMChoice.prototype.show = function () {
                         break;
                     }
                 }
-                if (!found) {
-                    edShcut.text = 'Stroke a key';
-                    edShcut.active = false; // on CS3 makes the event to occur one again, with
+                edShcut.text = 'Press a key';
+                edShcut.active = false; // on CS3 makes the event to occur one again, with
+
+                if (isCS2() || !found) {
                     edShcut.active = true;  // edShcut.text == the single char last enetered (!)
                 }
            }
