@@ -1086,7 +1086,7 @@ GoldenCrop.prototype.chooseRevealAction = function() {
                 break;
         }
 }
-    
+/*    
  * Logical heart of the script. Invoke each phase of script w/ or w/o suspending history.
  */
 GoldenCrop.prototype.go = function() {
