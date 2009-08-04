@@ -1,8 +1,0 @@
-/* tab-separated translations (easy import-export to excel or calc)
- * FIRST LINE: AvailLangs[TAB]langCode1[TAB]langCode2[TAB]...[TAB]langCodeN
- * NEXT LINES: stringId1[TAB]translationInLanguage1[TAB]translationInLanguage2[TAB]...[TAB]translationInLanguageN
- * For example:
-AvailLangs	en	pl
-exit	Exit	Wyjœcie
- *
- */
