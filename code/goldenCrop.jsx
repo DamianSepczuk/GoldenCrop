@@ -86,20 +86,20 @@ localizator.prototype.setLocale = function( locale ) {
 
 localizator.prototype.initStrings = function() {
     var str = this.str = new Array();
-    
+
     // Entries below were generated using localizator.loadCVSsaveAsJSCodeFile function
     str['chCropMethod'] = {en:'Choose crop style', pl:'Wybierz styl przycinania'};
     str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania'};
     str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij p³ótno'};
     str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskê kadruj¹c¹'};
-    str['cancelCrop'] = {en:'Return to cropping', pl:'Wróæ do przycinania'};
+    str['cancel'] = {en:'Cancel', pl:'Anuluj'};
     str['bgOnLayer'] = {en:'Background on layer', pl:'T³o na warstwie'};
     str['bgFill'] = {en:'Background fill', pl:'Wype³nienie t³a'};
+    str['doOutsCrop'] = {en:'Do outside cropping (YES) or crop without extending canvas (NO)?', pl:'Rozszerzyæ pó³tno (TAK) czy przyci¹æ bez rozszerzania (NIE)?'};
     str['-grid'] = {en:' - grid', pl:' - siatka'};
     str['-resize'] = {en:' - resize', pl:' - przeskalowanie'};
     str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie'};
     str['-crop'] = {en:' - crop', pl:' - przycinanie'};
-    str['-rotate'] = {en:' - rotate', pl:' - obróæ'};
     str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN'};
     str['cropMask'] = {en:'Crop mask', pl:'Maska kadruj¹ca'};
     str['divRules'] = {en:'Dividing rules', pl:'Regu³y podzia³u'};
@@ -112,6 +112,20 @@ localizator.prototype.initStrings = function() {
     str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz p³ótno'};
     str['dontExtCanv'] = {en:'Crop without extension', pl:'Przytnij bez rozszerzania'};
     str['retToCropping'] = {en:'Return to cropping', pl:'Wróæ do kadrowania'};
+    str['chCompMethod'] = {en:'Composition method', pl:'Metoda kompozycji'};
+    str['chCompMethodQ'] = {en:'Choose composition guidelines', pl:'Wybierz metodê kompozycji'};
+    str['goldenRule'] = {en:'Golden Rule', pl:'Z³oty podzia³'};
+    str['ruleOfThirds'] = {en:'Rule of Thirds', pl:'Regu³a trzech'};
+    str['goldenSpiralBL'] = {en:'Golden Spiral bottom-left', pl:'Z³ota spirala lewo-dó³'};
+    str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'Z³ota spirala lewo-góra'};
+    str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'Z³ota spirala prawo-góra'};
+    str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'Z³ota spirala prawo-dó³'};
+    str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie'};
+    str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie'};
+    str['ok'] = {en:'OK', pl:'OK'};
+    str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Z³ote Spirale'};
+    str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podzia³y'};
+
 }
 
 // Returns translations in CVS format
@@ -343,14 +357,163 @@ dialogMenu.prototype.show = function () {
         return result-11;
     }
 }
+// ---------------------------------------------------------------------
+
+function dialogMenuMChoice( menuDesc ) {
+    this.desc = menuDesc;
+}
+
+dialogMenuMChoice.prototype.show = function () {
+    // helper function
+    function _repeatString( str, n ) {
+        var out = '';
+        while ( n-- > 0) {
+            out += str;
+        }
+        return out;
+    }
+
+    var menuDesc = this.desc;
+    
+    var cbElements = menuDesc.cbElements;
+    var msElements = menuDesc.msElements;
+    
+    var dlg = new Window('dialog', menuDesc.caption);
+    dlg.preferredSize.width = 155;
+    
+    with (dlg)
+    {
+       orientation = 'column';
+       alignChildren = 'fill';
+       add('statictext', undefined, menuDesc.question);
+       var g1 = add('group', undefined, undefined);
+
+       with (g1) {
+           var g1_cb = add('group', undefined, undefined);
+           with (g1_cb) {
+               orientation = 'column';
+               alignChildren = 'fill';
+
+               for ( var i = 0; i<cbElements.length; ++i ) {
+                    var key = cbElements[i].key.toLowerCase();
+                    var cbName = 'op'+i;
+                    var caption = '[&'+cbElements[i].key+'] ' + cbElements[i].text;
+                    var capLen = caption.length;
+                    var e = add('checkbox', undefined, caption, {name: cbName});
+                    e.value = !!cbElements[i].sel;
+                    cbElements[i].obj = e;
+               }
+           }
+          var g1_ms = add('group', undefined, undefined);
+          with (g1_ms) {
+               orientation = 'column';
+               alignChildren = 'fill';
+
+               var maxCaptionLen = -Infinity;
+               msElements.push
+               for ( var i = 0; i<msElements.length; ++i ) {
+                   var capLen = msElements[i].text.length + msElements[i].key.length + 3;
+                   if ( capLen > maxCaptionLen ) maxCaptionLen = capLen;
+                }
+
+               for ( var i = 0; i<msElements.length; ++i ) {
+                    var key = msElements[i].key.toLowerCase();
+                    var btnName = 'op'+i;
+                    var caption = '[&'+msElements[i].key+'] ' + msElements[i].text;
+                    var capLen = caption.length;
+                    var e = add('button', undefined, caption + _repeatString(' ', (maxCaptionLen-capLen)*1.4), {name: btnName});
+                    e.elements = msElements[i].elements;
+                   e.action = msElements[i].action;
+                    e.onClick = function() {
+                        switch ( this.action ) {
+                            case 'slctAll':
+                               for ( var i = 0; i<cbElements.length; ++i ) {
+                                  if(!cbElements[i].obj.value) cbElements[i].obj.notify();
+                               }
+                               break;
+                            case 'dslctAll':
+                               for ( var i = 0; i<cbElements.length; ++i ) {
+                                  if(cbElements[i].obj.value) cbElements[i].obj.notify();
+                               }
+                               break;
+                            default:
+                               if (this.elements) {
+                                   for ( var i = 0; i<this.elements.length; ++i ) {
+                                      cbElements[this.elements[i]].obj.notify();
+                                   }
+                               }
+                               break;
+                        }
+                    }
+                    msElements[i].obj = e;
+               }
+          }
+       }
+   
+   
+       var okBtn = add('button', undefined, this.desc.okTxt, {name: 'ok'});
+       var cancelBtn = add('button', undefined, this.desc.cancelTxt, {name: 'cancel'});
+       defaultElement = okBtn;
+       cancelElement = cancelBtn;
+       var allElements = cbElements.concat(msElements);
+       
+       if( isCS4() ){
+           addEventListener('keydown', function (e) {
+               for ( var i = 0; i<allElements.length; ++i )
+               {
+                   if ( e.keyName == allElements[i].key.toUpperCase() ) {
+                       allElements[i].obj.notify();
+                       break;
+                   }
+               }
+           }, false);
+        } else {
+           var edShcut = add('edittext', undefined, '...', {name: 'edShcut'});
+           edShcut.active = true;
+           edShcut.onChanging = function ()  {
+               if ( edShcut.text == ' ' ) {
+                   defaultElement.notify();
+                   return;
+               }
+               var found = false;
+                for ( var i = 0; i<allElements.length; ++i )
+                {
+                    $.writeln(edShcut.text.toUpperCase() + ' = ' + allElements[i].key.toUpperCase());
+                    if ( edShcut.text.toUpperCase() == allElements[i].key.toUpperCase() ) {
+                        allElements[i].obj.notify();
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    edShcut.text = 'Stroke a key';
+                    edShcut.active = false; // on CS3 makes the event to occur one again, with
+                    edShcut.active = true;  // edShcut.text == the single char last enetered (!)
+                }
+           }
+        }
+    }
+    dlg.center();
+    var result = dlg.show();
+    if ( result != 1 ) {
+        return false;
+    } else {
+        result = [];
+        for ( var i = 0; i<cbElements.length; ++i ) {
+            result[i] = cbElements[i].obj.value;
+        }
+        return result;
+    }
+}
+
 
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
 function GoldenCrop( _doc ) {
     this.doc = _doc;
-	Stdlib.saveLayer = false;
-	Stdlib.saveDoc = false;
+    Stdlib.saveLayer = false;
+    Stdlib.saveDoc = false;
 };
 
 /*
@@ -497,114 +660,114 @@ GoldenCrop.prototype.makeDiagStrip = function( direction, stripSize, color ) {
 }
 
 GoldenCrop.prototype.createGoldenSpiralPath = function(numOfTurns, offset, w, h, startX, startY) {
-	// Default values
-	if (!w) w = this.docW;
-	if (!h) h = this.docH;
-	if (!startX) startX = 0;
-	if (!startY) startY = h;
-	if (!offset) offset = 0;
-	if (!numOfTurns) numOfTurns = (offset>0)?Infinity:5;
-	
-	// Frequently used constants
-	const           k = (4*(Math.sqrt(2)-1))/3; // kappa, used to draw bezier ellipse section
-	const         phi = 2/(1+Math.sqrt(5));     // phi, inverse of golden ratio
-	const        phi2 = phi*phi;                // phi square
-	const oneMinusPhi = 1-phi;                  // 1-phi
-	
-	// <=CS4; patth points coordinates must be given in current DIP (!), for example
-	//        72dpi: 1 path 'pixel' => 1 image pixel
-	//       300pdi: 1 path 'pixel' => 300/72 image pixels
-	var DPIFix = 72/this.doc.resolution; 
-	offset *= DPIFix; w *= DPIFix; h *= DPIFix; startX *= DPIFix; startY *= DPIFix;
-	
-	// Create initial point
-	var points = [Stdlib.createPathPoint([startX+offset,startY])];
-	var i=0;
-	for (; i<numOfTurns; ++i)
-	{
-		var startPoint = points[points.length-1];
-		// coordinates of starting point w/o offset
-		var x = startPoint.anchor[0]-offset,
-		    y = startPoint.anchor[1];
-		// coordinates of current segment points
-		var pA = [x+offset,y];
-		var pB = [x+phi*w, y-h+offset];
-		var pC = [x+w-offset, y-oneMinusPhi*h];
-		var pD = [x+(oneMinusPhi+phi2)*w, y-offset];
-		var pE = [x+phi*w+offset, y-oneMinusPhi*phi*h];
-		// compute distances
-		var dAB = [pB[0]-pA[0],pA[1]-pB[1]];
-		var dBC = [pC[0]-pB[0],pC[1]-pB[1]];
-		var dCD = [pC[0]-pD[0],pD[1]-pC[1]];
-		var dDE = [pD[0]-pE[0],pD[1]-pE[1]];
-		
-		// minimal offsets in both directions whith which the curve could be drawn
-		if ( Math.min(dDE[0], dDE[1]) < 0 ) {
-			
-			if ( dAB[0] < 0 ) pA[0] = startPoint.anchor[0] -= offset - (offset+dAB[0])*0.7;
-			if ( dBC[1] < 0 ) pB[1] -=offset - (offset+dBC[1])*0.7;
-			if ( dCD[0] < 0 ) pC[0] +=offset - (offset+dCD[0])*0.7;
-			if ( dDE[1] < 0 ) pD[1] +=offset - (offset+dDE[1])*0.7;
-			if ( dDE[0] < 0 ) pE[0] -=offset - (offset+dDE[0])*0.7;
+    // Default values
+    if (!w) w = this.docW;
+    if (!h) h = this.docH;
+    if (!startX) startX = 0;
+    if (!startY) startY = h;
+    if (!offset) offset = 0;
+    if (!numOfTurns) numOfTurns = (offset>0)?Infinity:5;
+    
+    // Frequently used constants
+    const           k = (4*(Math.sqrt(2)-1))/3; // kappa, used to draw bezier ellipse section
+    const         phi = 2/(1+Math.sqrt(5));     // phi, inverse of golden ratio
+    const        phi2 = phi*phi;                // phi square
+    const oneMinusPhi = 1-phi;                  // 1-phi
+    
+    // <=CS4; patth points coordinates must be given in current DIP (!), for example
+    //        72dpi: 1 path 'pixel' => 1 image pixel
+    //       300pdi: 1 path 'pixel' => 300/72 image pixels
+    var DPIFix = 72/this.doc.resolution; 
+    offset *= DPIFix; w *= DPIFix; h *= DPIFix; startX *= DPIFix; startY *= DPIFix;
+    
+    // Create initial point
+    var points = [Stdlib.createPathPoint([startX+offset,startY])];
+    var i=0;
+    for (; i<numOfTurns; ++i)
+    {
+        var startPoint = points[points.length-1];
+        // coordinates of starting point w/o offset
+        var x = startPoint.anchor[0]-offset,
+            y = startPoint.anchor[1];
+        // coordinates of current segment points
+        var pA = [x+offset,y];
+        var pB = [x+phi*w, y-h+offset];
+        var pC = [x+w-offset, y-oneMinusPhi*h];
+        var pD = [x+(oneMinusPhi+phi2)*w, y-offset];
+        var pE = [x+phi*w+offset, y-oneMinusPhi*phi*h];
+        // compute distances
+        var dAB = [pB[0]-pA[0],pA[1]-pB[1]];
+        var dBC = [pC[0]-pB[0],pC[1]-pB[1]];
+        var dCD = [pC[0]-pD[0],pD[1]-pC[1]];
+        var dDE = [pD[0]-pE[0],pD[1]-pE[1]];
+        
+        // minimal offsets in both directions whith which the curve could be drawn
+        if ( Math.min(dDE[0], dDE[1]) < 0 ) {
+            
+            if ( dAB[0] < 0 ) pA[0] = startPoint.anchor[0] -= offset - (offset+dAB[0])*0.7;
+            if ( dBC[1] < 0 ) pB[1] -=offset - (offset+dBC[1])*0.7;
+            if ( dCD[0] < 0 ) pC[0] +=offset - (offset+dCD[0])*0.7;
+            if ( dDE[1] < 0 ) pD[1] +=offset - (offset+dDE[1])*0.7;
+            if ( dDE[0] < 0 ) pE[0] -=offset - (offset+dDE[0])*0.7;
 
-			// recompute distances
-			dAB = [pB[0]-pA[0],pA[1]-pB[1]];
-			dBC = [pC[0]-pB[0],pC[1]-pB[1]];
-			dCD = [pC[0]-pD[0],pD[1]-pC[1]];
-			dDE = [pD[0]-pE[0],pD[1]-pE[1]];
-			numOfTurns=0;
-		}
-	
-		// correct first point's handle
-		startPoint.leftDirection = [pA[0], y-k*dAB[1]];
-		startPoint.rightDirection[0] = pA[0];
-		
-		// add points with handles
-		points.push(Stdlib.createPathPoint(pB,[pB[0]+k*dBC[0],pB[1]],[pB[0]-k*dAB[0],pB[1]]));
-		points.push(Stdlib.createPathPoint(pC,[pC[0],pC[1]+k*dCD[1]],[pC[0],pC[1]-k*dBC[1]]));
-		points.push(Stdlib.createPathPoint(pD,[pD[0]-k*dDE[0],pD[1]],[pD[0]+k*dCD[0],pD[1]]));
-		points.push(Stdlib.createPathPoint(pE,undefined,[pE[0],pE[1]+k*dDE[1]]));
-		
-		w = dDE[0]+offset;   // width of NEXT segment
-		h = pE[1]-pC[1];  // height of NEXT segment
-	}
-	return {points:points, cTurns:i};
+            // recompute distances
+            dAB = [pB[0]-pA[0],pA[1]-pB[1]];
+            dBC = [pC[0]-pB[0],pC[1]-pB[1]];
+            dCD = [pC[0]-pD[0],pD[1]-pC[1]];
+            dDE = [pD[0]-pE[0],pD[1]-pE[1]];
+            numOfTurns=0;
+        }
+    
+        // correct first point's handle
+        startPoint.leftDirection = [pA[0], y-k*dAB[1]];
+        startPoint.rightDirection[0] = pA[0];
+        
+        // add points with handles
+        points.push(Stdlib.createPathPoint(pB,[pB[0]+k*dBC[0],pB[1]],[pB[0]-k*dAB[0],pB[1]]));
+        points.push(Stdlib.createPathPoint(pC,[pC[0],pC[1]+k*dCD[1]],[pC[0],pC[1]-k*dBC[1]]));
+        points.push(Stdlib.createPathPoint(pD,[pD[0]-k*dDE[0],pD[1]],[pD[0]+k*dCD[0],pD[1]]));
+        points.push(Stdlib.createPathPoint(pE,undefined,[pE[0],pE[1]+k*dDE[1]]));
+        
+        w = dDE[0]+offset;   // width of NEXT segment
+        h = pE[1]-pC[1];  // height of NEXT segment
+    }
+    return {points:points, cTurns:i};
 }
 
 GoldenCrop.prototype.makeGoldenSpiral = function( orientation, stripSizePrc, color ) {
     const docWidth  = this.docW,
           docHeight = this.docH;
     const stripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);
-	
-	var offsetPath = this.createGoldenSpiralPath(false, stripSize);
-	var normalPath = this.createGoldenSpiralPath(offsetPath.cTurns);
-	
-	var fillPath = offsetPath.points;
-	for (var i=0; i<normalPath.points.length; ++i) {
-		var tmp = normalPath.points[i].leftDirection
-		normalPath.points[i].leftDirection = normalPath.points[i].rightDirection;
-		normalPath.points[i].rightDirection = tmp;
-	}
-	fillPath = fillPath.concat(normalPath.points.reverse());
-	var spi = new SubPathInfo();
-	spi.closed = true;
-	spi.operation = ShapeOperation.SHAPEADD;
-	spi.entireSubPath = fillPath;
+    
+    var offsetPath = this.createGoldenSpiralPath(false, stripSize);
+    var normalPath = this.createGoldenSpiralPath(offsetPath.cTurns);
+    
+    var fillPath = offsetPath.points;
+    for (var i=0; i<normalPath.points.length; ++i) {
+        var tmp = normalPath.points[i].leftDirection
+        normalPath.points[i].leftDirection = normalPath.points[i].rightDirection;
+        normalPath.points[i].rightDirection = tmp;
+    }
+    fillPath = fillPath.concat(normalPath.points.reverse());
+    var spi = new SubPathInfo();
+    spi.closed = true;
+    spi.operation = ShapeOperation.SHAPEADD;
+    spi.entireSubPath = fillPath;
 
-	var GSPath = this.doc.pathItems.add('', [spi]);
-	switch (orientation) {
-		case 1:
-			Stdlib.flipPath(0,1);
-			break;
-		case 2:
-			Stdlib.flipPath(1,1);
-			break;
-		case 3:
-			Stdlib.flipPath(1,0);
-			break;
-	}
-	var SpiralLayer = Stdlib.createSolidFillLayer(undefined, color, 'Golden spiral' );
-	GSPath.remove();
+    var GSPath = this.doc.pathItems.add('', [spi]);
+    switch (orientation) {
+        case 1:
+            Stdlib.flipPath(0,1);
+            break;
+        case 2:
+            Stdlib.flipPath(1,1);
+            break;
+        case 3:
+            Stdlib.flipPath(1,0);
+            break;
+    }
+    var SpiralLayer = Stdlib.createSolidFillLayer(undefined, color, 'Golden spiral' );
+    GSPath.remove();
 }
 
 /*
@@ -690,41 +853,66 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
     Stdlib.rectPath( ShapeOperation.SHAPESUBTRACT, Units.PERCENT, 0,0,100,100);
     
     // Add dividing rules
-    this.gCropDivRules = Stdlib.createLayerGroup(this.loc.get('divRules'), 50);
-    
-    // ----- Golden rule
-    const phi = (Math.sqrt(5)-1)/2; // Inv Golden number, ca. 0.6180339887498948482045868343656
-    this.phiStrips = this.makeStrips(phi, basicStripSize*stripsThickScale[0], colors[1]);
-    if (this.ifApplyFX) this.applyStripFX();
-    
-    // ----- One-third rule
-    const third = 1.0/3;
-    this.thirdStrips = this.makeStrips(third, basicStripSize*stripsThickScale[1], colors[2]);
-    if (this.ifApplyFX) this.applyStripFX();
+	var anyGuidelines = false;
+	for ( gline in this.guidelines ) {
+		anyGuidelines |= this.guidelines[gline].create;
+	}
+    if (anyGuidelines) {
+		this.gCropDivRules = Stdlib.createLayerGroup(this.loc.get('divRules'), 50);
+		
+		// ----- Golden rule
+		if (this.guidelines.golden.create) {
+			const phi = (Math.sqrt(5)-1)/2; // Inv Golden number, ca. 0.6180339887498948482045868343656
+			this.guidelines.golden.layer = this.makeStrips(phi, basicStripSize*stripsThickScale[0], colors[1]);
+			if (this.ifApplyFX) this.applyStripFX();
+		}
+		
+		// ----- One-third rule
+		if (this.guidelines.roth.create) {
+			const third = 1.0/3;
+			this.guidelines.roth.layer = this.makeStrips(third, basicStripSize*stripsThickScale[1], colors[2]);
+			if (this.ifApplyFX) this.applyStripFX();
+		}
 
-    // ----- Golden diagonal rule (up)
-    this.diagGoldUp = this.makeDiagStrip(true, basicStripSize*stripsThickScale[2], colors[3]);
-    if (this.ifApplyFX) this.applyStripFX();
-    
-    // ----- Golden diagonal rule (down)
-    this.diagGoldDown = this.makeDiagStrip(false, basicStripSize*stripsThickScale[2], colors[4]);
-    if (this.ifApplyFX) this.applyStripFX();
+		// ----- Golden diagonal rule (up)
+		if (this.guidelines.gdiagup.create) {
+			this.guidelines.gdiagup.layer = this.makeDiagStrip(true, basicStripSize*stripsThickScale[2], colors[3]);
+			if (this.ifApplyFX) this.applyStripFX();
+		}
 	
-	// ----- Golden spiral (starts at bottom-left)
-	this.goldenSpiralBL = this.makeGoldenSpiral(0, basicStripSize*stripsThickScale[3], colors[5]);
-	if (this.ifApplyFX) this.applyStripFX();
+		// ----- Golden diagonal rule (down)
+		if (this.guidelines.gdiagdown.create) {
+			this.guidelines.gdiagdown.layer = this.makeDiagStrip(false, basicStripSize*stripsThickScale[2], colors[4]);
+			if (this.ifApplyFX) this.applyStripFX();
+		}
 	
-	// ----- Golden spiral (starts at bottom-left)
-	this.goldenSpiralBL = this.makeGoldenSpiral(1, basicStripSize*stripsThickScale[3], colors[6]);
-	if (this.ifApplyFX) this.applyStripFX();
+		// ----- Golden spiral (starts at bottom-left)
+		if (this.guidelines.gspiralBL.create) {
+			this.guidelines.gspiralBL.layer = this.makeGoldenSpiral(0, basicStripSize*stripsThickScale[3], colors[5]);
+			if (this.ifApplyFX) this.applyStripFX();
+		}
 	
-	// ----- Golden spiral (starts at bottom-left)
-	this.goldenSpiralBL = this.makeGoldenSpiral(2, basicStripSize*stripsThickScale[3], colors[7]);
-	if (this.ifApplyFX) this.applyStripFX();
-	
-	// ----- Golden spiral (starts at bottom-left)
-	this.goldenSpiralBL = this.makeGoldenSpiral(3, basicStripSize*stripsThickScale[3], colors[8]);
-	if (this.ifApplyFX) this.applyStripFX();
+		// ----- Golden spiral (starts at bottom-left)
+		if (this.guidelines.gspiralTL.create) {
+			this.guidelines.gspiralTL.layer = this.makeGoldenSpiral(1, basicStripSize*stripsThickScale[3], colors[6]);
+			if (this.ifApplyFX) this.applyStripFX();
+		}
+			
+		// ----- Golden spiral (starts at bottom-left)
+		if (this.guidelines.gspiralTR.create) {
+			this.guidelines.gspiralTR.layer = this.makeGoldenSpiral(2, basicStripSize*stripsThickScale[3], colors[7]);
+			if (this.ifApplyFX) this.applyStripFX();
+		}
+			
+		// ----- Golden spiral (starts at bottom-left)
+		if (this.guidelines.gspiralBR.create) {
+			this.guidelines.gspiralBR.layer = this.makeGoldenSpiral(3, basicStripSize*stripsThickScale[3], colors[8]);
+			if (this.ifApplyFX) this.applyStripFX();
+		}
+	} else {
+		this.bogusLayer = this.makeStrips(.5, 0.0001, colors[0]);
+		this.doc.activeLayer.opacity=0;
+	}
 }
 
 /*
@@ -759,15 +947,11 @@ GoldenCrop.prototype.simpleCrop = function() {
  * Make cropping mask non-transparent and make active and hide Dividing Rules group
  */
 GoldenCrop.prototype.maskOutCrop = function() {
-    this.outerFrame.opacity = 100;
-    this.doc.activeLayer = this.gCropDivRules;
-    this.doc.activeLayer.visible = false
-    /*
-    this.phiStrips.remove();
-    this.thirdStrips.remove();
-    this.diagGoldUp.remove();
-    this.diagGoldDown.remove();
-    */
+	this.outerFrame.opacity = 100;
+	if (this.gCropDivRules) {
+		this.doc.activeLayer = this.gCropDivRules;
+		this.doc.activeLayer.visible = false
+	}
 }
 
 /*
@@ -848,12 +1032,12 @@ GoldenCrop.prototype.doRotateCanvas = function() {
     if ( this.popBackground ) {
         this.doPopBackground();
     }
-	var angle = this.rotateCanvasA;
-	if ( angle > 45 ) {
-		angle-=90;
-	} else if (angle < -45 ) {
-		angle+=90;
-	}
+    var angle = this.rotateCanvasA;
+    if ( angle > 45 ) {
+        angle-=90;
+    } else if (angle < -45 ) {
+        angle+=90;
+    }
     Stdlib.rotateCannvas(angle);
     // update cropping bounds and document dimentions
     this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.outerFrame);         
@@ -903,13 +1087,42 @@ GoldenCrop.prototype.chooseRevealAction = function() {
         }
 }
     
-/*
  * Logical heart of the script. Invoke each phase of script w/ or w/o suspending history.
  */
 GoldenCrop.prototype.go = function() {
    var docW = this.docW = parseInt(this.doc.width.as("px"));
    var docH = this.docH = parseInt(this.doc.height.as("px"));
-          
+    var menuDesc = {caption:this.loc.get('chCompMethod'),
+                    question:this.loc.get('chCompMethodQ'),
+                    okTxt:this.loc.get('ok'),
+                    cancelTxt:this.loc.get('cancel'),
+                    cbElements:[{key:'1', text:this.loc.get('goldenRule'), sel: true},
+                              {key:'2', text:this.loc.get('ruleOfThirds'), sel: true},
+                              {key:'3', text:this.loc.get('goldenDiagUp'), sel: true},
+                              {key:'4', text:this.loc.get('goldenDiagDown'), sel: true},
+                              {key:'5', text:this.loc.get('goldenSpiralBL')},
+                              {key:'6', text:this.loc.get('goldenSpiralTL')},
+                              {key:'7', text:this.loc.get('goldenSpiralTR')},
+					         {key:'8', text:this.loc.get('goldenSpiralBR')}
+                             ],
+                    msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2,3]},
+                                {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[4,5,6,7]},
+                              {key:'a', text:this.loc.get('selectAll'), action: 'slctAll'},
+                               {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
+    ]
+                   };
+    var dlg = new dialogMenuMChoice(menuDesc);
+    var res = dlg.show();
+	if (!res) return;
+	this.guidelines = {golden: {create: res[0]},
+		                 roth: {create: res[1]},
+		              gdiagup: {create: res[2]},
+		            gdiagdown: {create: res[3]},
+		            gspiralBL: {create: res[4]},
+		            gspiralTL: {create: res[5]},
+		            gspiralTR: {create: res[6]},
+		            gspiralBR: {create: res[7]}};
+
     if ( this.ifSuspendHistory ) {
         this.doc.suspendHistory(szAppName + this.loc.get('-grid'), 'this.makeGrid()');
         Stdlib.NOP();
@@ -946,33 +1159,33 @@ GoldenCrop.prototype.go = function() {
                 this.popBackground = true; // default, could be changed in the following code
                 var anRad = ((this.rotateCanvasA)*Math.PI)/180;
                 var sinAb = Math.sin(Math.abs(anRad)), cosAb = Math.cos(Math.abs(anRad)),
-				    sinAn =Math.sin(anRad), cosAn = Math.cos(anRad);
+                    sinAn =Math.sin(anRad), cosAn = Math.cos(anRad);
                 var mid = {x:(cb[0]+cb[2])/2,y:(cb[1]+cb[3])/2};
                 //var dist = Math.sqrt(mid.x*mid.x+mid.y*mid.y);
                 var cbRot = cb.clone();
-				var newDocW = Math.ceil(docW * cosAb + docH * sinAb),
-				    newDocH = Math.ceil(docW * sinAb + docH * cosAb);
-			    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
-				var minXp, maxXp, minYp, maxYp; 
-				// translate to 0,0, rotate, and translate back
+                var newDocW = Math.ceil(docW * cosAb + docH * sinAb),
+                    newDocH = Math.ceil(docW * sinAb + docH * cosAb);
+                var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
+                var minXp, maxXp, minYp, maxYp; 
+                // translate to 0,0, rotate, and translate back
                 for (var i=6; i<10; ++i) {
-					var x = cbRot[i].x - mid.x,
-					    y = cbRot[i].y - mid.y;
+                    var x = cbRot[i].x - mid.x,
+                        y = cbRot[i].y - mid.y;
                     var xrot = x * cosAn - y * sinAn,
                         yrot = x * sinAn + y * cosAn;
                     x = cbRot[i].x = xrot+mid.x+(newDocW-docW)/2;
                     y = cbRot[i].y = yrot+mid.y+(newDocH-docH)/2;
-				    if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
-				    if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
-				    if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
-				    if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
+                    if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
+                    if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
+                    if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
+                    if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
                 }
                 this.afterRotate = {cb: [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp, cbRot],
-								   docW: newDocW,
-								   docH: newDocH};
+                                   docW: newDocW,
+                                   docH: newDocH};
                 // $.writeln('~~~~~~~~~~~~~');
                 // $.writeln('afterRotate:' +this.afterRotate);
-				//debugger;
+                //debugger;
             }
             
             // Detect cropping mode
@@ -984,28 +1197,28 @@ GoldenCrop.prototype.go = function() {
                     this.popBackground = false;
                 }
             } else {
-				if ( this.rotateCanvasA ) {
-					cb = this.afterRotate.cb; // simulate rotation for further computing
-					docW = this.afterRotate.docW; docH = this.afterRotate.docH;
-				}
-				if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) { // no image crop
-					this.cropMethod = false;
-					this.revealMethod = 'EXTCANVAS';
-					this.popBackground = true;
-				} else {
-				   if ( this.rotateCanvasA && cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
-					   // rotation uncovers needed canvas, i.e. no further extension after roattion is needed
-					   this.revealMethod = 'false';
-				   } else {
-				       this.revealMethod = this.chooseRevealAction();
-				   }
-					if ( !(this.revealMethod === 0) ) {
-						if ( this.revealMethod == 'EXTCANVAS' ) {
-							this.popBackground = true;
-						}
-						this.cropMethod = this.chooseCropMethod();
-					}
-				}
+                if ( this.rotateCanvasA ) {
+                    cb = this.afterRotate.cb; // simulate rotation for further computing
+                    docW = this.afterRotate.docW; docH = this.afterRotate.docH;
+                }
+                if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) { // no image crop
+                    this.cropMethod = false;
+                    this.revealMethod = 'EXTCANVAS';
+                    this.popBackground = true;
+                } else {
+                   if ( this.rotateCanvasA && cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
+                       // rotation uncovers needed canvas, i.e. no further extension after roattion is needed
+                       this.revealMethod = 'false';
+                   } else {
+                       this.revealMethod = this.chooseRevealAction();
+                   }
+                    if ( !(this.revealMethod === 0) ) {
+                        if ( this.revealMethod == 'EXTCANVAS' ) {
+                            this.popBackground = true;
+                        }
+                        this.cropMethod = this.chooseCropMethod();
+                    }
+                }
 
             }
         } while ( this.revealMethod === 0 || this.cropMethod === 0)
@@ -1017,7 +1230,7 @@ GoldenCrop.prototype.go = function() {
     } else {
         this.tmpFctn();
     }
-
+	if (this.bogusLayer) this.bogusLayer.remove();
     // $.writeln( '==========' );
     // $.writeln( 'cropAccepted: ' + this.cropAccepted );
     // $.writeln( 'cropMethod: ' + this.cropMethod );
@@ -1410,20 +1623,20 @@ Stdlib.wrapLC = function(doc, ftn) {
 
   var ad = app.activeDocument;
   if (doc) {
-	if (ad != doc) {
-	  app.activeDocument = doc;
-	}
+    if (ad != doc) {
+      app.activeDocument = doc;
+    }
   } else {
-	doc = ad;
+    doc = ad;
   }
 
   var res = undefined;
   try {
-	res = ftn(doc);
+    res = ftn(doc);
   } finally {
-	if (  Stdlib.saveDoc && ad && app.activeDocument != ad) {
-	  app.activeDocument = ad;
-	}
+    if (  Stdlib.saveDoc && ad && app.activeDocument != ad) {
+      app.activeDocument = ad;
+    }
   }
   return res;
 };
@@ -1431,20 +1644,20 @@ Stdlib.wrapLC = function(doc, ftn) {
 Stdlib.wrapLCLayer = function(doc, layer, ftn) {
   var ad = app.activeDocument;
   if (doc) {
-	if (ad != doc) {
-	  app.activeDocument = doc;
-	}
+    if (ad != doc) {
+      app.activeDocument = doc;
+    }
   } else {
-	doc = ad;
+    doc = ad;
   }
 
   var al = doc.activeLayer;
   var alvis = al.visible;
 
   if (layer && doc.activeLayer != layer) {
-	doc.activeLayer = layer;
+    doc.activeLayer = layer;
   } else {
-	layer = doc.activeLayer;
+    layer = doc.activeLayer;
   }
   var res = undefined;
 
@@ -1452,13 +1665,13 @@ Stdlib.wrapLCLayer = function(doc, layer, ftn) {
     res = ftn(doc, layer);
 
   } finally {
-	if ( Stdlib.saveLayer )  {
-		if (doc.activeLayer != al) {
-		  doc.activeLayer = al;
-		}
-		if (!doc.activeLayer.isBackgroundLayer) {
-		  doc.activeLayer.visible = alvis;
-		}
+    if ( Stdlib.saveLayer )  {
+        if (doc.activeLayer != al) {
+          doc.activeLayer = al;
+        }
+        if (!doc.activeLayer.isBackgroundLayer) {
+          doc.activeLayer.visible = alvis;
+        }
     }
     if (Stdlib.saveDoc && app.activeDocument != ad) {
       app.activeDocument = ad;
@@ -1795,7 +2008,7 @@ Stdlib.getVectorMaskAngle_cornerPointsOnly = function(round, doc, layer) {
      var v_len = Math.sqrt(v[0]*v[0]+v[1]*v[1]);
      var an = Math.acos(v[1]/v_len);
     var res = 90.0-an*180.0/Math.PI;
-	if (p1x>p2x) res=-res;
+    if (p1x>p2x) res=-res;
     if (!round) 
     { 
         res = Math.round(res*100)/100; 
@@ -1818,31 +2031,31 @@ Stdlib.rotateCannvas = function( angle, doc ) {
 }
 
 Stdlib.flipPath = function(h, v) {
-	var idTrnf = cTID( "Trnf" );
-		var desc108 = new ActionDescriptor();
-			var ref101 = new ActionReference();
-			ref101.putEnumerated( cTID( "Path" ), cTID( "Ordn" ), cTID( "Trgt" ));
-		desc108.putReference(  cTID( "null" ), ref101 );
-		desc108.putEnumerated( cTID( "FTcs" ), cTID( "QCSt" ), cTID( "Qcsa" ) );
-		if (h) desc108.putUnitDouble( cTID( "Wdth" ), cTID( "#Prc" ), -100.000000 );
-		if (v) desc108.putUnitDouble( cTID( "Hght" ), cTID( "#Prc" ), -100.000000 );
-	executeAction( idTrnf, desc108, DialogModes.NO );
+    var idTrnf = cTID( "Trnf" );
+        var desc108 = new ActionDescriptor();
+            var ref101 = new ActionReference();
+            ref101.putEnumerated( cTID( "Path" ), cTID( "Ordn" ), cTID( "Trgt" ));
+        desc108.putReference(  cTID( "null" ), ref101 );
+        desc108.putEnumerated( cTID( "FTcs" ), cTID( "QCSt" ), cTID( "Qcsa" ) );
+        if (h) desc108.putUnitDouble( cTID( "Wdth" ), cTID( "#Prc" ), -100.000000 );
+        if (v) desc108.putUnitDouble( cTID( "Hght" ), cTID( "#Prc" ), -100.000000 );
+    executeAction( idTrnf, desc108, DialogModes.NO );
 }
 
 Stdlib.createPathPoint = function(point, lHandle, rHandle) {
-	var kind = (lHandle || rHandle)?PointKind.SMOOTHPOINT:PointKind.CORNERPOINT;
-	if (!lHandle) lHandle = point;
-	if (!rHandle) rHandle = point;
-	
-	var o = new PathPointInfo();
-	/*o.anchor = [new UnitValue(point[0],'px'),new UnitValue(point[1],'px')];
-	o.leftDirection = [new UnitValue(lHandle[0],'px'),new UnitValue(lHandle[1],'px')];
-	o.rightDirection = [new UnitValue(rHandle[0],'px'),new UnitValue(rHandle[1],'px')];*/
-	o.anchor = point;
-	o.leftDirection = lHandle;
-	o.rightDirection = rHandle;
-	o.kind = kind;
-	return o;
+    var kind = (lHandle || rHandle)?PointKind.SMOOTHPOINT:PointKind.CORNERPOINT;
+    if (!lHandle) lHandle = point;
+    if (!rHandle) rHandle = point;
+    
+    var o = new PathPointInfo();
+    /*o.anchor = [new UnitValue(point[0],'px'),new UnitValue(point[1],'px')];
+    o.leftDirection = [new UnitValue(lHandle[0],'px'),new UnitValue(lHandle[1],'px')];
+    o.rightDirection = [new UnitValue(rHandle[0],'px'),new UnitValue(rHandle[1],'px')];*/
+    o.anchor = point;
+    o.leftDirection = lHandle;
+    o.rightDirection = rHandle;
+    o.kind = kind;
+    return o;
 }
 // ===END: stdlib.js====================================================================================================================
 

@@ -3,7 +3,7 @@
 "chCropMethodQ";"Choose crop style";"Wybierz styl przycinania";
 "cropCanvas";"Crop canvas (simple crop)";"Przytnij płótno";
 "mkCropMask";"Make crop mask";"Stwórz maskę kadrującą";
-"cancelCrop";"Cancel";"Anuluj";
+"cancel";"Cancel";"Anuluj";
 "bgOnLayer";"Background on layer";"Tło na warstwie";
 "bgFill";"Background fill";"Wypełnienie tła";
 "doOutsCrop";"Do outside cropping (YES) or crop without extending canvas (NO)?";"Rozszerzyć półtno (TAK) czy przyciąć bez rozszerzania (NIE)?";
@@ -23,3 +23,16 @@
 "extendCanvas";"Extend canvas";"Rozszerz płótno";
 "dontExtCanv";"Crop without extension";"Przytnij bez rozszerzania";
 "retToCropping";"Return to cropping";"Wróć do kadrowania";
+"chCompMethod";"Composition method";"Metoda kompozycji";
+"chCompMethodQ";"Choose composition guidelines";"Wybierz metodę kompozycji";
+"goldenRule";"Golden Rule";"Złoty podział";
+"ruleOfThirds";"Rule of Thirds";"Reguła trzech";
+"goldenSpiralBL";"Golden Spiral bottom-left";"Złota spirala lewo-dół";
+"goldenSpiralTL";"Golden Spiral top-left";"Złota spirala lewo-góra";
+"goldenSpiralTR";"Golden Spiral top-right";"Złota spirala prawo-góra";
+"goldenSpiralBR";"Golden Spiral bottom-right";"Złota spirala prawo-dół";
+"selectAll";"Select All";"Zaznacz wszystkie";
+"deselectAll";"Deselect All";"Odznacz wszystkie";
+"ok";"OK";"OK";
+"allGoldenSpirals";"All Golden Spirals";"Wszystkie Złote Spirale";
+"basicRules";"Basic rules";"Podstawowe podziały";
