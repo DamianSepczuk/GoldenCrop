@@ -1,5 +1,5 @@
 /*****************************************
- * Golden crop tool, v0.77 beta
+ * Golden crop script, v0.77 beta
  *
  * Copyright 2009, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
  * 
@@ -16,8 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 
 
 /************************
@@ -52,6 +50,37 @@ var lang = "auto";
 
 
 // ---------------------------------------------------------------------
+/*
+// BEGIN__HARVEST_EXCEPTION_ZSTRING
+<javascriptresource>
+    <name>Golden Crop</name>
+    <about>Golden Crop script v0.77 beta by Damian Sepczuk aka SzopeN
+
+Copyright 2009, GNU GPL License
+
+http://goldencrop.sourceforge.net</about>
+    <menu>automate</menu>
+    <enableinfo>true</enableinfo>
+    <eventid>c4f6f3f7-1b93-47af-bab5-287c581c5fa8</eventid>
+    <category>szopensoft</category>
+    <terminology><![CDATA[<<
+                         /Version 1 
+                         /Events << 
+                           /c4f6f3f7-1b93-47af-bab5-287c581c5fa8 [(Golden Crop) /noDirectParam <<
+                             /golden [(Golden Rule) /boolean]
+                             /roth [(Rule of Thirds) /boolean]
+                             /gdiagup [(Golden diagonal upwards) /boolean]
+                             /gdiagdown [(Golden diagonal downwards) /boolean]
+                             /gspiralBL [(Golden Spiral bottom-left) /boolean]
+                             /gspiralTL [(Golden Spiral top-left) /boolean]
+                             /gspiralTR [(Golden Spiral top-right) /boolean]
+                             /gspiralBR [(Golden Spiral bottom-right) /boolean]
+                           >>] 
+                         >> 
+                      >>]]></terminology>
+</javascriptresource>
+// END__HARVEST_EXCEPTION_ZSTRING
+*/
 // Some global configuration
 #strict on
 #target photoshop
@@ -63,6 +92,7 @@ $.level = debug?1:0;
 
 const szAppName = "Golden Crop",
       szVersion = "0.77 beta";
+const UUID = '2c910bcd-8e34-4779-a885-bb214df640a3';
 // ---------------------------------------------------------------------
 function localizator(secretNumber) {
     if ( secretNumber != 314159 ) {
@@ -315,12 +345,12 @@ dialogMenu.prototype.show = function () {
        }
        if( isCS4() ){
            addEventListener('keydown', function (e) {
-			   // Next funny thing about PS CS4
-			   // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
-			   // Most curious doing nothing (NOP) helps
-			   if (e.keyName!='Escape' && e.keyName!='Enter' && e.keyName!='Return') {
-				   Stdlib.NOP();
-			   }
+               // Next funny thing about PS CS4
+               // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
+               // Most curious doing nothing (NOP) helps
+               if (e.keyName!='Escape' && e.keyName!='Enter' && e.keyName!='Return') {
+                   Stdlib.NOP();
+               }
                for ( var i = 0; i<elements.length; ++i )
                {
                    if ( e.keyName == elements[i].key.toUpperCase() ) {
@@ -466,12 +496,12 @@ dialogMenuMChoice.prototype.show = function () {
        
        if( isCS4() ){
            addEventListener('keydown', function (e) {
-			   // Next funny thing about PS CS4
-			   // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
-			   // Most curious doing nothing (NOP) helps
-			   if (e.keyName!='Escape' && e.keyName!='Enter' && e.keyName!='Return') {
-				   Stdlib.NOP();
-			   }
+               // Next funny thing about PS CS4
+               // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
+               // Most curious doing nothing (NOP) helps
+               if (e.keyName!='Escape' && e.keyName!='Enter' && e.keyName!='Return') {
+                   Stdlib.NOP();
+               }
                for ( var i = 0; i<allElements.length; ++i )
                {
                    if ( e.keyName == allElements[i].key.toUpperCase() ) {
@@ -491,7 +521,7 @@ dialogMenuMChoice.prototype.show = function () {
                var found = false;
                 for ( var i = 0; i<allElements.length; ++i )
                 {
-                    $.writeln(edShcut.text.toUpperCase() + ' = ' + allElements[i].key.toUpperCase());
+                    //$.writeln(edShcut.text.toUpperCase() + ' = ' + allElements[i].key.toUpperCase());
                     if ( edShcut.text.toUpperCase() == allElements[i].key.toUpperCase() ) {
                         allElements[i].obj.notify();
                         found = true;
@@ -519,8 +549,255 @@ dialogMenuMChoice.prototype.show = function () {
         return result;
     }
 }
+// ---------------------------------------------------------------------
+function SimpleADUnserializer( ad )
+{
+    var obj = new Object();
+    
+    for ( var i=0; i<ad.count; ++i)
+    {
+        var key = ad.getKey(i);
+         var fieldName = app.typeIDToStringID(key);
+        switch ( ad.getType(key) )
+        {
+            case DescValueType.BOOLEANTYPE:
+                obj[ fieldName ] = ad.getBoolean( key );
+                break;
+            case DescValueType.STRINGTYPE:
+                obj[ fieldName ] = ad.getString( key );
+                break;
+            case DescValueType.DOUBLETYPE:
+                obj[ fieldName ] = ad.getString( key );
+                break;
+            case DescValueType.RAWTYPE: // array
+                obj[ fieldName ] = eval(ad.getData( key ));
+                break;
+            case DescValueType.OBJECTTYPE:
+                obj[ fieldName ] = SimpleADUnserializer(ad.getObject( key ));
+                break;
+            case DescValueType.UNITDOUBLE:
+            case DescValueType.INTEGERTYPE: // supported via double
+            case DescValueType.ALIASTYPE:
+            case DescValueType.CLASSTYPE:
+            case DescValueType.ENUMERATEDTYPE:
+            case DescValueType.LISTTYPE:
+            case DescValueType.REFERENCETYPE:
+                // unsupported types
+                break;
+        }
+    }
+
+    return obj;
+}
 
 
+function SimpleADSerializer( obj )
+{
+    isArray = function ( obj )
+    {
+        return obj.constructor.toString().indexOf('Array') != -1;
+    }
+    var STTID = app.stringIDToTypeID;
+
+    var ad = new ActionDescriptor();
+    //ad.putString( app.charIDToTypeID( 'Msge' ), 'alamakota' );
+    for ( var field in obj )
+    {
+        var ID = app.stringIDToTypeID(field);
+        var val = obj[field];
+        //var typeID = STTID(field.toString()); // represents field name
+        switch (typeof val)
+        {
+            case "function":
+                // we store only data
+                break;
+            case "undefined":
+                ad.putData( ID, 'undefined');
+                break;
+            case "boolean":
+                ad.putBoolean( ID,  val);
+                break;
+            case "number":
+                ad.putDouble( ID,  val);
+                break;
+            case "string":
+                ad.putString( ID,  val);
+                break;
+            case "object":
+                if ( val == null )
+                {
+                    ad.putData( ID, 'null');
+                }
+                else if ( isArray( val ) )
+                {
+                    ad.putData( ID, SimpleJSONSerializer(val));
+                }
+                else
+                {
+                    ad.putObject( ID,  SimpleADSerializer(val));
+                }
+                break;
+        }
+    }
+    return ad;
+}
+
+function SimpleJSONSerializer( obj )
+{
+    isArray = function ( obj )
+    {
+        return obj.constructor.toString().indexOf('Array') != -1;
+    }
+
+    var ret="";
+    switch (typeof obj)
+    {
+        case "function":
+            break;
+        case "boolean":
+        case "number":
+            ret += obj;
+            break;
+        case "string":
+            ret += '"'+obj.replace ('"', '\\"')+'"';
+            break;
+        case "undefined":
+            ret += 'undefined'
+            break;
+        case "object":
+            if ( obj == null )
+            {
+                ret += 'null'
+            }
+            else if (isArray(obj))
+            {
+                ret += '[';
+                ret += SimpleJSONSerializer(obj[0]);
+                for ( var i=1; i<obj.length; ++i )
+                {
+                    ret += ', ' + SimpleJSONSerializer(obj[i]);
+                }
+                ret += ']';
+            }
+            else
+            {
+                ret += '{';
+                var isFirst = true;
+                for ( var b in obj )
+                {
+                    if ( isFirst == true ) isFirst = false else ret += ', ';
+                    ret += '"'+b+'": ' + SimpleJSONSerializer(obj[b]);
+                }
+                ret += '}';
+            }
+            break;
+        default:
+            break;
+    }
+    return ret;
+}
+
+// Configurator
+configurator = function(paramsDesc, uuid) {
+    this._init(paramsDesc);
+    this.uuid = uuid;
+    this.readFromPlayback = false;
+    this.defaultsUsed     = true;
+    this.isDisplayDialog  = DialogModes.ALL;
+}
+
+configurator.prototype.get = function(id) {
+    if (typeof this.params[id] == 'undefined') throw new Error('No such property: ' + id);
+    return this.params[id].value;
+}
+
+configurator.prototype.set = function(id, val) {
+    if (typeof this.params[id] == 'undefined') throw new Error('No such property: ' + id);
+    var tmp = this.params[id].value;
+    this.params[id].value = val;
+    return tmp;
+}
+
+configurator.prototype.isDisplayNormalDialog = function() {
+    return this.isDisplayDialog==DialogModes.ALL;
+}
+
+configurator.prototype.isDisplayErrorDialog = function() {
+    return this.isDisplayDialog!=DialogModes.NO;
+}
+
+configurator.prototype.loadSettings = function() {
+    var lvl = $.level;
+    $.level = 0;
+    try {
+        // try to get global options
+        var ad = app.getCustomOptions(this.uuid);        
+        this._fromActionDescriptor(ad);
+        this.defaultsUsed = false;
+    }
+    catch(e) {
+        // no config, display dialog to get some
+        this.defaultsUsed    = true;
+    } finally {
+        $.level = lvl;
+    }
+
+    // try to get options from action state
+    if ( app.playbackParameters.count > 0 ){
+        this._fromActionDescriptor(app.playbackParameters);
+        this.readFromPlayback = true;
+        this.defaultsUsed     = false;
+        this.isDisplayDialog  = app.playbackDisplayDialogs;
+    }
+
+}
+
+configurator.prototype.saveSettings = function() {
+     
+    var ad = this._toActionDescriptor();
+    app.playbackParameters = ad;
+    if ( !this.readFromPlayback ) {
+        app.putCustomOptions (this.uuid, ad, true);
+    }
+}
+
+configurator.prototype._init = function(paramsDesc) {
+    this.params = paramsDesc;
+}
+
+configurator.prototype._toActionDescriptor = function() {
+    var nv = {};
+    for ( var o in this.params) {
+        nv[o]=this.get(o);
+    }
+    return SimpleADSerializer(nv);
+}
+
+configurator.prototype._fromActionDescriptor = function( ad ) {
+    var nv = SimpleADUnserializer(ad);
+    for ( var o in nv) {
+        this.set(o, nv[o]);
+    }
+}
+
+configurator.prototype._debug_undefine_all_values = function() {
+    for ( var o in this.params) {
+        this.set(o, undefined);
+    }
+}
+
+configurator.prototype.purgeSavedGlobals = function() {
+    app.eraseCustomOptions(this.uuid);
+}
+
+configurator.prototype.debugPrint = function() {
+    for ( var o in this.params) {
+        $.writeln( o +' = "' + this.params[o].value + '" (' + typeof this.params[o].value + ')');
+    }
+
+    $.writeln('readFromPlayback: ' + this.readFromPlayback);
+    $.writeln('defaultsUsed: ' + this.defaultsUsed);
+}
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
@@ -534,6 +811,19 @@ function GoldenCrop( _doc ) {
  * Basic configuration. In further versions it ill be user-interactive and action-recordable.
  */
 GoldenCrop.prototype.loadConfig = function() {
+    var paramsID = {golden:{value:true, desc:'goldenRule'},
+                    roth:{value:true, desc:'ruleOfThirds'},
+                    gdiagup:{value:true, desc:'goldenDiagUp'},
+                    gdiagdown:{value:true, desc:'goldenDiagDown'},
+                    gspiralBL:{value:false, desc:'goldenSpiralBL'},
+                    gspiralTL:{value:false, desc:'goldenSpiralTL'},
+                    gspiralTR:{value:false, desc:'goldenSpiralTR'},
+                    gspiralBR:{value:false, desc:'goldenSpiralBR'}
+                    /*{name:'', value:'', desc:''},*/
+                    };
+    this.conf = new configurator(paramsID, UUID);
+    this.conf.loadSettings();
+    
     this.ifApplyFX = true;
     this.ifSuspendHistory = isSC3Plus();
     this.loc = localizator.getInstance();
@@ -867,66 +1157,66 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
     Stdlib.rectPath( ShapeOperation.SHAPESUBTRACT, Units.PERCENT, 0,0,100,100);
     
     // Add dividing rules
-	var anyGuidelines = false;
-	for ( gline in this.guidelines ) {
-		anyGuidelines |= this.guidelines[gline].create;
-	}
+    var anyGuidelines = false;
+    for ( gline in this.guidelines ) {
+        anyGuidelines |= this.guidelines[gline].create;
+    }
     if (anyGuidelines) {
-		this.gCropDivRules = Stdlib.createLayerGroup(this.loc.get('divRules'), 50);
-		
-		// ----- Golden rule
-		if (this.guidelines.golden.create) {
-			const phi = (Math.sqrt(5)-1)/2; // Inv Golden number, ca. 0.6180339887498948482045868343656
-			this.guidelines.golden.layer = this.makeStrips(phi, basicStripSize*stripsThickScale[0], colors[1]);
-			if (this.ifApplyFX) this.applyStripFX();
-		}
-		
-		// ----- One-third rule
-		if (this.guidelines.roth.create) {
-			const third = 1.0/3;
-			this.guidelines.roth.layer = this.makeStrips(third, basicStripSize*stripsThickScale[1], colors[2]);
-			if (this.ifApplyFX) this.applyStripFX();
-		}
+        this.gCropDivRules = Stdlib.createLayerGroup(this.loc.get('divRules'), 50);
+        
+        // ----- Golden rule
+        if (this.guidelines.golden.create) {
+            const phi = (Math.sqrt(5)-1)/2; // Inv Golden number, ca. 0.6180339887498948482045868343656
+            this.guidelines.golden.layer = this.makeStrips(phi, basicStripSize*stripsThickScale[0], colors[1]);
+            if (this.ifApplyFX) this.applyStripFX();
+        }
+        
+        // ----- One-third rule
+        if (this.guidelines.roth.create) {
+            const third = 1.0/3;
+            this.guidelines.roth.layer = this.makeStrips(third, basicStripSize*stripsThickScale[1], colors[2]);
+            if (this.ifApplyFX) this.applyStripFX();
+        }
 
-		// ----- Golden diagonal rule (up)
-		if (this.guidelines.gdiagup.create) {
-			this.guidelines.gdiagup.layer = this.makeDiagStrip(true, basicStripSize*stripsThickScale[2], colors[3]);
-			if (this.ifApplyFX) this.applyStripFX();
-		}
-	
-		// ----- Golden diagonal rule (down)
-		if (this.guidelines.gdiagdown.create) {
-			this.guidelines.gdiagdown.layer = this.makeDiagStrip(false, basicStripSize*stripsThickScale[2], colors[4]);
-			if (this.ifApplyFX) this.applyStripFX();
-		}
-	
-		// ----- Golden spiral (starts at bottom-left)
-		if (this.guidelines.gspiralBL.create) {
-			this.guidelines.gspiralBL.layer = this.makeGoldenSpiral(0, basicStripSize*stripsThickScale[3], colors[5]);
-			if (this.ifApplyFX) this.applyStripFX();
-		}
-	
-		// ----- Golden spiral (starts at bottom-left)
-		if (this.guidelines.gspiralTL.create) {
-			this.guidelines.gspiralTL.layer = this.makeGoldenSpiral(1, basicStripSize*stripsThickScale[3], colors[6]);
-			if (this.ifApplyFX) this.applyStripFX();
-		}
-			
-		// ----- Golden spiral (starts at bottom-left)
-		if (this.guidelines.gspiralTR.create) {
-			this.guidelines.gspiralTR.layer = this.makeGoldenSpiral(2, basicStripSize*stripsThickScale[3], colors[7]);
-			if (this.ifApplyFX) this.applyStripFX();
-		}
-			
-		// ----- Golden spiral (starts at bottom-left)
-		if (this.guidelines.gspiralBR.create) {
-			this.guidelines.gspiralBR.layer = this.makeGoldenSpiral(3, basicStripSize*stripsThickScale[3], colors[8]);
-			if (this.ifApplyFX) this.applyStripFX();
-		}
-	} else {
-		this.bogusLayer = this.makeStrips(.5, 0.0001, colors[0]);
-		this.doc.activeLayer.opacity=0;
-	}
+        // ----- Golden diagonal rule (up)
+        if (this.guidelines.gdiagup.create) {
+            this.guidelines.gdiagup.layer = this.makeDiagStrip(true, basicStripSize*stripsThickScale[2], colors[3]);
+            if (this.ifApplyFX) this.applyStripFX();
+        }
+    
+        // ----- Golden diagonal rule (down)
+        if (this.guidelines.gdiagdown.create) {
+            this.guidelines.gdiagdown.layer = this.makeDiagStrip(false, basicStripSize*stripsThickScale[2], colors[4]);
+            if (this.ifApplyFX) this.applyStripFX();
+        }
+    
+        // ----- Golden spiral (starts at bottom-left)
+        if (this.guidelines.gspiralBL.create) {
+            this.guidelines.gspiralBL.layer = this.makeGoldenSpiral(0, basicStripSize*stripsThickScale[3], colors[5]);
+            if (this.ifApplyFX) this.applyStripFX();
+        }
+    
+        // ----- Golden spiral (starts at bottom-left)
+        if (this.guidelines.gspiralTL.create) {
+            this.guidelines.gspiralTL.layer = this.makeGoldenSpiral(1, basicStripSize*stripsThickScale[3], colors[6]);
+            if (this.ifApplyFX) this.applyStripFX();
+        }
+            
+        // ----- Golden spiral (starts at bottom-left)
+        if (this.guidelines.gspiralTR.create) {
+            this.guidelines.gspiralTR.layer = this.makeGoldenSpiral(2, basicStripSize*stripsThickScale[3], colors[7]);
+            if (this.ifApplyFX) this.applyStripFX();
+        }
+            
+        // ----- Golden spiral (starts at bottom-left)
+        if (this.guidelines.gspiralBR.create) {
+            this.guidelines.gspiralBR.layer = this.makeGoldenSpiral(3, basicStripSize*stripsThickScale[3], colors[8]);
+            if (this.ifApplyFX) this.applyStripFX();
+        }
+    } else {
+        this.bogusLayer = this.makeStrips(.5, 0.0001, colors[0]);
+        this.doc.activeLayer.opacity=0;
+    }
 }
 
 /*
@@ -961,11 +1251,11 @@ GoldenCrop.prototype.simpleCrop = function() {
  * Make cropping mask non-transparent and make active and hide Dividing Rules group
  */
 GoldenCrop.prototype.maskOutCrop = function() {
-	this.outerFrame.opacity = 100;
-	if (this.gCropDivRules) {
-		this.doc.activeLayer = this.gCropDivRules;
-		this.doc.activeLayer.visible = false
-	}
+    this.outerFrame.opacity = 100;
+    if (this.gCropDivRules) {
+        this.doc.activeLayer = this.gCropDivRules;
+        this.doc.activeLayer.visible = false
+    }
 }
 
 /*
@@ -977,7 +1267,7 @@ GoldenCrop.prototype.chooseCropMethod = function() {
                 question:this.loc.get('chCropMethodQ'),
                 elements:[{key:'1', text:this.loc.get('cropCanvas'), def:true},
                           {key:'2', text:this.loc.get('mkCropMask')},
-                          {key:'Esc', text:this.loc.get('cancelCrop')}
+                          {key:'Esc', text:this.loc.get('cancel')}
                          ]
                };
     
@@ -1106,36 +1396,50 @@ GoldenCrop.prototype.chooseRevealAction = function() {
 GoldenCrop.prototype.go = function() {
    var docW = this.docW = parseInt(this.doc.width.as("px"));
    var docH = this.docH = parseInt(this.doc.height.as("px"));
-    var menuDesc = {caption:this.loc.get('chCompMethod'),
-                    question:this.loc.get('chCompMethodQ'),
-                    okTxt:this.loc.get('ok'),
-                    cancelTxt:this.loc.get('cancel'),
-                    cbElements:[{key:'1', text:this.loc.get('goldenRule'), sel: true},
-                              {key:'2', text:this.loc.get('ruleOfThirds'), sel: true},
-                              {key:'3', text:this.loc.get('goldenDiagUp'), sel: true},
-                              {key:'4', text:this.loc.get('goldenDiagDown'), sel: true},
-                              {key:'5', text:this.loc.get('goldenSpiralBL')},
-                              {key:'6', text:this.loc.get('goldenSpiralTL')},
-                              {key:'7', text:this.loc.get('goldenSpiralTR')},
-					         {key:'8', text:this.loc.get('goldenSpiralBR')}
-                             ],
-                    msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2,3]},
-                                {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[4,5,6,7]},
-                              {key:'a', text:this.loc.get('selectAll'), action: 'slctAll'},
-                               {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
-    ]
-                   };
-    var dlg = new dialogMenuMChoice(menuDesc);
-    var res = dlg.show();
-	if (!res) return;
-	this.guidelines = {golden: {create: res[0]},
-		                 roth: {create: res[1]},
-		              gdiagup: {create: res[2]},
-		            gdiagdown: {create: res[3]},
-		            gspiralBL: {create: res[4]},
-		            gspiralTL: {create: res[5]},
-		            gspiralTR: {create: res[6]},
-		            gspiralBR: {create: res[7]}};
+   if (this.conf.isDisplayNormalDialog()) {
+       var menuDesc = {caption:this.loc.get('chCompMethod'),
+                       question:this.loc.get('chCompMethodQ'),
+                       okTxt:this.loc.get('ok'),
+                       cancelTxt:this.loc.get('cancel'),
+                       cbElements:[{key:'1', text:this.loc.get('goldenRule'), sel: this.conf.get('golden')},
+                                   {key:'2', text:this.loc.get('ruleOfThirds'), sel: this.conf.get('roth')},
+                                   {key:'3', text:this.loc.get('goldenDiagUp'), sel: this.conf.get('gdiagup')},
+                                   {key:'4', text:this.loc.get('goldenDiagDown'), sel: this.conf.get('gdiagdown')},
+                                   {key:'5', text:this.loc.get('goldenSpiralBL'), sel: this.conf.get('gspiralBL')},
+                                   {key:'6', text:this.loc.get('goldenSpiralTL'), sel: this.conf.get('gspiralTL')},
+                                   {key:'7', text:this.loc.get('goldenSpiralTR'), sel: this.conf.get('gspiralTR')},
+                                   {key:'8', text:this.loc.get('goldenSpiralBR'), sel: this.conf.get('gspiralBR')}
+                                  ],
+                       msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2,3]},
+                                   {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[4,5,6,7]},
+                                   {key:'a', text:this.loc.get('selectAll'), action: 'slctAll'},
+                                   {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
+                                  ]
+                      };
+        var dlg = new dialogMenuMChoice(menuDesc);
+        var res = dlg.show();
+        if (!res) return;
+        this.conf.set('golden', res[0]);
+        this.conf.set('roth', res[1]);
+        this.conf.set('gdiagup', res[2]);
+        this.conf.set('gdiagdown', res[3]);
+        this.conf.set('gspiralBL', res[4]);
+        this.conf.set('gspiralTL', res[5]);
+        this.conf.set('gspiralTR', res[6]);
+        this.conf.set('gspiralBR', res[7]);
+        
+        // Save parameters; crop could be canceled, but the line remains, so save lines settings now
+        this.conf.saveSettings();
+    }
+
+    this.guidelines = {golden: {create: this.conf.get('golden')}, // history relict, to be integrated with config and dialog
+                         roth: {create: this.conf.get('roth')},
+                      gdiagup: {create: this.conf.get('gdiagup')},
+                    gdiagdown: {create: this.conf.get('gdiagdown')},
+                    gspiralBL: {create: this.conf.get('gspiralBL')},
+                    gspiralTL: {create: this.conf.get('gspiralTL')},
+                    gspiralTR: {create: this.conf.get('gspiralTR')},
+                    gspiralBR: {create: this.conf.get('gspiralBR')}};
 
     if ( this.ifSuspendHistory ) {
         this.doc.suspendHistory(szAppName + this.loc.get('-grid'), 'this.makeGrid()');
@@ -1244,7 +1548,7 @@ GoldenCrop.prototype.go = function() {
     } else {
         this.tmpFctn();
     }
-	if (this.bogusLayer) this.bogusLayer.remove();
+    if (this.bogusLayer) this.bogusLayer.remove();
     // $.writeln( '==========' );
     // $.writeln( 'cropAccepted: ' + this.cropAccepted );
     // $.writeln( 'cropMethod: ' + this.cropMethod );
@@ -1282,6 +1586,8 @@ GoldenCrop.prototype.go = function() {
                 eval('this.'+cropFunction);
             }
         }
+        // save parameters one again (for shure)
+        this.conf.saveSettings();
     } else {
         // remove resize entry from history -- it does nothing
         executeAction( cTID( "undo" ), undefined, DialogModes.NO );
@@ -1329,13 +1635,6 @@ try {
    delete lvl; 
 } 
 
-// see XBridgeTalk for more comprehensive isCSX handling 
-// if (!global["isCS3"]) { 
-//   isCS3 = function()  { return psVersion.match(/^10\./) != null; }; 
-// } 
-// if (!global["isCS2"]) { 
-//   isCS2 = function()  { return psVersion.match(/^9\./) != null; }; 
-// }
 isSC3Plus = function()  { return isCS3() || isCS4() }; 
 isCS4 = function()  { return psVersion.match(/^11\./) != null; }; 
 isCS3 = function()  { return psVersion.match(/^10\./) != null; }; 
