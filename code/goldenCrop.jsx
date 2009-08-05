@@ -600,7 +600,7 @@ function SimpleADSerializer( obj )
     var STTID = app.stringIDToTypeID;
 
     var ad = new ActionDescriptor();
-    //ad.putString( app.charIDToTypeID( 'Msge' ), 'alamakota' );
+
     for ( var field in obj )
     {
         var ID = app.stringIDToTypeID(field);
@@ -755,10 +755,12 @@ configurator.prototype.loadSettings = function() {
     }
 
 }
-
+configurator.prototype.setMessage = function(msg) {
+    this.msg = msg;
+}
 configurator.prototype.saveSettings = function() {
-     
     var ad = this._toActionDescriptor();
+    ad.putString( app.charIDToTypeID( 'Msge' ),  this.msg);
     app.playbackParameters = ad;
     if ( !this.readFromPlayback ) {
         app.putCustomOptions (this.uuid, ad, true);
@@ -780,7 +782,9 @@ configurator.prototype._toActionDescriptor = function() {
 configurator.prototype._fromActionDescriptor = function( ad ) {
     var nv = SimpleADUnserializer(ad);
     for ( var o in nv) {
-        this.set(o, nv[o]);
+        if (o != 'Msge' ) {
+            this.set(o, nv[o]);
+        }
     }
 }
 
@@ -840,6 +844,7 @@ GoldenCrop.prototype.loadConfig = function() {
     this.ifApplyFX = true;
     this.ifSuspendHistory = isSC3Plus();
     this.loc = localizator.getInstance();
+    this.conf.setMessage(this.loc.get('GCbySzN'));
 }
 
 /*
@@ -1446,6 +1451,19 @@ GoldenCrop.prototype.findCropMaskAndDivRules = function ( mainGCGroup ) {
     return layers.cropMask?layers:false;
 }
 
+GoldenCrop.prototype.restoreUserGCGroupSettings = function () {
+	if (this.skipGridCreation) {
+	   this.gCrop.visible = this.userSettings.gCrop[0];
+	   this.gCrop.opacity = this.userSettings.gCrop[1];
+	   this.cropMask.visible = this.userSettings.cropMask[0];
+	   this.cropMask.opacity = this.userSettings.cropMask[1];
+	   if ( this.gCropDivRules ) {
+		   this.gCropDivRules.visible = this.userSettings.divRUles[0];
+		   this.gCropDivRules.opacity = this.userSettings.divRUles[1];
+	   }
+	}
+}
+
 /*    
  * Logical heart of the script. Invoke each phase of script w/ or w/o suspending history.
  */
@@ -1453,7 +1471,9 @@ GoldenCrop.prototype.go = function() {
    var docW = this.docW = parseInt(this.doc.width.as("px"));
    var docH = this.docH = parseInt(this.doc.height.as("px"));
    try {
-       if (!this.conf.isRunFromAction()) {
+       // old version !this.conf.isRunFromAction()
+       // select last (bottom) layer to force adding new GC group (i.e. don't search for existing ones)
+       if (this.doc.activeLayer != this.doc.layers[this.doc.layers.length-1]) {
            // search for GC group
            var gcg = this.findMainGCGroup();
            if ( gcg ) {
@@ -1465,9 +1485,12 @@ GoldenCrop.prototype.go = function() {
                    this.cropMask         = gcSub.cropMask;
                    this.gCropDivRules    = gcSub.divRules;
                    
-                   this.userSettings = {cropMask: [this.cropMask.visible, this.cropMask.opacity]}
+                   this.userSettings = {gCrop: [this.gCrop.visible, this.gCrop.opacity],
+                                        cropMask: [this.cropMask.visible, this.cropMask.opacity]}
                    if (this.gCropDivRules) this.userSettings.divRUles = [this.gCropDivRules.visible, this.gCropDivRules.opacity];
-                   
+
+                   this.gCrop.opacity   = 100;
+                   this.gCrop.visible = true;
                    this.cropMask.visible = true;
                    this.cropMask.opacity = 70;
                    if ( this.gCropDivRules ) {
@@ -1679,14 +1702,7 @@ GoldenCrop.prototype.go = function() {
             this.doc.activeLayer = this.gCrop;
         }
     } finally {
-        if (this.skipGridCreation) {
-           this.cropMask.visible = this.userSettings.cropMask[0];
-           this.cropMask.opacity = this.userSettings.cropMask[1];
-           if ( this.gCropDivRules ) {
-               this.gCropDivRules.visible = this.userSettings.divRUles[0];
-               this.gCropDivRules.opacity = this.userSettings.divRUles[1];
-           }
-        }
+		this.restoreUserGCGroupSettings();
     }
 }
 
