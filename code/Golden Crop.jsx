@@ -879,8 +879,8 @@ GoldenCrop.prototype.makeStrips = function( position, stripSize, color ) {
     Stdlib.addVectorMask(true); // true => 'hide all' mode
     
     const oneMinusPosition = 1 - position;
-    const docWidth  = this.doc.width.as("px"),
-          docHeight = this.doc.height.as("px");
+    const docWidth  = this.docW,
+          docHeight = this.docH;
     const halfStripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSize) / 2;
     
     // add horizontal strips
@@ -924,8 +924,8 @@ GoldenCrop.prototype.makeDiagStrip = function( direction, stripSize, color ) {
     Stdlib.removeLayerMask();
     Stdlib.addVectorMask(true);    
     
-    const docWidth  = this.doc.width.as("px"),
-          docHeight = this.doc.height.as("px");
+    const docWidth  = this.docW,
+          docHeight = this.docH;
     const stripSizePx = Math.min(docWidth, docHeight) * stripSize;
 
     var w = docWidth,
@@ -1678,7 +1678,7 @@ GoldenCrop.prototype.go = function() {
         this.doc.suspendHistory(szAppName + this.loc.get('-resize'), 'this.interactiveCrop()');
         Stdlib.NOP();
     } else {
-        this.tmpFctn();
+        this.interactiveCrop();
     }
 
     // TODO: Remove bogusLayer if it could be created AND transformed if needed ('resume crop' function)
