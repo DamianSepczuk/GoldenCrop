@@ -762,7 +762,7 @@ configurator.prototype.saveSettings = function() {
     var ad = this._toActionDescriptor();
     ad.putString( app.charIDToTypeID( 'Msge' ),  this.msg);
     app.playbackParameters = ad;
-    if ( !this.readFromPlayback ) {
+    if ( !this.readFromPlayback && isSC3plus() ) {
         app.putCustomOptions (this.uuid, ad, true);
     }
 }
@@ -782,7 +782,7 @@ configurator.prototype._toActionDescriptor = function() {
 configurator.prototype._fromActionDescriptor = function( ad ) {
     var nv = SimpleADUnserializer(ad);
     for ( var o in nv) {
-        if (o != 'Msge' ) {
+        if (o != 'Msge' && o != 'message') { // CS3 and CS2 fix
             this.set(o, nv[o]);
         }
     }
@@ -842,7 +842,7 @@ GoldenCrop.prototype.loadConfig = function() {
                     gspiralBR: {create: this.conf.get('gspiralBR')}};
                     
     this.ifApplyFX = true;
-    this.ifSuspendHistory = isSC3Plus();
+    this.ifSuspendHistory = isSC3plus();
     this.loc = localizator.getInstance();
     this.conf.setMessage(this.loc.get('GCbySzN'));
 }
@@ -1232,11 +1232,14 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
             if (this.ifApplyFX) this.applyStripFX();
         }
     } else {
-        this.bogusLayer = this.makeStrips(.5, 0.0001, colors[0]);
-        this.doc.activeLayer.opacity=0;
+        this.addBogusLayer();
     }
 }
 
+GoldenCrop.prototype.addBogusLayer = function() {
+    this.bogusLayer = this.makeStrips(.5, 0.0001, Stdlib.createRGBColor(0, 0, 0));
+    this.doc.activeLayer.opacity=0;
+}
 /*
  * Activate user-interactive free transform mode and check results.
  * *** BLOCKING FUNCTION ***
@@ -1307,7 +1310,7 @@ GoldenCrop.prototype.chooseCropMethod = function() {
  * Color of the solid fill layer is determined by current foreground color
  */
 GoldenCrop.prototype.doPopBackground = function() {
-    if (this.backgroundPopped) return;
+    if ( this.backgroundPopped || !Stdlib.hasBackground( this.doc ) ) return;
     this.backgroundPopped = true;
      
     if ( Stdlib.hasBackground(this.doc) ) {
@@ -1452,16 +1455,16 @@ GoldenCrop.prototype.findCropMaskAndDivRules = function ( mainGCGroup ) {
 }
 
 GoldenCrop.prototype.restoreUserGCGroupSettings = function () {
-	if (this.skipGridCreation) {
-	   this.gCrop.visible = this.userSettings.gCrop[0];
-	   this.gCrop.opacity = this.userSettings.gCrop[1];
-	   this.cropMask.visible = this.userSettings.cropMask[0];
-	   this.cropMask.opacity = this.userSettings.cropMask[1];
-	   if ( this.gCropDivRules ) {
-		   this.gCropDivRules.visible = this.userSettings.divRUles[0];
-		   this.gCropDivRules.opacity = this.userSettings.divRUles[1];
-	   }
-	}
+    if (this.skipGridCreation) {
+       this.cropMask.opacity = this.userSettings.cropMask[1];
+       this.cropMask.visible = this.userSettings.cropMask[0];
+       if ( this.gCropDivRules ) {
+           this.gCropDivRules.opacity = this.userSettings.divRUles[1];
+           this.gCropDivRules.visible = this.userSettings.divRUles[0];
+       }
+       this.gCrop.opacity = this.userSettings.gCrop[1];
+       this.gCrop.visible = this.userSettings.gCrop[0];
+    }
 }
 
 /*    
@@ -1470,240 +1473,255 @@ GoldenCrop.prototype.restoreUserGCGroupSettings = function () {
 GoldenCrop.prototype.go = function() {
    var docW = this.docW = parseInt(this.doc.width.as("px"));
    var docH = this.docH = parseInt(this.doc.height.as("px"));
-   try {
-       // old version !this.conf.isRunFromAction()
-       // select last (bottom) layer to force adding new GC group (i.e. don't search for existing ones)
-       if (this.doc.activeLayer != this.doc.layers[this.doc.layers.length-1]) {
-           // search for GC group
-           var gcg = this.findMainGCGroup();
-           if ( gcg ) {
-               var gcSub = this.findCropMaskAndDivRules( gcg );
-               if (gcSub) {
-                   // Found :) Do not create new -- use existing
-                   this.skipGridCreation = true;
-                   this.gCrop            = gcg;
-                   this.cropMask         = gcSub.cropMask;
-                   this.gCropDivRules    = gcSub.divRules;
-                   
-                   this.userSettings = {gCrop: [this.gCrop.visible, this.gCrop.opacity],
-                                        cropMask: [this.cropMask.visible, this.cropMask.opacity]}
-                   if (this.gCropDivRules) this.userSettings.divRUles = [this.gCropDivRules.visible, this.gCropDivRules.opacity];
 
-                   this.gCrop.opacity   = 100;
-                   this.gCrop.visible = true;
-                   this.cropMask.visible = true;
-                   this.cropMask.opacity = 70;
-                   if ( this.gCropDivRules ) {
-                       this.gCropDivRules.visible = true;
-                       this.gCropDivRules.opacity = 50;
-                   }
+   // old version !this.conf.isRunFromAction()
+   // select last (bottom) layer to force adding new GC group (i.e. don't search for existing ones)
+   if (this.doc.activeLayer != this.doc.layers[this.doc.layers.length-1]) {
+       // search for GC group
+       var gcg = this.findMainGCGroup();
+       if ( gcg ) {
+           var gcSub = this.findCropMaskAndDivRules( gcg );
+           if (gcSub) {
+               // Found :) Do not create new -- use existing
+               this.skipGridCreation = true;
+               this.gCrop            = gcg;
+               this.cropMask         = gcSub.cropMask;
+               this.gCropDivRules    = gcSub.divRules;
+               
+               this.userSettings = {gCrop: [this.gCrop.visible, Math.min(this.gCrop.opacity,100)],
+                                    cropMask: [this.cropMask.visible, Math.min(this.cropMask.opacity,100)]}
+               if (this.gCropDivRules) this.userSettings.divRUles = [this.gCropDivRules.visible, Math.min(this.gCropDivRules.opacity,100)];
+
+               this.gCrop.opacity   = 100;
+               this.gCrop.visible = true;
+
+               this.cropMask.opacity = 70;
+               this.cropMask.visible = true;
+
+               if ( this.gCropDivRules && this.gCropDivRules.layers.length) {
+                   this.gCropDivRules.visible = true;
+                   this.gCropDivRules.opacity = 50;
+               } else {
+                   // TODO: add bogus layer AND transform it to match active crop mask as needed
+                   // this.addBogusLayer();
                }
+               
+               this.doc.activeLayer = this.gCrop;
            }
        }
-       if (!this.skipGridCreation) {
-           if (this.conf.isDisplayNormalDialog()) {
-               var menuDesc = {caption:this.loc.get('chCompMethod'),
-                               question:this.loc.get('chCompMethodQ'),
-                               okTxt:this.loc.get('ok'),
-                               cancelTxt:this.loc.get('cancel'),
-                               cbElements:[{key:'1', text:this.loc.get('goldenRule'), sel: this.conf.get('golden')},
-                                           {key:'2', text:this.loc.get('ruleOfThirds'), sel: this.conf.get('roth')},
-                                           {key:'3', text:this.loc.get('goldenDiagUp'), sel: this.conf.get('gdiagup')},
-                                           {key:'4', text:this.loc.get('goldenDiagDown'), sel: this.conf.get('gdiagdown')},
-                                           {key:'5', text:this.loc.get('goldenSpiralBL'), sel: this.conf.get('gspiralBL')},
-                                           {key:'6', text:this.loc.get('goldenSpiralTL'), sel: this.conf.get('gspiralTL')},
-                                           {key:'7', text:this.loc.get('goldenSpiralTR'), sel: this.conf.get('gspiralTR')},
-                                           {key:'8', text:this.loc.get('goldenSpiralBR'), sel: this.conf.get('gspiralBR')}
-                                          ],
-                               msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2,3]},
-                                           {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[4,5,6,7]},
-                                           {key:'a', text:this.loc.get('selectAll'), action: 'slctAll'},
-                                           {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
-                                          ]
-                              };
-                var dlg = new dialogMenuMChoice(menuDesc);
-                var res = dlg.show();
-                if (!res) return;
-                this.conf.set('golden', res[0]);
-                this.conf.set('roth', res[1]);
-                this.conf.set('gdiagup', res[2]);
-                this.conf.set('gdiagdown', res[3]);
-                this.conf.set('gspiralBL', res[4]);
-                this.conf.set('gspiralTL', res[5]);
-                this.conf.set('gspiralTR', res[6]);
-                this.conf.set('gspiralBR', res[7]);
-                
-                // Save parameters; crop could be canceled, but the line remains, so save lines settings now
-                this.conf.saveSettings();
-            }
-
-            // TODO: When continuing this could be not consistent with actual state!
-            // ^[\t ]+([^:]+)(...........) / this.guidelines.\1.create =
-            this.guidelines.golden.create = this.conf.get('golden'); // history relict, to be integrated with config and dialog
-            this.guidelines.roth.create = this.conf.get('roth');
-            this.guidelines.gdiagup.create = this.conf.get('gdiagup');
-            this.guidelines.gdiagdown.create = this.conf.get('gdiagdown');
-            this.guidelines.gspiralBL.create = this.conf.get('gspiralBL');
-            this.guidelines.gspiralTL.create = this.conf.get('gspiralTL');
-            this.guidelines.gspiralTR.create = this.conf.get('gspiralTR');
-            this.guidelines.gspiralBR.create = this.conf.get('gspiralBR');
-
-
-            if ( this.ifSuspendHistory ) {
-                this.doc.suspendHistory(szAppName + this.loc.get('-grid'), 'this.makeGrid()');
-                Stdlib.NOP();
-            } else {
-                this.makeGrid();
-            }
+   }
+   if (!this.skipGridCreation) {
+       if (this.conf.isDisplayNormalDialog()) {
+           var menuDesc = {caption:this.loc.get('chCompMethod'),
+                           question:this.loc.get('chCompMethodQ'),
+                           okTxt:this.loc.get('ok'),
+                           cancelTxt:this.loc.get('cancel'),
+                           cbElements:[{key:'1', text:this.loc.get('goldenRule'), sel: this.conf.get('golden')},
+                                       {key:'2', text:this.loc.get('ruleOfThirds'), sel: this.conf.get('roth')},
+                                       {key:'3', text:this.loc.get('goldenDiagUp'), sel: this.conf.get('gdiagup')},
+                                       {key:'4', text:this.loc.get('goldenDiagDown'), sel: this.conf.get('gdiagdown')},
+                                       {key:'5', text:this.loc.get('goldenSpiralBL'), sel: this.conf.get('gspiralBL')},
+                                       {key:'6', text:this.loc.get('goldenSpiralTL'), sel: this.conf.get('gspiralTL')},
+                                       {key:'7', text:this.loc.get('goldenSpiralTR'), sel: this.conf.get('gspiralTR')},
+                                       {key:'8', text:this.loc.get('goldenSpiralBR'), sel: this.conf.get('gspiralBR')}
+                                      ],
+                           msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2,3]},
+                                       {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[4,5,6,7]},
+                                       {key:'a', text:this.loc.get('selectAll'), action: 'slctAll'},
+                                       {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
+                                      ]
+                          };
+            var dlg = new dialogMenuMChoice(menuDesc);
+            var res = dlg.show();
+            if (!res) return;
+            this.conf.set('golden', res[0]);
+            this.conf.set('roth', res[1]);
+            this.conf.set('gdiagup', res[2]);
+            this.conf.set('gdiagdown', res[3]);
+            this.conf.set('gspiralBL', res[4]);
+            this.conf.set('gspiralTL', res[5]);
+            this.conf.set('gspiralTR', res[6]);
+            this.conf.set('gspiralBR', res[7]);
+            
+            // Save parameters; crop could be canceled, but the line remains, so save lines settings now
+            this.conf.saveSettings();
         }
-        // New action mechanizm
-        // !== false   - indicates some method
-        // x !== y <=> !(x === y) -- only the second form gives right value in CS2 and (CS3, CS4)
-        // false       - indicates no action
-        this.cropAccepted  = false;
-        this.cropMethod    = false;
-        this.revealMethod  = false;
-        this.popBackground = false;
-        this.rotateCanvasA = false;
-        // ---!!!
-        var cropFunctions  = {SIMPLE:'simpleCrop()', MASK:'maskOutCrop()'};
-        var revealVuncions = {EXTCANVAS:'doRevealPopBackround()'};
 
-        this.tmpFctn = function () {
-            do {
-                this.cropAccepted = Stdlib.userGoToFreeTransform(this.doc, this.gCrop);
-                if ( !this.cropAccepted ) break;
-                
-                this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.cropMask);
-                var cb = this.cropBounds;
+        // TODO: When continuing this could be not consistent with actual state!
+        // ^[\t ]+([^:]+)(...........) / this.guidelines.\1.create =
+        this.guidelines.golden.create = this.conf.get('golden'); // history relict, to be integrated with config and dialog
+        this.guidelines.roth.create = this.conf.get('roth');
+        this.guidelines.gdiagup.create = this.conf.get('gdiagup');
+        this.guidelines.gdiagdown.create = this.conf.get('gdiagdown');
+        this.guidelines.gspiralBL.create = this.conf.get('gspiralBL');
+        this.guidelines.gspiralTL.create = this.conf.get('gspiralTL');
+        this.guidelines.gspiralTR.create = this.conf.get('gspiralTR');
+        this.guidelines.gspiralBR.create = this.conf.get('gspiralBR');
 
-                // Detect angle
-                var threshold = 0.0001;
-                var angle = Stdlib.getVectorMaskAngle_cornerPointsOnly(false, this.doc, this.cropMask);
-                this.rotateCanvasA = ( Math.abs(angle)%90 > threshold )?-angle:false;
-                if ( this.rotateCanvasA ) {
-                    this.popBackground = true; // default, could be changed in the following code
-                    var anRad = ((this.rotateCanvasA)*Math.PI)/180;
-                    var sinAb = Math.sin(Math.abs(anRad)), cosAb = Math.cos(Math.abs(anRad)),
-                        sinAn =Math.sin(anRad), cosAn = Math.cos(anRad);
-                    var mid = {x:(cb[0]+cb[2])/2,y:(cb[1]+cb[3])/2};
-                    //var dist = Math.sqrt(mid.x*mid.x+mid.y*mid.y);
-                    var cbRot = cb.clone();
-                    var newDocW = Math.ceil(docW * cosAb + docH * sinAb),
-                        newDocH = Math.ceil(docW * sinAb + docH * cosAb);
-                    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
-                    var minXp, maxXp, minYp, maxYp; 
-                    // translate to 0,0, rotate, and translate back
-                    for (var i=6; i<10; ++i) {
-                        var x = cbRot[i].x - mid.x,
-                            y = cbRot[i].y - mid.y;
-                        var xrot = x * cosAn - y * sinAn,
-                            yrot = x * sinAn + y * cosAn;
-                        x = cbRot[i].x = xrot+mid.x+(newDocW-docW)/2;
-                        y = cbRot[i].y = yrot+mid.y+(newDocH-docH)/2;
-                        if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
-                        if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
-                        if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
-                        if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
-                    }
-                    this.afterRotate = {cb: [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp, cbRot],
-                                       docW: newDocW,
-                                       docH: newDocH};
-                    // $.writeln('~~~~~~~~~~~~~');
-                    // $.writeln('afterRotate:' +this.afterRotate);
-                    //debugger;
-                }
-                
-                // Detect cropping mode
-                if ( cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
-                    // cropping only inside picture frame
-                    this.cropMethod = this.chooseCropMethod();
-                    if ( this.rotateCanvasA && this.cropMethod == 'SIMPLE' ) {
-                        // cancel background pop even when there is a rotation
-                        this.popBackground = false;
-                    }
-                } else {
-                    if ( this.rotateCanvasA ) {
-                        cb = this.afterRotate.cb; // simulate rotation for further computing
-                        docW = this.afterRotate.docW; docH = this.afterRotate.docH;
-                    }
-                    if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) { // no image crop
-                        this.cropMethod = false;
-                        this.revealMethod = 'EXTCANVAS';
-                        this.popBackground = true;
-                    } else {
-                       if ( this.rotateCanvasA && cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
-                           // rotation uncovers needed canvas, i.e. no further extension after roattion is needed
-                           this.revealMethod = 'false';
-                       } else {
-                           this.revealMethod = this.chooseRevealAction();
-                       }
-                        if ( !(this.revealMethod === 0) ) {
-                            if ( this.revealMethod == 'EXTCANVAS' ) {
-                                this.popBackground = true;
-                            }
-                            this.cropMethod = this.chooseCropMethod();
-                        }
-                    }
-
-                }
-            } while ( this.revealMethod === 0 || this.cropMethod === 0)
-        };
 
         if ( this.ifSuspendHistory ) {
-            this.doc.suspendHistory(szAppName + this.loc.get('-resize'), 'this.tmpFctn()');
+            this.doc.suspendHistory(szAppName + this.loc.get('-grid'), 'this.makeGrid()');
             Stdlib.NOP();
         } else {
-            this.tmpFctn();
+            this.makeGrid();
         }
-        if (this.bogusLayer) this.bogusLayer.remove();
-        // $.writeln( '==========' );
-        // $.writeln( 'cropAccepted: ' + this.cropAccepted );
-        // $.writeln( 'cropMethod: ' + this.cropMethod );
-        // $.writeln( 'revealMethod: ' + this.revealMethod );
-        // $.writeln( 'popBackground: ' + this.popBackground );
-        // $.writeln( 'rotateCanvasA: ' + this.rotateCanvasA );
-        
-        if ( this.cropAccepted ) {
-            
-            if ( !(this.rotateCanvasA === false) ) {
-                if ( this.ifSuspendHistory ) {
-                    this.doc.suspendHistory(szAppName + this.loc.get('-rotate'), 'this.doRotateCanvas()');
-                    Stdlib.NOP();
-                } else {
-                    this.doRotateCanvas();
-                }
-            }
-
-            if ( this.revealMethod ) {
-                var revealingFunction = revealVuncions[this.revealMethod];
-                if ( this.ifSuspendHistory ) {
-                    this.doc.suspendHistory(szAppName + this.loc.get('-reveal'), 'this.'+revealingFunction);
-                    Stdlib.NOP();
-                } else {
-                    eval('this.'+revealingFunction);
-                }
-            }
-
-            if ( this.cropMethod ) {
-                var cropFunction = cropFunctions[this.cropMethod];
-                if ( this.ifSuspendHistory ) {
-                    this.doc.suspendHistory(szAppName + this.loc.get('-crop'), 'this.'+cropFunction);
-                    Stdlib.NOP();
-                } else {
-                    eval('this.'+cropFunction);
-                }
-            }
-            // save parameters one again (for shure)
-            this.conf.saveSettings();
-        } else {
-            // remove resize entry from history -- it does nothing
-            executeAction( cTID( "undo" ), undefined, DialogModes.NO );
-            this.doc.activeLayer = this.gCrop;
-        }
-    } finally {
-		this.restoreUserGCGroupSettings();
     }
+    // New action mechanizm
+    // !== false   - indicates some method
+    // x !== y <=> !(x === y) -- only the second form gives right value in CS2 and (CS3, CS4)
+    // false       - indicates no action
+    this.cropAccepted  = false;
+    this.cropMethod    = false;
+    this.revealMethod  = false;
+    this.popBackground = false;
+    this.rotateCanvasA = false;
+    // ---!!!
+    var cropFunctions  = {SIMPLE:'simpleCrop()', MASK:'maskOutCrop()'};
+    var revealVuncions = {EXTCANVAS:'doRevealPopBackround()'};
+
+    this.tmpFctn = function () {
+        do {
+            this.cropAccepted = Stdlib.userGoToFreeTransform(this.doc, this.gCrop);
+            if ( !this.cropAccepted ) break;
+            
+            this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.cropMask);
+            var cb = this.cropBounds;
+
+            // Detect angle
+            var threshold = 0.0001;
+            var angle = Stdlib.getVectorMaskAngle_cornerPointsOnly(false, this.doc, this.cropMask);
+            this.rotateCanvasA = ( Math.abs(angle)%90 > threshold )?-angle:false;
+            if ( this.rotateCanvasA ) {
+                this.popBackground = true; // default, could be changed in the following code
+                var anRad = ((this.rotateCanvasA)*Math.PI)/180;
+                var sinAb = Math.sin(Math.abs(anRad)), cosAb = Math.cos(Math.abs(anRad)),
+                    sinAn =Math.sin(anRad), cosAn = Math.cos(anRad);
+                var mid = {x:(cb[0]+cb[2])/2,y:(cb[1]+cb[3])/2};
+                //var dist = Math.sqrt(mid.x*mid.x+mid.y*mid.y);
+                var cbRot = cb.clone();
+                var newDocW = Math.ceil(docW * cosAb + docH * sinAb),
+                    newDocH = Math.ceil(docW * sinAb + docH * cosAb);
+                var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
+                var minXp, maxXp, minYp, maxYp; 
+                // translate to 0,0, rotate, and translate back
+                for (var i=6; i<10; ++i) {
+                    var x = cbRot[i].x - mid.x,
+                        y = cbRot[i].y - mid.y;
+                    var xrot = x * cosAn - y * sinAn,
+                        yrot = x * sinAn + y * cosAn;
+                    x = cbRot[i].x = xrot+mid.x+(newDocW-docW)/2;
+                    y = cbRot[i].y = yrot+mid.y+(newDocH-docH)/2;
+                    if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
+                    if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
+                    if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
+                    if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
+                }
+                this.afterRotate = {cb: [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp, cbRot],
+                                   docW: newDocW,
+                                   docH: newDocH};
+                // $.writeln('~~~~~~~~~~~~~');
+                // $.writeln('afterRotate:' +this.afterRotate);
+                //debugger;
+            }
+            
+            // Detect cropping mode
+            if ( cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
+                // cropping only inside picture frame
+                this.cropMethod = this.chooseCropMethod();
+                if ( this.rotateCanvasA && this.cropMethod == 'SIMPLE' ) {
+                    // cancel background pop even when there is a rotation
+                    this.popBackground = false;
+                }
+            } else {
+                if ( this.rotateCanvasA ) {
+                    cb = this.afterRotate.cb; // simulate rotation for further computing
+                    docW = this.afterRotate.docW; docH = this.afterRotate.docH;
+                }
+                if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) { // no image crop
+                    this.cropMethod = false;
+                    this.revealMethod = 'EXTCANVAS';
+                    this.popBackground = true;
+                } else {
+                   if ( this.rotateCanvasA && cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
+                       // rotation uncovers needed canvas, i.e. no further extension after roattion is needed
+                       this.revealMethod = 'false';
+                   } else {
+                       this.revealMethod = this.chooseRevealAction();
+                   }
+                    if ( !(this.revealMethod === 0) ) {
+                        if ( this.revealMethod == 'EXTCANVAS' ) {
+                            this.popBackground = true;
+                        }
+                        this.cropMethod = this.chooseCropMethod();
+                    }
+                }
+
+            }
+        } while ( this.revealMethod === 0 || this.cropMethod === 0)
+    };
+
+    if ( this.ifSuspendHistory ) {
+        this.doc.suspendHistory(szAppName + this.loc.get('-resize'), 'this.tmpFctn()');
+        Stdlib.NOP();
+    } else {
+        this.tmpFctn();
+    }
+
+    // TODO: Remove bogusLayer if it could be created AND transformed if needed ('resume crop' function)
+    // if (this.bogusLayer) this.bogusLayer.remove();
+    
+    // $.writeln( '==========' );
+    // $.writeln( 'cropAccepted: ' + this.cropAccepted );
+    // $.writeln( 'cropMethod: ' + this.cropMethod );
+    // $.writeln( 'revealMethod: ' + this.revealMethod );
+    // $.writeln( 'popBackground: ' + this.popBackground );
+    // $.writeln( 'rotateCanvasA: ' + this.rotateCanvasA );
+    
+    if ( this.cropAccepted ) {
+        
+        if ( !(this.rotateCanvasA === false) ) {
+            if ( this.ifSuspendHistory ) {
+                this.doc.suspendHistory(szAppName + this.loc.get('-rotate'), 'this.doRotateCanvas()');
+                Stdlib.NOP();
+            } else {
+                this.doRotateCanvas();
+            }
+        }
+
+        if ( this.revealMethod ) {
+            var revealingFunction = revealVuncions[this.revealMethod];
+            if ( this.ifSuspendHistory ) {
+                this.doc.suspendHistory(szAppName + this.loc.get('-reveal'), 'this.'+revealingFunction);
+                Stdlib.NOP();
+            } else {
+                eval('this.'+revealingFunction);
+            }
+        }
+
+        if ( this.cropMethod ) {
+            var cropFunction = cropFunctions[this.cropMethod];
+            if ( this.ifSuspendHistory ) {
+                this.doc.suspendHistory(szAppName + this.loc.get('-crop'), 'this.'+cropFunction);
+                Stdlib.NOP();
+            } else {
+                eval('this.'+cropFunction);
+            }
+        }
+        // save parameters one again (for shure)
+        this.conf.saveSettings();
+    } else {
+        // remove resize entry from history -- it does nothing
+        executeAction( cTID( "undo" ), undefined, DialogModes.NO );
+        // restore user-tuned parameters
+        if (this.skipGridCreation) {
+            this.restoreUserGCGroupSettings();
+        }
+        this.doc.activeLayer = this.gCrop;
+    }
+
+    // TODO: is there a need to restore user parameters everytime? I think No (or only when [2] Crop mask was selected)
+    //       it is neccesary only if teh user canceled 'free transform' mode
+    // this.restoreUserGCGroupSettings();
 }
 
 function main() {
@@ -1746,7 +1764,7 @@ try {
    delete lvl; 
 } 
 
-isSC3Plus = function()  { return isCS3() || isCS4() }; 
+isSC3plus = function()  { return isCS3() || isCS4() }; 
 isCS4 = function()  { return psVersion.match(/^11\./) != null; }; 
 isCS3 = function()  { return psVersion.match(/^10\./) != null; }; 
 isCS2 = function()  { return psVersion.match(/^9\./) != null; }; 
