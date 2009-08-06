@@ -1,5 +1,9 @@
+ï»¿/**
+* @@@BUILDINFO@@@ Golden Crop.jsx 0.85beta Thu Aug 06 2009 17:11:43 GMT+0200
+*/
+
 /*****************************************
- * Golden crop script, v0.77 beta
+ * Golden crop script, v0.85 beta
  *
  * Copyright 2009, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
  * 
@@ -53,8 +57,8 @@ var lang = "auto";
 /*
 // BEGIN__HARVEST_EXCEPTION_ZSTRING
 <javascriptresource>
-    <name>Golden Crop</name>
-    <about>Golden Crop script v0.77 beta by Damian Sepczuk aka SzopeN
+    <name>$$$/SzopeNSoft/GoldenCrop/AppName=Golden Crop</name>
+    <about>Golden Crop script v0.85 beta by Damian Sepczuk aka SzopeN
 
 Copyright 2009, GNU GPL License
 
@@ -64,20 +68,20 @@ http://goldencrop.sourceforge.net</about>
     <eventid>c4f6f3f7-1b93-47af-bab5-287c581c5fa8</eventid>
     <category>szopensoft</category>
     <terminology><![CDATA[<<
-                         /Version 1 
-                         /Events << 
-                           /c4f6f3f7-1b93-47af-bab5-287c581c5fa8 [(Golden Crop) /noDirectParam <<
-                             /golden [(Golden Rule) /boolean]
-                             /roth [(Rule of Thirds) /boolean]
-                             /gdiagup [(Golden diagonal upwards) /boolean]
-                             /gdiagdown [(Golden diagonal downwards) /boolean]
-                             /gspiralBL [(Golden Spiral bottom-left) /boolean]
-                             /gspiralTL [(Golden Spiral top-left) /boolean]
-                             /gspiralTR [(Golden Spiral top-right) /boolean]
-                             /gspiralBR [(Golden Spiral bottom-right) /boolean]
-                           >>] 
-                         >> 
-                      >>]]></terminology>
+             /Version 1 
+             /Events << 
+               /c4f6f3f7-1b93-47af-bab5-287c581c5fa8 [($$$/SzopeNSoft/GoldenCrop/AppName=Golden Crop) /noDirectParam <<
+                 /golden [($$$/SzopeNSoft/GoldenCrop/golden=Golden Rule) /boolean]
+                 /roth [($$$/SzopeNSoft/GoldenCrop/roth=Rule of Thirds) /boolean]
+                 /gdiagup [($$$/SzopeNSoft/GoldenCrop/gdiagup=Golden diagonal upwards) /boolean]
+                 /gdiagdown [($$$/SzopeNSoft/GoldenCrop/gdiagdown=Golden diagonal downwards) /boolean]
+                 /gspiralBL [($$$/SzopeNSoft/GoldenCrop/gspiralBL=Golden Spiral bottom-left) /boolean]
+                 /gspiralTL [($$$/SzopeNSoft/GoldenCrop/gspiralTL=Golden Spiral top-left) /boolean]
+                 /gspiralTR [($$$/SzopeNSoft/GoldenCrop/gspiralTR=Golden Spiral top-right) /boolean]
+                 /gspiralBR [($$$/SzopeNSoft/GoldenCrop/gspiralBR=Golden Spiral bottom-right) /boolean]
+                 >>] 
+              >> 
+            >>]]></terminology>
 </javascriptresource>
 // END__HARVEST_EXCEPTION_ZSTRING
 */
@@ -91,7 +95,7 @@ if ( lang != "auto" )
 $.level = debug?1:0;
 
 const szAppName = "Golden Crop",
-      szVersion = "0.77 beta";
+      szVersion = "0.85 beta";
 const UUID = '2c910bcd-8e34-4779-a885-bb214df640a3';
 // ---------------------------------------------------------------------
 function localizator(secretNumber) {
@@ -120,41 +124,41 @@ localizator.prototype.initStrings = function() {
     // Entries below were generated using localizator.loadCVSsaveAsJSCodeFile function
     str['chCropMethod'] = {en:'Choose crop style', pl:'Wybierz styl przycinania'};
     str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania'};
-    str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij p³ótno'};
-    str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskê kadruj¹c¹'};
+    str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij pÅ‚Ã³tno'};
+    str['mkCropMask'] = {en:'Make crop mask', pl:'StwÃ³rz maskÄ™ kadrujÄ…cÄ…'};
     str['cancel'] = {en:'Cancel', pl:'Anuluj'};
-    str['bgOnLayer'] = {en:'Background on layer', pl:'T³o na warstwie'};
-    str['bgFill'] = {en:'Background fill', pl:'Wype³nienie t³a'};
-    str['doOutsCrop'] = {en:'Do outside cropping (YES) or crop without extending canvas (NO)?', pl:'Rozszerzyæ pó³tno (TAK) czy przyci¹æ bez rozszerzania (NIE)?'};
+    str['bgOnLayer'] = {en:'Background on layer', pl:'TÅ‚o na warstwie'};
+    str['bgFill'] = {en:'Background fill', pl:'WypeÅ‚nienie tÅ‚a'};
+    str['doOutsCrop'] = {en:'Do outside cropping (YES) or crop without extending canvas (NO)?', pl:'RozszerzyÄ‡ pÃ³Å‚tno (TAK) czy przyciÄ…Ä‡ bez rozszerzania (NIE)?'};
     str['-grid'] = {en:' - grid', pl:' - siatka'};
     str['-resize'] = {en:' - resize', pl:' - przeskalowanie'};
     str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie'};
     str['-crop'] = {en:' - crop', pl:' - przycinanie'};
     str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN'};
-    str['cropMask'] = {en:'Crop mask', pl:'Maska kadruj¹ca'};
-    str['divRules'] = {en:'Dividing rules', pl:'Regu³y podzia³u'};
+    str['cropMask'] = {en:'Crop mask', pl:'Maska kadrujÄ…ca'};
+    str['divRules'] = {en:'Dividing rules', pl:'ReguÅ‚y podziaÅ‚u'};
     str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%'};
-    str['goldenDiagUp'] = {en:'Golden diagonal upwards', pl:'Z³ota przek¹tna w górê'};
-    str['goldenDiagDown'] = {en:'Golden diagonal downwards', pl:'Z³ota przek¹tna w dó³'};
-    str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomiæ ten skrypt.'};
-    str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie p³ótna.'};
-    str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobiæ z p³ótnem?'};
-    str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz p³ótno'};
+    str['goldenDiagUp'] = {en:'Golden diagonal upwards', pl:'ZÅ‚ota przekÄ…tna w gÃ³rÄ™'};
+    str['goldenDiagDown'] = {en:'Golden diagonal downwards', pl:'ZÅ‚ota przekÄ…tna w dÃ³Å‚'};
+    str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'OtwÃ³rz dokument, w ktÃ³rym chcesz uruchomiÄ‡ ten skrypt.'};
+    str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie pÅ‚Ã³tna.'};
+    str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobiÄ‡ z pÅ‚Ã³tnem?'};
+    str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz pÅ‚Ã³tno'};
     str['dontExtCanv'] = {en:'Crop without extension', pl:'Przytnij bez rozszerzania'};
-    str['retToCropping'] = {en:'Return to cropping', pl:'Wróæ do kadrowania'};
+    str['retToCropping'] = {en:'Return to cropping', pl:'WrÃ³Ä‡ do kadrowania'};
     str['chCompMethod'] = {en:'Composition method', pl:'Metoda kompozycji'};
-    str['chCompMethodQ'] = {en:'Choose composition guidelines', pl:'Wybierz metodê kompozycji'};
-    str['goldenRule'] = {en:'Golden Rule', pl:'Z³oty podzia³'};
-    str['ruleOfThirds'] = {en:'Rule of Thirds', pl:'Regu³a trzech'};
-    str['goldenSpiralBL'] = {en:'Golden Spiral bottom-left', pl:'Z³ota spirala lewo-dó³'};
-    str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'Z³ota spirala lewo-góra'};
-    str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'Z³ota spirala prawo-góra'};
-    str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'Z³ota spirala prawo-dó³'};
+    str['chCompMethodQ'] = {en:'Choose composition guidelines', pl:'Wybierz metodÄ™ kompozycji'};
+    str['goldenRule'] = {en:'Golden Rule', pl:'ZÅ‚oty podziaÅ‚'};
+    str['ruleOfThirds'] = {en:'Rule of Thirds', pl:'ReguÅ‚a trzech'};
+    str['goldenSpiralBL'] = {en:'Golden Spiral bottom-left', pl:'ZÅ‚ota spirala lewo-dÃ³Å‚'};
+    str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'ZÅ‚ota spirala lewo-gÃ³ra'};
+    str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'ZÅ‚ota spirala prawo-gÃ³ra'};
+    str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'ZÅ‚ota spirala prawo-dÃ³Å‚'};
     str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie'};
     str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie'};
     str['ok'] = {en:'OK', pl:'OK'};
-    str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Z³ote Spirale'};
-    str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podzia³y'};
+    str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie ZÅ‚ote Spirale'};
+    str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziaÅ‚y'};
 
 }
 
@@ -597,8 +601,6 @@ function SimpleADSerializer( obj )
     {
         return obj.constructor.toString().indexOf('Array') != -1;
     }
-    var STTID = app.stringIDToTypeID;
-
     var ad = new ActionDescriptor();
 
     for ( var field in obj )
@@ -1162,11 +1164,11 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
                   Stdlib.createRGBColor(0,255,255), Stdlib.createRGBColor(255,0,255), Stdlib.createRGBColor(255,255,0), Stdlib.createRGBColor(128,128,255)];
     }
     if (!stripsThickScale) {
-        stripsThickScale = [1, 1/2, 1/3, 1/3];
+        stripsThickScale = [1, 1/2, 1/3, 1/2];
     }
     
     this.gCrop = Stdlib.createLayerGroup(this.loc.get('GCbySzN'));
-
+    Stdlib.moveToFront();
     
     // Add crop-mask
     this.cropMask = Stdlib.createSolidFillLayer(undefined, colors[0], this.loc.get('cropMask'), maskOpacity);
@@ -1237,7 +1239,7 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
 }
 
 GoldenCrop.prototype.addBogusLayer = function() {
-    this.bogusLayer = this.makeStrips(.5, 0.0001, Stdlib.createRGBColor(0, 0, 0));
+    this.bogusLayer = this.makeStrips(.5, 1, Stdlib.createRGBColor(0, 0, 0));
     this.doc.activeLayer.opacity=0;
 }
 /*
@@ -1248,7 +1250,6 @@ GoldenCrop.prototype.addBogusLayer = function() {
  * If the user cancelled the transformation -- do not crop but keep all created layers
  */
 GoldenCrop.prototype.freeTransform = function() {
-    this.doc.activeLayer = this.gCrop;
     throw new Error('deprecated');
 }
 
@@ -1371,7 +1372,6 @@ GoldenCrop.prototype.doRotateCanvas = function() {
     // $.writeln('################# after rotate');
     // $.writeln('docW:' +this.docW);
     // $.writeln('docH:' +this.docH);
-
 }
 
 
@@ -1467,13 +1467,90 @@ GoldenCrop.prototype.restoreUserGCGroupSettings = function () {
     }
 }
 
-/*    
- * Logical heart of the script. Invoke each phase of script w/ or w/o suspending history.
- */
-GoldenCrop.prototype.go = function() {
-   var docW = this.docW = parseInt(this.doc.width.as("px"));
-   var docH = this.docH = parseInt(this.doc.height.as("px"));
+GoldenCrop.prototype.interactiveCrop = function () {
+    var docW = this.docW;
+    var docH = this.docH;
+    do {
+        this.cropAccepted = Stdlib.userGoToFreeTransform(this.doc, this.gCrop);
+        if ( !this.cropAccepted ) break;
+        
+        this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.cropMask);
+        var cb = this.cropBounds;
 
+        // Detect angle
+        var threshold = 0.0001;
+        var angle = Stdlib.getVectorMaskAngle_cornerPointsOnly(false, this.doc, this.cropMask);
+        this.rotateCanvasA = ( Math.abs(angle)%90 > threshold )?-angle:false;
+        if ( this.rotateCanvasA ) {
+            this.popBackground = true; // default, could be changed in the following code
+            var anRad = ((this.rotateCanvasA)*Math.PI)/180;
+            var sinAb = Math.sin(Math.abs(anRad)), cosAb = Math.cos(Math.abs(anRad)),
+                sinAn =Math.sin(anRad), cosAn = Math.cos(anRad);
+            var mid = {x:(cb[0]+cb[2])/2,y:(cb[1]+cb[3])/2};
+            //var dist = Math.sqrt(mid.x*mid.x+mid.y*mid.y);
+            var cbRot = cb.clone();
+            var newDocW = Math.ceil(docW * cosAb + docH * sinAb),
+                newDocH = Math.ceil(docW * sinAb + docH * cosAb);
+            var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
+            var minXp, maxXp, minYp, maxYp; 
+            // translate to 0,0, rotate, and translate back
+            for (var i=6; i<10; ++i) {
+                var x = cbRot[i].x - mid.x,
+                    y = cbRot[i].y - mid.y;
+                var xrot = x * cosAn - y * sinAn,
+                    yrot = x * sinAn + y * cosAn;
+                x = cbRot[i].x = xrot+mid.x+(newDocW-docW)/2;
+                y = cbRot[i].y = yrot+mid.y+(newDocH-docH)/2;
+                if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
+                if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
+                if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
+                if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
+            }
+            this.afterRotate = {cb: [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp, cbRot],
+                               docW: newDocW,
+                               docH: newDocH};
+            // $.writeln('~~~~~~~~~~~~~');
+            // $.writeln('afterRotate:' +this.afterRotate);
+            //debugger;
+        }
+        
+        // Detect cropping mode
+        if ( cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
+            // cropping only inside picture frame
+            this.cropMethod = this.chooseCropMethod();
+            if ( this.rotateCanvasA && this.cropMethod == 'SIMPLE' ) {
+                // cancel background pop even when there is a rotation
+                this.popBackground = false;
+            }
+        } else {
+            if ( this.rotateCanvasA ) {
+                cb = this.afterRotate.cb; // simulate rotation for further computing
+                docW = this.afterRotate.docW; docH = this.afterRotate.docH;
+            }
+            if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) { // no image crop
+                this.cropMethod = false;
+                this.revealMethod = 'EXTCANVAS';
+                this.popBackground = true;
+            } else {
+               if ( this.rotateCanvasA && cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
+                   // rotation uncovers needed canvas, i.e. no further extension after roattion is needed
+                   this.revealMethod = 'false';
+               } else {
+                   this.revealMethod = this.chooseRevealAction();
+               }
+                if ( !(this.revealMethod === 0) ) {
+                    if ( this.revealMethod == 'EXTCANVAS' ) {
+                        this.popBackground = true;
+                    }
+                    this.cropMethod = this.chooseCropMethod();
+                }
+            }
+
+        }
+    } while ( this.revealMethod === 0 || this.cropMethod === 0)
+};
+
+GoldenCrop.prototype.findCropToContinue = function() {
    // old version !this.conf.isRunFromAction()
    // select last (bottom) layer to force adding new GC group (i.e. don't search for existing ones)
    if (this.doc.activeLayer != this.doc.layers[this.doc.layers.length-1]) {
@@ -1491,7 +1568,6 @@ GoldenCrop.prototype.go = function() {
                this.userSettings = {gCrop: [this.gCrop.visible, Math.min(this.gCrop.opacity,100)],
                                     cropMask: [this.cropMask.visible, Math.min(this.cropMask.opacity,100)]}
                if (this.gCropDivRules) this.userSettings.divRUles = [this.gCropDivRules.visible, Math.min(this.gCropDivRules.opacity,100)];
-
                this.gCrop.opacity   = 100;
                this.gCrop.visible = true;
 
@@ -1510,41 +1586,58 @@ GoldenCrop.prototype.go = function() {
            }
        }
    }
+}
+
+GoldenCrop.prototype.showGuidelinesDialog = function () {
+    var menuDesc = {caption:this.loc.get('chCompMethod'),
+                   question:this.loc.get('chCompMethodQ'),
+                   okTxt:this.loc.get('ok'),
+                   cancelTxt:this.loc.get('cancel'),
+                   cbElements:[{key:'1', text:this.loc.get('goldenRule'), sel: this.conf.get('golden')},
+                               {key:'2', text:this.loc.get('ruleOfThirds'), sel: this.conf.get('roth')},
+                               {key:'3', text:this.loc.get('goldenDiagUp'), sel: this.conf.get('gdiagup')},
+                               {key:'4', text:this.loc.get('goldenDiagDown'), sel: this.conf.get('gdiagdown')},
+                               {key:'5', text:this.loc.get('goldenSpiralBL'), sel: this.conf.get('gspiralBL')},
+                               {key:'6', text:this.loc.get('goldenSpiralTL'), sel: this.conf.get('gspiralTL')},
+                               {key:'7', text:this.loc.get('goldenSpiralTR'), sel: this.conf.get('gspiralTR')},
+                               {key:'8', text:this.loc.get('goldenSpiralBR'), sel: this.conf.get('gspiralBR')}
+                              ],
+                   msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2,3]},
+                               {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[4,5,6,7]},
+                               {key:'a', text:this.loc.get('selectAll'), action: 'slctAll'},
+                               {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
+                              ]
+                  };
+    var dlg = new dialogMenuMChoice(menuDesc);
+    var res = dlg.show();
+    if (!res) return false;
+    this.conf.set('golden', res[0]);
+    this.conf.set('roth', res[1]);
+    this.conf.set('gdiagup', res[2]);
+    this.conf.set('gdiagdown', res[3]);
+    this.conf.set('gspiralBL', res[4]);
+    this.conf.set('gspiralTL', res[5]);
+    this.conf.set('gspiralTR', res[6]);
+    this.conf.set('gspiralBR', res[7]);
+
+    // Save parameters; crop could be canceled, but the line remains, so save lines settings now
+    this.conf.saveSettings();
+    return true;
+}
+
+/*    
+ * Logical heart of the script. Invoke each phase of script w/ or w/o suspending history.
+ */
+GoldenCrop.prototype.go = function() {
+   var docW = this.docW = parseInt(this.doc.width.as("px"));
+   var docH = this.docH = parseInt(this.doc.height.as("px"));
+
+   this.findCropToContinue();
    if (!this.skipGridCreation) {
        if (this.conf.isDisplayNormalDialog()) {
-           var menuDesc = {caption:this.loc.get('chCompMethod'),
-                           question:this.loc.get('chCompMethodQ'),
-                           okTxt:this.loc.get('ok'),
-                           cancelTxt:this.loc.get('cancel'),
-                           cbElements:[{key:'1', text:this.loc.get('goldenRule'), sel: this.conf.get('golden')},
-                                       {key:'2', text:this.loc.get('ruleOfThirds'), sel: this.conf.get('roth')},
-                                       {key:'3', text:this.loc.get('goldenDiagUp'), sel: this.conf.get('gdiagup')},
-                                       {key:'4', text:this.loc.get('goldenDiagDown'), sel: this.conf.get('gdiagdown')},
-                                       {key:'5', text:this.loc.get('goldenSpiralBL'), sel: this.conf.get('gspiralBL')},
-                                       {key:'6', text:this.loc.get('goldenSpiralTL'), sel: this.conf.get('gspiralTL')},
-                                       {key:'7', text:this.loc.get('goldenSpiralTR'), sel: this.conf.get('gspiralTR')},
-                                       {key:'8', text:this.loc.get('goldenSpiralBR'), sel: this.conf.get('gspiralBR')}
-                                      ],
-                           msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2,3]},
-                                       {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[4,5,6,7]},
-                                       {key:'a', text:this.loc.get('selectAll'), action: 'slctAll'},
-                                       {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
-                                      ]
-                          };
-            var dlg = new dialogMenuMChoice(menuDesc);
-            var res = dlg.show();
-            if (!res) return;
-            this.conf.set('golden', res[0]);
-            this.conf.set('roth', res[1]);
-            this.conf.set('gdiagup', res[2]);
-            this.conf.set('gdiagdown', res[3]);
-            this.conf.set('gspiralBL', res[4]);
-            this.conf.set('gspiralTL', res[5]);
-            this.conf.set('gspiralTR', res[6]);
-            this.conf.set('gspiralBR', res[7]);
-            
-            // Save parameters; crop could be canceled, but the line remains, so save lines settings now
-            this.conf.saveSettings();
+           if(!this.showGuidelinesDialog()) {
+               return false;
+           }
         }
 
         // TODO: When continuing this could be not consistent with actual state!
@@ -1579,89 +1672,10 @@ GoldenCrop.prototype.go = function() {
     var cropFunctions  = {SIMPLE:'simpleCrop()', MASK:'maskOutCrop()'};
     var revealVuncions = {EXTCANVAS:'doRevealPopBackround()'};
 
-    this.tmpFctn = function () {
-        do {
-            this.cropAccepted = Stdlib.userGoToFreeTransform(this.doc, this.gCrop);
-            if ( !this.cropAccepted ) break;
-            
-            this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.cropMask);
-            var cb = this.cropBounds;
 
-            // Detect angle
-            var threshold = 0.0001;
-            var angle = Stdlib.getVectorMaskAngle_cornerPointsOnly(false, this.doc, this.cropMask);
-            this.rotateCanvasA = ( Math.abs(angle)%90 > threshold )?-angle:false;
-            if ( this.rotateCanvasA ) {
-                this.popBackground = true; // default, could be changed in the following code
-                var anRad = ((this.rotateCanvasA)*Math.PI)/180;
-                var sinAb = Math.sin(Math.abs(anRad)), cosAb = Math.cos(Math.abs(anRad)),
-                    sinAn =Math.sin(anRad), cosAn = Math.cos(anRad);
-                var mid = {x:(cb[0]+cb[2])/2,y:(cb[1]+cb[3])/2};
-                //var dist = Math.sqrt(mid.x*mid.x+mid.y*mid.y);
-                var cbRot = cb.clone();
-                var newDocW = Math.ceil(docW * cosAb + docH * sinAb),
-                    newDocH = Math.ceil(docW * sinAb + docH * cosAb);
-                var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
-                var minXp, maxXp, minYp, maxYp; 
-                // translate to 0,0, rotate, and translate back
-                for (var i=6; i<10; ++i) {
-                    var x = cbRot[i].x - mid.x,
-                        y = cbRot[i].y - mid.y;
-                    var xrot = x * cosAn - y * sinAn,
-                        yrot = x * sinAn + y * cosAn;
-                    x = cbRot[i].x = xrot+mid.x+(newDocW-docW)/2;
-                    y = cbRot[i].y = yrot+mid.y+(newDocH-docH)/2;
-                    if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
-                    if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
-                    if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
-                    if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
-                }
-                this.afterRotate = {cb: [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp, cbRot],
-                                   docW: newDocW,
-                                   docH: newDocH};
-                // $.writeln('~~~~~~~~~~~~~');
-                // $.writeln('afterRotate:' +this.afterRotate);
-                //debugger;
-            }
-            
-            // Detect cropping mode
-            if ( cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
-                // cropping only inside picture frame
-                this.cropMethod = this.chooseCropMethod();
-                if ( this.rotateCanvasA && this.cropMethod == 'SIMPLE' ) {
-                    // cancel background pop even when there is a rotation
-                    this.popBackground = false;
-                }
-            } else {
-                if ( this.rotateCanvasA ) {
-                    cb = this.afterRotate.cb; // simulate rotation for further computing
-                    docW = this.afterRotate.docW; docH = this.afterRotate.docH;
-                }
-                if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) { // no image crop
-                    this.cropMethod = false;
-                    this.revealMethod = 'EXTCANVAS';
-                    this.popBackground = true;
-                } else {
-                   if ( this.rotateCanvasA && cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
-                       // rotation uncovers needed canvas, i.e. no further extension after roattion is needed
-                       this.revealMethod = 'false';
-                   } else {
-                       this.revealMethod = this.chooseRevealAction();
-                   }
-                    if ( !(this.revealMethod === 0) ) {
-                        if ( this.revealMethod == 'EXTCANVAS' ) {
-                            this.popBackground = true;
-                        }
-                        this.cropMethod = this.chooseCropMethod();
-                    }
-                }
-
-            }
-        } while ( this.revealMethod === 0 || this.cropMethod === 0)
-    };
 
     if ( this.ifSuspendHistory ) {
-        this.doc.suspendHistory(szAppName + this.loc.get('-resize'), 'this.tmpFctn()');
+        this.doc.suspendHistory(szAppName + this.loc.get('-resize'), 'this.interactiveCrop()');
         Stdlib.NOP();
     } else {
         this.tmpFctn();
@@ -1775,10 +1789,13 @@ if (isPS7()) {  // this does not work for eval-includes
   app = this; 
 }
 
-cTID_global_array = new Array();
-cTID = function(s) { return cTID_global_array[s] || cTID_global_array[s]=app.charIDToTypeID(s); };
-sTID_global_array = new Array();
-sTID = function(s) { return sTID_global_array[s] || sTID_global_array[s]=app.stringIDToTypeID(s); };
+function cTID(s) { 
+  return cTID[s] || cTID[s] = app.charIDToTypeID(s); 
+}; 
+
+function sTID(s) { 
+  return sTID[s] || sTID[s] = app.stringIDToTypeID(s); 
+};
 
 Stdlib = function Stdlib() {};
 
@@ -2022,7 +2039,6 @@ Stdlib.userGoToFreeTransform = function(doc, layer) {
           executeAction(cTID("Trnf"), retPostMoveDesc(), DialogModes.ALL);///ALL
         } catch (e) {
           state = false;
-          // // $.writeln('' + new Date() + '-------> ' + $.level);
           if (e.number != 8007) { // if not "User cancelled"
             throw e;
           }
@@ -2499,6 +2515,18 @@ Stdlib.createPathPoint = function(point, lHandle, rHandle) {
     o.kind = kind;
     return o;
 }
+
+Stdlib.moveToFront = function() {
+    var idmove = charIDToTypeID( "move" );
+        var desc67 = new ActionDescriptor();
+            var ref58 = new ActionReference();
+            ref58.putEnumerated( charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ) );
+        desc67.putReference( charIDToTypeID( "null" ), ref58 );
+            var ref59 = new ActionReference();
+            ref59.putEnumerated( charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Frnt" ) );
+        desc67.putReference( charIDToTypeID( "T   " ), ref59 );
+    executeAction( idmove, desc67, DialogModes.NO );
+}
 // ===END: stdlib.js====================================================================================================================
 
 Object.prototype.clone = function() {
@@ -2528,4 +2556,5 @@ try {
 } finally {
    app.preferences.rulerUnits = oldRulerUnit; // Restore ruler unit
 }
-// ---------------------------------------------------------------------
+
+'Golden Crop by SzopeN';
