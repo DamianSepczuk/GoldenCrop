@@ -60,6 +60,22 @@ a:hover {text-decoration: underline; color: #ff3 }
 	display: inline;
 }
 
+#newVersionAlert {
+	width: 80%;
+	border: 2px solid #ffd635;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 1em;
+	padding: 10px;
+	text-align: center;
+	background-color: #261d00;
+	font-size: 200%;
+}
+
+#newVersionAlert .wn {
+	font-size: 70%;
+}
+
 #footNote {
 	font-size: 50%;
 	color: #666;
@@ -72,6 +88,21 @@ div#faq h2 {
 }
 -->
 </style>
+<script type="text/javascript">
+<!--
+if (document.images)
+{
+  preload_image_object = new Image();
+  image_url = new Array();
+  image_url[0] = "http://goldencrop.sourceforge.net/img/download_btn_hover.png";
+  image_url[1] = "http://goldencrop.sourceforge.net/img/donate_btn_hover.png";
+
+  for(var i=0; i<image_url.length; ++i) {
+	 preload_image_object.src = image_url[i];
+  }
+}
+//-->
+</script>
 </head>
 <body>
 <div id="gclogo"><img alt="Golden Crop logo" src="img/GoldenCrop_logo.png"/></div>
@@ -82,8 +113,12 @@ Golden Crop<br /><span class="smaller">the ultimate Photoshop<sup>®</sup> cropp
 </div>
 <p>
 Welcome to the official site of the Golden Crop script! Please choose one of the golden buttons of immediate action or select the topic of your interest from the list below.</p>
+<div id="newVersionAlert">
+New version <strong>0.85 beta</strong> is available!<br />
+<a class="wn" href="#whatsNew">Whats new?</a>
+</div>
 <div id="goldenButtons">
-	<div id="downloadBtn"><a href="http://sourceforge.net/projects/goldencrop/files/"><img class="btnNormal" alt="Download button" src="img/download_btn.png" width="273" height="146" /><img class="btnHover" alt="Download button" src="img/download_btn_hover.png" width="273" height="146" /></a>
+	<div id="downloadBtn"><a href="https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.85%20beta/Golden%20Crop_v085beta.zip/download"><img class="btnNormal" alt="Download button" src="img/download_btn.png" width="273" height="146" /><img class="btnHover" alt="Download button" src="img/download_btn_hover.png" width="273" height="146" /></a>
 	</div>
 	<div id="donateBtn">
 		<a href="http://sourceforge.net/project/project_donations.php?group_id=270328"><img class="btnNormal" alt="Download button" src="img/donate_btn.png" width="274" height="146" /><img class="btnHover" alt="Download button" src="img/donate_btn_hover.png" width="274" height="146" /></a>
@@ -101,12 +136,13 @@ Welcome to the official site of the Golden Crop script! Please choose one of the
 	<li>Is it free?</li>
 	<li>How to run/install/uninstall the Golden Crop script?</li>
 	<li>What the Golden Crop script can do?</li>
+	<li>What's new? (changelog)</li>
 	<li>How can I configure the Golden Crop script?</li>
 	<li>How can I contact the author?</li>
 </ol>
 <div id="faq">
 <h2>Advertisement</h2>
-Why there is an advertisement? In order to allow the developper to buy himself a beer after countless hours he spend coding. At least once a year ;)
+Why there is an advertisement? In order to allow the developer to buy himself a beer after countless hours he spend coding. At least once a year ;)
 
 <script type="text/javascript"><!--
 google_ad_client = "pub-4337717722148975";
@@ -121,8 +157,9 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 
 <h2>What is the Golden Crop script?</h2>
-<p>Golden Crop script designed as an aid for cropping images according to the division rules. The script generates visual guidelines for the <b>Rule of Thirds</b>, <b>Golden Rule</b> and both <b>Diagonal Golden Rules</b>. Some people think, that aligning vital elements with this guidelines creates special visual impact, making the image more interesting. You can see this guidelines on a picture below:
-<img alt="guidelines" src="img/guidelines.png"/>
+<p>Golden Crop script designed as an aid for cropping images according to the division rules. The script generates visual guidelines for the <strong>Rule of Thirds</strong>, <strong>Golden Rule</strong> both <strong>Diagonal Golden Rules</strong> and four <strong>Golden Spirals</strong>. Some people think, that aligning vital elements with this guidelines creates special visual impact, making the image more interesting. You can see this guidelines on a picture below:
+<img style="margin: auto; display:block" alt="guidelines" src="img/guidelines.png"/><br />
+<img style="margin: auto; display:block" alt="Golden Spirals" src="img/goldenSpirals.png" />
 </p>
 <p>If you know nothing about dividing rules, feel free to google for some info, or use the following links:</p>
 <ul>
@@ -131,11 +168,11 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 	<li><a target="_blank" href="http://www.davebritzius.com/?p=115">What a Difference a Crop Makes - the Rule of Thirds</a></li>
 	<li><a target="_blank" href="http://www.photoshopessentials.com/photo-editing/rule-of-thirds.php">Add Visual Interest To Your Photos With The Rule Of Thirds</a></li>
 	<li><a target="_blank" href="http://www.sciencebuddies.org/science-fair-projects/project_ideas/Photo_p012.shtml">The Golden Rules of Photography</a></li>
-	<li>Find more: <form action="http://www.google.com/cse" id="cse-search-box" target="_blank">  <div>    <input type="hidden" name="cx" value="partner-pub-4337717722148975:i51cih-eyiw" />    <input type="hidden" name="ie" value="UTF-8" />    <input type="text" name="q" size="31" />    <input type="submit" name="sa" value="Szukaj" />  </div></form><script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en"></script> 
+	<li>Find more: <form action="http://www.google.com/cse" id="cse-search-box" target="_blank">  <div>    <input type="hidden" name="cx" value="partner-pub-4337717722148975:i51cih-eyiw" />    <input type="hidden" name="ie" value="UTF-8" />    <input type="text" name="q" size="31" />    <input type="submit" name="sa" value="Szukaj" />  </div></form><script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en"></script> </li>
 </ul>
 
 <h2>Who can use it?</h2>
-<p>Anyone who wants... and have Adobe® Photoshop® CS3 or Adobe® Photoshop® CS4 installed. This script should work both on Windows and Mac version of the software.</p>
+<p>Anyone who wants... and have Adobe® Photoshop® CS2, CS3 or CS4 installed. This script should work both on Windows and Mac version of the software. Adobe® Photoshop® versions earlier than CS2 will not be supported due to lack of scripting possibilities.</p>
 <h2>Is it free?</h2>
 <p>
 Yes, it is! Free as in beer and free as in speech :) This software uses GNU General Public License. But if you run a business or just like the script consider <a href="http://sourceforge.net/project/project_donations.php?group_id=270328">making a donation</a>.
@@ -148,7 +185,7 @@ Yes, it is! Free as in beer and free as in speech :) This software uses GNU Gene
 Installing the Golden Crop script is really simple. In fact, if you only want to give it a try, you do not have to install the script at all!</p>
 <h3>Running without installation</h3>
 <ol>
-	<li><a href="http://sourceforge.net/projects/goldencrop/files/">Download</a> the latest version of the script. Choose your favorite archive format. After downloading, unpack to some location, for example to Desktop. You can also simply "enter" into the archive and drag 'goldenCrop.jsx' file to desired location.</li>
+	<li><a href="http://sourceforge.net/projects/goldencrop/files/">Download</a> the latest version of the script. Choose your favourite archive format. After downloading, unpack to some location, for example to Desktop. You can also simply "enter" into the archive and drag 'goldenCrop.jsx' file to desired location.</li>
 	<li>In Photoshop® open the file you want to crop.</li>
 	<li>Double click on the script file. If you see a massage similar to the one presented on the image below, click Yes.<img src="img/runScriptAlert.png" alt="Script Alert - confirm run" />
 	</li>
@@ -157,7 +194,7 @@ Installing the Golden Crop script is really simple. In fact, if you only want to
 <h3>Installation</h3>
 <ol>
 <li>
-<a href="http://sourceforge.net/projects/goldencrop/files/">Download</a> the latest version of the script. Choose your favorite archive format. After downloading, unpack the file 'goldenCrop.jsx' to your local Photoshop® script folder. If you installed Photoshop® with default settings try one of this folders:
+<a href="http://sourceforge.net/projects/goldencrop/files/">Download</a> the latest version of the script. Choose your favourite archive format. After downloading, unpack the file 'goldenCrop.jsx' to your local Photoshop® script folder. If you installed Photoshop® with default settings try one of this folders:
 <ul>
 	<li>On 32-bit systems (most common): <pre>C:\Program Files\Adobe\Adobe Photoshop CS4\Presets\Scripts\</pre></li>
 	<li>64-bit version of Photoshop® on 64-bit system: <pre>C:\Program Files\Adobe\Adobe Photoshop CS4 (64 Bit)\Presets\Scripts\</pre></li>
@@ -167,7 +204,7 @@ You can also simply "enter" into the archive and drag the file to desired locati
 </li>
 <li>If Photoshop is running, restart it. Otherwise simply run it.</li>
 <li>In Photoshop® open the file you want to crop.</li>
-<li>Run the script choosing <strong>File>Scripts>goldenCrop</strong> from Photoshop® menu. Feel free to assign a keyboard shortcut through 'Edit>Keyboard Shortcuts' [Alt+Shift+Ctrl+K]! My preffered one is [Ctrl+Shift+Q].</li>
+<li>Run the script choosing <strong>File>Scripts>goldenCrop</strong> from Photoshop® menu. Feel free to assign a keyboard shortcut through 'Edit>Keyboard Shortcuts' [Alt+Shift+Ctrl+K]! My preferred one is [Ctrl+Shift+Q].</li>
 <li>Now the script is running in Photoshop®. See next question for instruction how to use it. ...or just play with it!</li>
 </ol>
 <h3>Uninstallation </h3>
@@ -211,6 +248,30 @@ The 'select cropping method' dialog is displayed. You can now select cropping me
 <p><strong>Method 3: 'cancel cropping'</strong> The image is not cropped. Neither opacity nor visibility of layers created by Golden Crop is changed. If you want to delete all layers created by the script, just hit [Del].</p>
 <p>After selecting one of above options, script performs its operations and the control returns to the user.
 </p>
+<h2><a name="whatsNew"></a>What's new? (changelog)</h2>
+<h3>Version 0.85 beta</h3>
+<ul>
+  <li>It is now <strong style="font-size:150%; color: red">CS2 compatible</strong>!</li>
+  <li>Ability to <strong style="font-size:150%; color: #ffd635">continue interrupted crop</strong> added. The script finds the 'Golden
+    Crop by SzopeN'  group and resumes crop in interactive mode
+	To force adding new 'Golden Crop by SzopeN' group, select the bottommost
+	layer (for example: Background)</li>
+  <li>Golden spirals added<br />
+      <img alt="Golden Spirals" src="img/goldenSpirals.png" />
+      </li>
+  <li>"Choose guidelines" dialog added. Now you can choose which guidelines
+    would be drawn. Last choice is remembered.<br />
+      <img alt="Composition guidelines" src="img/chooseGuidelines.png" />
+	</li>
+  <li>The script behaves like a plugin, now resides in File>Automate>Golden Crop (note: in CS2 it is still in File>Scripts menu)<br />
+      <img alt="New menu position" src="img/newMenuPos.png" /></li>
+  <li>It can be recorded in action (though it is still user-interactive,
+    only guidelines choice is saved)<br />
+      <img alt="Golden Crop registered in action" src="img/GCaction.png" /></li>
+  <li>[Alt],[key] problem fixed in dialog boxes</li>
+  <li>Minor fix in rotation, detecting portrait/landscape crop</li>
+  <li>Code cleanup and optimization</li>
+</ul>
 <h2>How can I configure the Golden Crop script?</h2>
 <p>The Golden Crop script is currently in beta stage. There is no easy way to configure the script. If you are a power user, try editing the script file with notepad and changing configuration values placed at the beginning of the file.</p>
 

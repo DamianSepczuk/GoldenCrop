@@ -60,6 +60,22 @@ a:hover {text-decoration: underline; color: #ff3 }
 	display: inline;
 }
 
+#newVersionAlert {
+	width: 80%;
+	border: 2px solid #ffd635;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 1em;
+	padding: 10px;
+	text-align: center;
+	background-color: #261d00;
+	font-size: 200%;
+}
+
+#newVersionAlert .wn {
+	font-size: 70%;
+}
+
 #footNote {
 	font-size: 50%;
 	color: #666;
@@ -72,6 +88,21 @@ div#faq h2 {
 }
 -->
 </style>
+<script type="text/javascript">
+<!--
+if (document.images)
+{
+  preload_image_object = new Image();
+  image_url = new Array();
+  image_url[0] = "http://goldencrop.sourceforge.net/img/download_btn_hover.png";
+  image_url[1] = "http://goldencrop.sourceforge.net/img/donate_btn_hover.png";
+
+  for(var i=0; i<image_url.length; ++i) {
+	 preload_image_object.src = image_url[i];
+  }
+}
+//-->
+</script>
 </head>
 <body>
 <div id="gclogo"><img alt="Golden Crop logo" src="img/GoldenCrop_logo.png"/></div>
@@ -82,8 +113,12 @@ Golden Crop<br /><span class="smaller">prawdopodobnie najlepsze narzędzie do ka
 </div>
 <p>
 Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przycisków albo wybierz interesujący Cię temat z listy poniżej.</p>
+<div id="newVersionAlert">
+Nowa wersja <strong>0.85 beta</strong> jest dostępna!<br />
+<a class="wn" href="#whatsNew">Co nowego?</a>
+</div>
 <div id="goldenButtons">
-	<div id="downloadBtn"><a href="http://sourceforge.net/projects/goldencrop/files/"><img class="btnNormal" alt="Download button" src="img/download_btn.png" width="273" height="146" /><img class="btnHover" alt="Download button" src="img/download_btn_hover.png" width="273" height="146" /></a>
+	<div id="downloadBtn"><a href="https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.85%20beta/Golden%20Crop_v085beta.zip/download"><img class="btnNormal" alt="Download button" src="img/download_btn.png" width="273" height="146" /><img class="btnHover" alt="Download button" src="img/download_btn_hover.png" width="273" height="146" /></a>
 	</div>
 	<div id="donateBtn">
 		<a href="http://sourceforge.net/project/project_donations.php?group_id=270328"><img class="btnNormal" alt="Download button" src="img/donate_btn.png" width="274" height="146" /><img class="btnHover" alt="Download button" src="img/donate_btn_hover.png" width="274" height="146" /></a>
@@ -101,12 +136,13 @@ Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przyc
 	<li>Czy to wolne oprogramowanie? Czy jest za darmo?</li>
 	<li>Jak uruchomić/zainstalować/odinstalować skrypt Golden Crop?</li>
 	<li>Co potrafi skrypt Golden Crop?</li>
+	<li>Co nowego? (wykaz zmian)</li>
 	<li>Jak mogę skonfigurować skrypt Golden Crop?</li>
 	<li>W jaki sposób mogę skontaktować się z autorem?</li>
 </ol>
 <div id="faq">
 <h2>Reklama</h2>
-Dlaczego wyśwtetlana jest reklama? Żeby autor skryptu, po wyczerpujących godzinach spędzonych na kodowani, miał na piwo... raz na pół roku ;)
+Dlaczego wyświetlana jest reklama? Żeby autor skryptu, po wyczerpujących godzinach spędzonych na kodowani, miał na piwo... raz na pół roku ;)
 
 <script type="text/javascript"><!--
 google_ad_client = "pub-4337717722148975";
@@ -121,8 +157,9 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 
 <h2>Czym jest skrypt Golden Crop?</h2>
-<p>Skrypt Golden Crop został zaprojektowany w celu ułatwienia kadrowania zdjęć zgodnie z regułami podziału. Generuje on wizualne prowadnice dla <b>Reguły Trzech</b>, <b>Złotej Reguły</b> i <b>Trójkątnej Złotej Reguły</b> w obu kierunkach. W czasach przed fotografią, w malarstwie utrwalił się kanon podziału płótna, dotyczący ważnych elementów obrazu przedstawionego. Pionierzy fotografii przenieśli te reguły do nowo powstającej sztuki. Umiejscowienie ważnych elementów zdjęcia zgodnie z regułami podziału może sprawić, że praca stanie się bardziej interesująca i przyciągająca uwagę. Na poniższym obrazku możesz zobaczyć jak wyglądają prowadnice generowane przez skrypt:
-<img alt="guidelines" src="img/guidelines.png"/>
+<p>Skrypt Golden Crop został zaprojektowany w celu ułatwienia kadrowania zdjęć zgodnie z regułami podziału. Generuje on wizualne prowadnice dla <strong>Reguły Trzech</strong>, <strong>Złotej Reguły</strong>, <strong>Trójkątnej Złotej Reguły</strong> w obu kierunkach oraz czterech <strong>Złotych Spiral</strong>. W czasach przed fotografią, w malarstwie utrwalił się kanon podziału płótna, dotyczący ważnych elementów obrazu przedstawionego. Pionierzy fotografii przenieśli te reguły do nowo powstającej sztuki. Umiejscowienie ważnych elementów zdjęcia zgodnie z regułami podziału może sprawić, że praca stanie się bardziej interesująca i przyciągająca uwagę. Na poniższym obrazku możesz zobaczyć jak wyglądają prowadnice generowane przez skrypt:
+<img style="margin: auto; display:block" alt="Prowadnice" src="img/guidelines.png"/><br />
+<img style="margin: auto; display:block" alt="Złote spirale" src="img/goldenSpirals.png" />
 </p>
 <p>Jeśli koncepcje reguł podziału są Ci obce, skorzystaj z wyszukiwarki internetowej albo zajrzyj pod jeden z linków:</p>
 <ul>
@@ -135,7 +172,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </ul>
 
 <h2>Kto może go używać?</h2>
-<p>Każdy kto chce... i ma zainstalowany program Adobe® Photoshop® CS3 lub Adobe® Photoshop® CS4. Skrypt powinien działać w systemie operacyjnym Microsoft Windows oraz Mac OS.</p>
+<p>Każdy kto chce... i ma zainstalowany program Adobe® Photoshop® w wersji CS2, CS3 lub CS4. Skrypt powinien działać w systemie operacyjnym Microsoft Windows oraz Mac OS. Wsparcie dla wersji poniżej CS2 nie jest przewidziane z powodu zaawansowanych możliwości obsługi skryptów.</p>
 <h2>Czy to wolne oprogramowanie? Czy jest za darmo?</h2>
 <p>
 Tak, jak najbardziej! Skrypt jest zarówno wolnym oprogramowaniem jak i darmowym dzięki zastosowaniu licencji GNU General Public License. Ale jeśli czerpiesz dochody korzystając z tego skryptu albo po prostu chcesz podziękować autorowi, rozważ proszę <a href="http://sourceforge.net/project/project_donations.php?group_id=270328">złożenie dotacji</a>.
@@ -208,6 +245,27 @@ Wyświetlane jest okno wyboru trybu przycinania. Możesz w nim wybrać metodę p
 <p><strong>Opcja 3: 'Wróć do przycinania'</strong> Wybranie tej opcji powoduje powrót do trybu kadrowania.</p>
 <p>Po wybraniu opcji 1 lub 2 wykonywane są odpowiednie akcje, po czym skrypt kończy swe działanie i zwraca pełną kontrolę użytkownikowi.
 </p>
+<h2><a name="whatsNew"></a>Co nowego? (wykaz zmian)</h2>
+<h3>Wersja 0.85 beta</h3>
+<ul>
+  <li>Działa w wersji <strong style="font-size:150%; color: red">CS2</strong>!</li>
+  <li>Możliwe jest <strong style="font-size:150%; color: #ffd635">kontynuowanie przerwanego kadrowania</strong>. Skrypt odnajduje grupę 'Golden
+    Crop by SzopeN' i wznawia kadrowanie w trybie interaktywnym.
+	Aby wymusić dodanie nowej grupy 'Golden Crop by SzopeN', przed uruchomieniem skryptu należy zaznaczyć warstwę znajdującą się na samym dole (na przykład warstwę Tła)</li>
+  <li>Dodano złote spirale<br />
+      <img alt="Golden Spirals" src="img/goldenSpirals.png" />
+      </li>
+  <li>Dodano dialog "Wybierz metodę kompozycji". Za jego pomocą można wybrać, które linie pomocnicze będą wyświetlane. Wybór jest zapamiętywany.<br />
+      <img alt="Composition guidelines" src="img/chooseGuidelines.png" />
+	</li>
+  <li>Skrypt zachowuj się jak plug-in. Dostępny jest z menu Plik>Automatyzuj>Golden Crop (uwaga: w wersji CS2 skrypt wciąż znajduje się w menu Plik>Skrypty)<br />
+      <img alt="New menu position" src="img/newMenuPos.png" /></li>
+  <li>Można nagrać wywołanie skryptu jako część akcji. Przy odtwarzaniu, skrypt dalej będzie działał w trybie interaktywnym. Jedynie wybór linii pomocniczych zostanie zapamiętany (nie pojawi się okno "Wybierz metodę kompozycji")<br />
+      <img alt="Golden Crop registered in action" src="img/GCaction.png" /></li>
+  <li>Rozwiązano problem z sekwencją klawiszy [Alt],[klawisz] w oknach dialogowych</li>
+  <li>Mała poprawka w sposobie obracania i wykrywania czy kadr jest pionowy czy poziomy</li>
+  <li>Zoptymalizowano i wyczyszczono kod</li>
+</ul>
 <h2>Jak mogę skonfigurować skrypt Golden Crop?</h2>
 <p>Skrypt Golden Crop jest aktualnie w fazie rozwoju <em>beta</em>. Dlatego nie istnieje jeszcze łatwa i wygodna metoda konfiguracji skryptu. Jeśli jesteś zaawansowanym użytkownikiem, możesz spróbować bezpośredniej edycji pliku skryptu za pomocą np. Notatnika. Najważniejsze zmienne konfiguracyjne (w tym sposób wyboru języka) znajdują się na początku pliku skryptu.</p>
 
