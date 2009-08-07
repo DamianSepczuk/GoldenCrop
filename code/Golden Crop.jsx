@@ -33,7 +33,7 @@ var debug = true;
 //        "pl"   for Polish
 //        "de"   for German
 //        "auto" to use Photoshop language
-var lang = "de";
+var lang = "auto";
 /************************
  *  END OF USER CONFIG  *
  ************************/
@@ -63,7 +63,11 @@ var lang = "de";
 
 Copyright 2009, GNU GPL License
 
-http://goldencrop.sourceforge.net</about>
+http://goldencrop.sourceforge.net
+Thanks to:
+ - Krystian for testing and fiving ideas
+ - Arkadius Bazior for German translation
+</about>
     <menu>automate</menu>
     <enableinfo>true</enableinfo>
     <eventid>c4f6f3f7-1b93-47af-bab5-287c581c5fa8</eventid>
@@ -2541,13 +2545,12 @@ Object.prototype.clone = function() {
 // ====================================================================================================================================
 
 app.bringToFront();
-if ( app.documents.length == 0 )
-{
-    var loc = localizator.getInstance();
-    throw new Error( loc.get('openB4Run') );
-}
-
 try {
+   if ( app.documents.length == 0 )
+   {
+	  var loc = localizator.getInstance();
+	  throw new Error( loc.get('openB4Run') );
+   }
    var oldRulerUnit = app.preferences.rulerUnits; // Save ruler unit
    app.preferences.rulerUnits = Units.PIXELS;     // Set it to PIXEL
    main();
