@@ -31,8 +31,9 @@ var debug = true;
 
 // set to "en"   for English, 
 //        "pl"   for Polish
+//        "de"   for German
 //        "auto" to use Photoshop language
-var lang = "auto";
+var lang = "de";
 /************************
  *  END OF USER CONFIG  *
  ************************/
@@ -122,43 +123,42 @@ localizator.prototype.initStrings = function() {
     var str = this.str = new Array();
 
     // Entries below were generated using localizator.loadCVSsaveAsJSCodeFile function
-    str['chCropMethod'] = {en:'Choose crop style', pl:'Wybierz styl przycinania'};
-    str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania'};
-    str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij płótno'};
-    str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskę kadrującą'};
-    str['cancel'] = {en:'Cancel', pl:'Anuluj'};
-    str['bgOnLayer'] = {en:'Background on layer', pl:'Tło na warstwie'};
-    str['bgFill'] = {en:'Background fill', pl:'Wypełnienie tła'};
-    str['doOutsCrop'] = {en:'Do outside cropping (YES) or crop without extending canvas (NO)?', pl:'Rozszerzyć półtno (TAK) czy przyciąć bez rozszerzania (NIE)?'};
-    str['-grid'] = {en:' - grid', pl:' - siatka'};
-    str['-resize'] = {en:' - resize', pl:' - przeskalowanie'};
-    str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie'};
-    str['-crop'] = {en:' - crop', pl:' - przycinanie'};
-    str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN'};
-    str['cropMask'] = {en:'Crop mask', pl:'Maska kadrująca'};
-    str['divRules'] = {en:'Dividing rules', pl:'Reguły podziału'};
-    str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%'};
-    str['goldenDiagUp'] = {en:'Golden diagonal upwards', pl:'Złota przekątna w górę'};
-    str['goldenDiagDown'] = {en:'Golden diagonal downwards', pl:'Złota przekątna w dół'};
-    str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.'};
-    str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.'};
-    str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?'};
-    str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz płótno'};
-    str['dontExtCanv'] = {en:'Crop without extension', pl:'Przytnij bez rozszerzania'};
-    str['retToCropping'] = {en:'Return to cropping', pl:'Wróć do kadrowania'};
-    str['chCompMethod'] = {en:'Composition method', pl:'Metoda kompozycji'};
-    str['chCompMethodQ'] = {en:'Choose composition guidelines', pl:'Wybierz metodę kompozycji'};
-    str['goldenRule'] = {en:'Golden Rule', pl:'Złoty podział'};
-    str['ruleOfThirds'] = {en:'Rule of Thirds', pl:'Reguła trzech'};
-    str['goldenSpiralBL'] = {en:'Golden Spiral bottom-left', pl:'Złota spirala lewo-dół'};
-    str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'Złota spirala lewo-góra'};
-    str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'Złota spirala prawo-góra'};
-    str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'Złota spirala prawo-dół'};
-    str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie'};
-    str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie'};
-    str['ok'] = {en:'OK', pl:'OK'};
-    str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale'};
-    str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały'};
+    str['chCropMethod'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil'};
+    str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil'};
+    str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij płótno', de:'Arbeitsfläche aufteilen'};
+    str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskę kadrującą', de:'Erstelle Schnittmaske'};
+    str['cancel'] = {en:'Cancel', pl:'Anuluj', de:'Abbrechen'};
+    str['bgOnLayer'] = {en:'Background on layer', pl:'Tło na warstwie', de:'Hintergrund auf Ebene'};
+    str['bgFill'] = {en:'Background fill', pl:'Wypełnienie tła', de:'Hintergrund füllen'};
+    str['-grid'] = {en:' - grid', pl:' - siatka', de:' - Rastern'};
+    str['-resize'] = {en:' - resize', pl:' - przeskalowanie', de:' - Skalieren'};
+    str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie', de:' - Einblenden'};
+    str['-crop'] = {en:' - crop', pl:' - przycinanie', de:' - Beschneiden'};
+    str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN', de:'Golden Crop by SzopeN'};
+    str['cropMask'] = {en:'Crop mask', pl:'Maska kadrująca', de:'Schnittmaske'};
+    str['divRules'] = {en:'Dividing rules', pl:'Reguły podziału', de:'Trennungsregeln'};
+    str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%'};
+    str['goldenDiagUp'] = {en:'Golden diagonal upwards', pl:'Złota przekątna w górę', de:'Goldene Diagonale aufwärts'};
+    str['goldenDiagDown'] = {en:'Golden diagonal downwards', pl:'Złota przekątna w dół', de:'Goldene Diagonale abwärts'};
+    str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.'};
+    str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen'};
+    str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?'};
+    str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz płótno', de:'Erweiterte Arbeitsfläche'};
+    str['dontExtCanv'] = {en:'Crop without extension', pl:'Przytnij bez rozszerzania', de:'Schnitt ohne Erweiterung'};
+    str['retToCropping'] = {en:'Return to cropping', pl:'Wróć do kadrowania', de:'Zurück zum Schneiden'};
+    str['chCompMethod'] = {en:'Composition method', pl:'Metoda kompozycji', de:'Kompositionsmethode'};
+    str['chCompMethodQ'] = {en:'Choose composition guidelines', pl:'Wybierz metodę kompozycji', de:'Auswahl der Kompositionslinien'};
+    str['goldenRule'] = {en:'Golden Rule', pl:'Złoty podział', de:'Goldene Regel'};
+    str['ruleOfThirds'] = {en:'Rule of Thirds', pl:'Reguła trzech', de:'Drittel-Regel'};
+    str['goldenSpiralBL'] = {en:'Golden Spiral bottom-left', pl:'Złota spirala lewo-dół', de:'Goldene Spirale unten links'};
+    str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'Złota spirala lewo-góra', de:'Goldene Spirale oben links'};
+    str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'Złota spirala prawo-góra', de:'Goldene Spirale oben rechts'};
+    str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'Złota spirala prawo-dół', de:'Goldene Spirale unten rechts'};
+    str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie', de:'Alles Auswählen'};
+    str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie', de:'Nichts Auswählen'};
+    str['ok'] = {en:'OK', pl:'OK', de:'OK'};
+    str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale', de:'Alle Goldenen Spiralen'};
+    str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln'};
 
 }
 
