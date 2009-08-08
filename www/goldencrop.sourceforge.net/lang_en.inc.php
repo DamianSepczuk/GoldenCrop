@@ -12,6 +12,12 @@ body { background-color: black;
 a { text-decoration: none; color: #ffc }
 a:hover {text-decoration: underline; color: #ff3 }
 #gclogo { text-align: center; }
+#rekWiez {
+    width:160px;
+	height:600px;
+	position: absolute;
+	left: 1040px;
+}
 #contents { 
 	background-color: #111;
 	border: 2px solid #333;
@@ -107,6 +113,17 @@ if (document.images)
 <body>
 <div id="gclogo"><img alt="Golden Crop logo" src="img/GoldenCrop_logo.png"/></div>
 <div id="contents">
+<div style="position: absolute;"><div id="rekWiez"><script type="text/javascript"><!--
+google_ad_client = "pub-4337717722148975";
+/* GC2_160x600, utworzono 09-08-07 */
+google_ad_slot = "5357393800";
+google_ad_width = 160;
+google_ad_height = 600;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div></div>
 <div id="langs"><?php printLanguageChangeBar(); ?></div>
 <div id="txttitle">
 Golden Crop<br /><span class="smaller">the ultimate Photoshop<sup>®</sup> cropping solution</span>
@@ -118,7 +135,7 @@ New version <strong>0.85 beta</strong> is available!<br />
 <a class="wn" href="#whatsNew">Whats new?</a>
 </div>
 <div id="goldenButtons">
-	<div id="downloadBtn"><a href="https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.85%20beta/Golden%20Crop_v085beta.zip/download"><img class="btnNormal" alt="Download button" src="img/download_btn.png" width="273" height="146" /><img class="btnHover" alt="Download button" src="img/download_btn_hover.png" width="273" height="146" /></a>
+	<div id="downloadBtn"><a href="/download.php"><img class="btnNormal" alt="Download button" src="img/download_btn.png" width="273" height="146" /><img class="btnHover" alt="Download button" src="img/download_btn_hover.png" width="273" height="146" /></a>
 	</div>
 	<div id="donateBtn">
 		<a href="http://sourceforge.net/project/project_donations.php?group_id=270328"><img class="btnNormal" alt="Download button" src="img/donate_btn.png" width="274" height="146" /><img class="btnHover" alt="Download button" src="img/donate_btn_hover.png" width="274" height="146" /></a>
@@ -138,6 +155,7 @@ New version <strong>0.85 beta</strong> is available!<br />
 	<li>What the Golden Crop script can do?</li>
 	<li>What's new? (changelog)</li>
 	<li>How can I configure the Golden Crop script?</li>
+	<li>Acknowledgements</li>
 	<li>How can I contact the author?</li>
 </ol>
 <div id="faq">
@@ -275,8 +293,17 @@ The 'select cropping method' dialog is displayed. You can now select cropping me
 <h2>How can I configure the Golden Crop script?</h2>
 <p>The Golden Crop script is currently in beta stage. There is no easy way to configure the script. If you are a power user, try editing the script file with notepad and changing configuration values placed at the beginning of the file.</p>
 
+<h2>Acknowledgements</h2>
+<p>On behalf of me and all users, I would like to deeply thank all people who contributed to the development of the Golden Crop script. Without their care and consideration, this script would likely not have matured. Especially big thanks goes to:
+</p>
+<ul>
+ <li><strong>Krystian Paździor</strong> for intense testing and brilliant ideas</li>
+ <li><strong>Arkadius Bazior</strong> for preparing German translation of the script</li>
+</ul>
+
+
 <h2>How can I contact the author?</h2>
-<p>Just drop me a line at goldencrop[at]o2[D()t]deleteme[d0t]pl</p>
+<p>Damian Sepczuk is the founder and the main developer of the Golden Crop project. If you want to contact the author, drop him a line at goldencrop[at]o2[D()t]deleteme[d0t]pl</p>
 </div>
 
 <p>

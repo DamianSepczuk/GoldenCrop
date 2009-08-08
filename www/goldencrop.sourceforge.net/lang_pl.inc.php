@@ -12,6 +12,12 @@ body { background-color: black;
 a { text-decoration: none; color: #ffc }
 a:hover {text-decoration: underline; color: #ff3 }
 #gclogo { text-align: center; }
+#rekWiez {
+    width:160px;
+	height:600px;
+	position: absolute;
+	left: 1040px;
+}
 #contents { 
 	background-color: #111;
 	border: 2px solid #333;
@@ -107,6 +113,17 @@ if (document.images)
 <body>
 <div id="gclogo"><img alt="Golden Crop logo" src="img/GoldenCrop_logo.png"/></div>
 <div id="contents">
+<div style="position: absolute;"><div id="rekWiez"><script type="text/javascript"><!--
+google_ad_client = "pub-4337717722148975";
+/* GC2_160x600, utworzono 09-08-07 */
+google_ad_slot = "5357393800";
+google_ad_width = 160;
+google_ad_height = 600;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div></div>
 <div id="langs"><?php printLanguageChangeBar(); ?></div>
 <div id="txttitle">
 Golden Crop<br /><span class="smaller">prawdopodobnie najlepsze narzędzie do kadrowania w programie Adobe<sup>®</sup> Photoshop<sup>®</sup></span>
@@ -118,7 +135,7 @@ Nowa wersja <strong>0.85 beta</strong> jest dostępna!<br />
 <a class="wn" href="#whatsNew">Co nowego?</a>
 </div>
 <div id="goldenButtons">
-	<div id="downloadBtn"><a href="https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.85%20beta/Golden%20Crop_v085beta.zip/download"><img class="btnNormal" alt="Download button" src="img/download_btn.png" width="273" height="146" /><img class="btnHover" alt="Download button" src="img/download_btn_hover.png" width="273" height="146" /></a>
+	<div id="downloadBtn"><a href="/download.php"><img class="btnNormal" alt="Download button" src="img/download_btn.png" width="273" height="146" /><img class="btnHover" alt="Download button" src="img/download_btn_hover.png" width="273" height="146" /></a>
 	</div>
 	<div id="donateBtn">
 		<a href="http://sourceforge.net/project/project_donations.php?group_id=270328"><img class="btnNormal" alt="Download button" src="img/donate_btn.png" width="274" height="146" /><img class="btnHover" alt="Download button" src="img/donate_btn_hover.png" width="274" height="146" /></a>
@@ -138,6 +155,7 @@ Nowa wersja <strong>0.85 beta</strong> jest dostępna!<br />
 	<li>Co potrafi skrypt Golden Crop?</li>
 	<li>Co nowego? (wykaz zmian)</li>
 	<li>Jak mogę skonfigurować skrypt Golden Crop?</li>
+	<li>Podziękowania</li>
 	<li>W jaki sposób mogę skontaktować się z autorem?</li>
 </ol>
 <div id="faq">
@@ -268,6 +286,15 @@ Wyświetlane jest okno wyboru trybu przycinania. Możesz w nim wybrać metodę p
 </ul>
 <h2>Jak mogę skonfigurować skrypt Golden Crop?</h2>
 <p>Skrypt Golden Crop jest aktualnie w fazie rozwoju <em>beta</em>. Dlatego nie istnieje jeszcze łatwa i wygodna metoda konfiguracji skryptu. Jeśli jesteś zaawansowanym użytkownikiem, możesz spróbować bezpośredniej edycji pliku skryptu za pomocą np. Notatnika. Najważniejsze zmienne konfiguracyjne (w tym sposób wyboru języka) znajdują się na początku pliku skryptu.</p>
+
+<h2>Podziękowania</h2>
+<p>Pomocną dłoń wyciągnęli:
+</p>
+<ul>
+ <li><strong>Krystian Paździor</strong> -- intensywne testowanie po nocach i błyskotliwe pomysły</li>
+ <li><strong>Arkadius Bazior</strong> -- opracowanie niemieckiej wersji językowej skryptu</li>
+</ul>
+<p>W imieniu swoim oraz wszystkich użytkowników skryptu <strong>dziękuję Wam za włożoną pracę i poświęcony czas</strong>! </p>
 
 <h2>W jaki sposób mogę skontaktować się z autorem?</h2>
 <p>Autorem i założycielem projektu jest Damian Sepczuk. Skrobnij maila na adres goldencrop[maŁpa]o2[kr0pka]USUŃ_TO_I_NASTĘPNĄ_KROPKĘ[kropka]pl</p>
