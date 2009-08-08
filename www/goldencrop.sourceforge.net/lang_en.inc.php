@@ -132,7 +132,7 @@ Golden Crop<br /><span class="smaller">the ultimate Photoshop<sup>®</sup> cropp
 Welcome to the official site of the Golden Crop script! Please choose one of the golden buttons of immediate action or select the topic of your interest from the list below.</p>
 <div id="newVersionAlert">
 New version <strong>0.85 beta</strong> is available!<br />
-<a class="wn" href="#whatsNew">Whats new?</a>
+<a class="wn" href="#whatsNew">What's new?</a>
 </div>
 <div id="goldenButtons">
 	<div id="downloadBtn"><a href="/download.php"><img class="btnNormal" alt="Download button" src="img/download_btn.png" width="273" height="146" /><img class="btnHover" alt="Download button" src="img/download_btn_hover.png" width="273" height="146" /></a>
@@ -203,7 +203,7 @@ Yes, it is! Free as in beer and free as in speech :) This software uses GNU Gene
 Installing the Golden Crop script is really simple. In fact, if you only want to give it a try, you do not have to install the script at all!</p>
 <h3>Running without installation</h3>
 <ol>
-	<li><a href="http://sourceforge.net/projects/goldencrop/files/">Download</a> the latest version of the script. Choose your favourite archive format. After downloading, unpack to some location, for example to Desktop. You can also simply "enter" into the archive and drag 'goldenCrop.jsx' file to desired location.</li>
+	<li><a href="http://sourceforge.net/projects/goldencrop/files/">Download</a> the latest version of the script. Choose your favorite archive format. After downloading, unpack to some location, for example to Desktop. You can also simply "enter" into the archive and drag 'goldenCrop.jsx' file to desired location.</li>
 	<li>In Photoshop® open the file you want to crop.</li>
 	<li>Double click on the script file. If you see a massage similar to the one presented on the image below, click Yes.<img src="img/runScriptAlert.png" alt="Script Alert - confirm run" />
 	</li>
@@ -212,7 +212,7 @@ Installing the Golden Crop script is really simple. In fact, if you only want to
 <h3>Installation</h3>
 <ol>
 <li>
-<a href="http://sourceforge.net/projects/goldencrop/files/">Download</a> the latest version of the script. Choose your favourite archive format. After downloading, unpack the file 'goldenCrop.jsx' to your local Photoshop® script folder. If you installed Photoshop® with default settings try one of this folders:
+<a href="http://sourceforge.net/projects/goldencrop/files/">Download</a> the latest version of the script. Choose your favorite archive format. After downloading, unpack the file 'goldenCrop.jsx' to your local Photoshop® script folder. If you installed Photoshop® with default settings try one of this folders:
 <ul>
 	<li>On 32-bit systems (most common): <pre>C:\Program Files\Adobe\Adobe Photoshop CS4\Presets\Scripts\</pre></li>
 	<li>64-bit version of Photoshop® on 64-bit system: <pre>C:\Program Files\Adobe\Adobe Photoshop CS4 (64 Bit)\Presets\Scripts\</pre></li>
