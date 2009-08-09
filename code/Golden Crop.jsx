@@ -464,9 +464,10 @@ dialogMenuMChoice.prototype.show = function () {
                for ( var i = 0; i<msElements.length; ++i ) {
                     var key = msElements[i].key.toLowerCase();
                     var btnName = 'op'+i;
-                    var caption = '[&'+msElements[i].key+'] ' + msElements[i].text;
+                    //var caption = '[&'+msElements[i].key+'] ' + msElements[i].text;
+                    var caption = msElements[i].text + ' [&'+msElements[i].key+']';
                     var capLen = caption.length;
-                    var e = add('button', undefined, caption + _repeatString(' ', (maxCaptionLen-capLen)*1.4), {name: btnName});
+                    var e = add('button', undefined, caption /*+ _repeatString(' ', (maxCaptionLen-capLen)*1.4)*/, {name: btnName});
                     e.elements = msElements[i].elements;
                    e.action = msElements[i].action;
                     e.onClick = function() {
@@ -2548,8 +2549,8 @@ app.bringToFront();
 try {
    if ( app.documents.length == 0 )
    {
-	  var loc = localizator.getInstance();
-	  throw new Error( loc.get('openB4Run') );
+      var loc = localizator.getInstance();
+      throw new Error( loc.get('openB4Run') );
    }
    var oldRulerUnit = app.preferences.rulerUnits; // Save ruler unit
    app.preferences.rulerUnits = Units.PIXELS;     // Set it to PIXEL
