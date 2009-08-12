@@ -1,4 +1,6 @@
-﻿/**
+﻿#target photoshop
+#strict on
+/**
 * @@@BUILDINFO@@@ Golden Crop.jsx 0.85beta Thu Aug 06 2009 17:11:43 GMT+0200
 */
 
@@ -78,8 +80,9 @@ Thanks to:
                /c4f6f3f7-1b93-47af-bab5-287c581c5fa8 [($$$/SzopeNSoft/GoldenCrop/AppName=Golden Crop) /noDirectParam <<
                  /golden [($$$/SzopeNSoft/GoldenCrop/golden=Golden Rule) /boolean]
                  /roth [($$$/SzopeNSoft/GoldenCrop/roth=Rule of Thirds) /boolean]
-                 /gdiagup [($$$/SzopeNSoft/GoldenCrop/gdiagup=Golden diagonal upwards) /boolean]
-                 /gdiagdown [($$$/SzopeNSoft/GoldenCrop/gdiagdown=Golden diagonal downwards) /boolean]
+                 /diagmethod [($$$/SzopeNSoft/GoldenCrop/diagmethod=Diagonal Method) /boolean]
+                 /gtrianup [($$$/SzopeNSoft/GoldenCrop/gtrianup=Golden triangle upwards) /boolean]
+                 /gtriandown [($$$/SzopeNSoft/GoldenCrop/gtriandown=Golden triangle downwards) /boolean]
                  /gspiralBL [($$$/SzopeNSoft/GoldenCrop/gspiralBL=Golden Spiral bottom-left) /boolean]
                  /gspiralTL [($$$/SzopeNSoft/GoldenCrop/gspiralTL=Golden Spiral top-left) /boolean]
                  /gspiralTR [($$$/SzopeNSoft/GoldenCrop/gspiralTR=Golden Spiral top-right) /boolean]
@@ -91,8 +94,6 @@ Thanks to:
 // END__HARVEST_EXCEPTION_ZSTRING
 */
 // Some global configuration
-#strict on
-#target photoshop
 
 $.localize = true;
 if ( lang != "auto" )
@@ -142,8 +143,9 @@ localizator.prototype.initStrings = function() {
     str['cropMask'] = {en:'Crop mask', pl:'Maska kadrująca', de:'Schnittmaske'};
     str['divRules'] = {en:'Dividing rules', pl:'Reguły podziału', de:'Trennungsregeln'};
     str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%'};
-    str['goldenDiagUp'] = {en:'Golden diagonal upwards', pl:'Złota przekątna w górę', de:'Goldene Diagonale aufwärts'};
-    str['goldenDiagDown'] = {en:'Golden diagonal downwards', pl:'Złota przekątna w dół', de:'Goldene Diagonale abwärts'};
+    str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldene Dreieck aufwärts'};
+    str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldene Dreieck abwärts'};
+	str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonale'};
     str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.'};
     str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen'};
     str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?'};
@@ -718,12 +720,12 @@ configurator.prototype.isRunFromAction = function() {
 }
 
 configurator.prototype.get = function(id) {
-    if (typeof this.params[id] == 'undefined') throw new Error('No such property: ' + id);
+    if (typeof this.params[id] == 'undefined') return/*throw new Error('No such property: ' + id)*/;
     return this.params[id].value;
 }
 
 configurator.prototype.set = function(id, val) {
-    if (typeof this.params[id] == 'undefined') throw new Error('No such property: ' + id);
+    if (typeof this.params[id] == 'undefined') return/*throw new Error('No such property: ' + id)*/;
     var tmp = this.params[id].value;
     this.params[id].value = val;
     return tmp;
@@ -828,8 +830,9 @@ function GoldenCrop( _doc ) {
 GoldenCrop.prototype.loadConfig = function() {
     var paramsID = {golden:{value:true, desc:'goldenRule'},
                     roth:{value:true, desc:'ruleOfThirds'},
-                    gdiagup:{value:true, desc:'goldenDiagUp'},
-                    gdiagdown:{value:true, desc:'goldenDiagDown'},
+                    diagmethod:{value:true, desc:'diagonalMethod'},
+                    gtrianup:{value:true, desc:'goldenTriangleUp'},
+                    gtriandown:{value:true, desc:'goldenTriangleDown'},
                     gspiralBL:{value:false, desc:'goldenSpiralBL'},
                     gspiralTL:{value:false, desc:'goldenSpiralTL'},
                     gspiralTR:{value:false, desc:'goldenSpiralTR'},
@@ -841,8 +844,9 @@ GoldenCrop.prototype.loadConfig = function() {
 
     this.guidelines = {golden: {create: this.conf.get('golden')}, // history relict, to be integrated with config and dialog
                          roth: {create: this.conf.get('roth')},
-                      gdiagup: {create: this.conf.get('gdiagup')},
-                    gdiagdown: {create: this.conf.get('gdiagdown')},
+                   diagmethod: {create: this.conf.get('diagmethod')},
+                     gtrianup: {create: this.conf.get('gtrianup')},
+                   gtriandown: {create: this.conf.get('gtriandown')},
                     gspiralBL: {create: this.conf.get('gspiralBL')},
                     gspiralTL: {create: this.conf.get('gspiralTL')},
                     gspiralTR: {create: this.conf.get('gspiralTR')},
@@ -876,37 +880,34 @@ GoldenCrop.prototype.loadConfig = function() {
  * and vertical lines thickness is min(800,600)*0.012=600*0.012=7.2px. Nothe that strip WILL be at least 1px
  * thick, even if computed thickness is lower than 1px.
  */
-GoldenCrop.prototype.makeStrips = function( position, stripSize, color ) {
-
-    var StripLayer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('stripAtPrc', Math.round(position*100)) );
-    Stdlib.removeLayerMask(); // no error if there is no (raster) mask
-    
-    Stdlib.addVectorMask(true); // true => 'hide all' mode
-    
+GoldenCrop.prototype.makeStrips = function( position, stripSizePrc, color ) {
     const oneMinusPosition = 1 - position;
     const docWidth  = this.docW,
           docHeight = this.docH;
-    const halfStripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSize) / 2;
-    
+    const stripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);
+	var paths = [];
     // add horizontal strips
     var tmp = docHeight*position;
-    Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, tmp-halfStripSize, 0, tmp+halfStripSize, docWidth);
+	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,docWidth,tmp,stripSize)));
     tmp = docHeight*oneMinusPosition;
-    Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, tmp-halfStripSize, 0, tmp+halfStripSize, docWidth);
+	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,docWidth,tmp,stripSize)));
 
     // add vertical strips
     tmp = docWidth*position;
-    Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, 0, tmp-halfStripSize, docHeight, tmp+halfStripSize);
+	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,docHeight,stripSize)));
     tmp = docWidth*oneMinusPosition;
-    Stdlib.rectPath( ShapeOperation.SHAPEADD, Units.PIXELS, 0, tmp-halfStripSize, docHeight, tmp+halfStripSize);
-    
+	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,docHeight,stripSize)));
+	var GSPath = this.doc.pathItems.add('', paths);	
+    var StripLayer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('stripAtPrc', Math.round(position*100)) );    
+	GSPath.remove();
+	
     return StripLayer;
 }
 
 
 
 /*
- * Create diagonal strip with perpendicular strips connecting it to other two corners
+ * Create diagonal strip with perpendicular strips connecting it to other two corners (Golden Triangle)
  *   [in] direction | true  - line going form bottom left to top right (upwards)
  *                    false - line going form top left to bottom right (downwards)
  *   [in] stripSize | from range (0.0, 1.0)  - how thick single strip should be
@@ -924,40 +925,35 @@ GoldenCrop.prototype.makeStrips = function( position, stripSize, color ) {
  * and vertical lines thickness is min(800,600)*0.012=600*0.012=7.2px. Nothe that strip WILL be at least 1px
  * thick, even if computed thickness is lower than 1px.
  */
-GoldenCrop.prototype.makeDiagStrip = function( direction, stripSize, color ) {
-    var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get( direction?'goldenDiagUp':'goldenDiagDown') );
-    Stdlib.removeLayerMask();
-    Stdlib.addVectorMask(true);    
-    
+GoldenCrop.prototype.makeGoldenTriangle = function( direction, stripSize, color ) {
     const docWidth  = this.docW,
           docHeight = this.docH;
-    const stripSizePx = Math.min(docWidth, docHeight) * stripSize;
+    const stripSizePx = Math.max(1,Math.min(docWidth, docHeight) * stripSize);
 
     var w = docWidth,
         h = docHeight;
-    
+    var paths = [];
     if (direction) {
         // left-2-right
-        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, 0, h, w, 0);
+		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, h, w, 0, stripSizePx)));
         var x = h/((w/h)+(h/w)),
             y = (w/h)*x;
-        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, 0, 0, x, y);
+		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, 0, x, y, stripSizePx)));
             x = (w*(w/h))/((w/h)+(h/w)),
             y = (-h/w)*x + h;
-        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, x, y, w, h);
+		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(x, y, w, h, stripSizePx)));
     } else {
         // right-2-left
-        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, 0, 0, w, h);
+		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, 0, w, h, stripSizePx)));
         var x = (h/((w/h)+(h/w))),
             y = (w/h)*x;
             x=w-x;
-        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, w, 0, x, y);
+		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(w, 0, x, y, stripSizePx)));
             x = (w*(w/h))/((w/h)+(h/w)),
             y = (-h/w)*x + h;
             x=w-x;
-        Stdlib.linePath(ShapeOperation.SHAPEADD, Units.PIXELS, stripSizePx, x, y, 0, h);
+		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(x, y, 0, h, stripSizePx)));
     }
-    
     /* 
         Normalize -- make sure that whole path is contained by image frame (esp. corner problem)    
         
@@ -966,26 +962,35 @@ GoldenCrop.prototype.makeDiagStrip = function( direction, stripSize, color ) {
               \|   \
                \    \
                |\
-        make it to be inside
-               ---.----- - part of diagonal line is outside of image frame
-               | / \
-               |/   \
-               |\    \
-
     */
-    /* // Get size from selection doesn't work (it's clipped to document boundaries)
-    Stdlib.loadVectorMaskSelection();
-    var layerW = (this.doc.selection.bounds[2]-this.doc.selection.bounds[0]).as("px"),
-        layerH = (this.doc.selection.bounds[3]-this.doc.selection.bounds[1]).as("px");
-    doc.selection.deselect();
-    layer.resize(docWidth/layerW*100, docHeight/layerH*100, AnchorPosition.MIDDLECENTER);
-    //*/
-    //* // Get size from layer bounds works fine
-    var layerW = (layer.bounds[2]-layer.bounds[0]).as("px"),
-        layerH = (layer.bounds[3]-layer.bounds[1]).as("px");
-    layer.resize(docWidth/layerW*100, docHeight/layerH*100, AnchorPosition.MIDDLECENTER);
-    //*/
+	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,docHeight/2,docWidth,docHeight/2,docHeight), true, ShapeOperation.SHAPEINTERSECT));    
+	var GSPath = this.doc.pathItems.add('', paths);
+	var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get( direction?'goldenTriangleUp':'goldenTriangleDown') );
+	GSPath.remove();
+
     return layer;
+}
+
+GoldenCrop.prototype.makeDiagonalMethod = function( stripSizePrc, color ) {
+	var paths = [];
+    const docWidth  = this.docW,
+          docHeight = this.docH;
+	const stripSizePx = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);;
+	var minWH = Math.min(docWidth,docHeight);
+
+	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,0,minWH,minWH,stripSizePx)));
+	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(docWidth-minWH,docHeight-minWH,docWidth,docHeight,stripSizePx)));
+	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,minWH,minWH,0,stripSizePx)));
+	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(docWidth-minWH,docHeight,docWidth,docHeight-minWH,stripSizePx)));
+	
+	// normalize, see: makeGoldenTriangle
+	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,docHeight/2,docWidth,docHeight/2,docHeight), true, ShapeOperation.SHAPEINTERSECT));
+	
+	var GSPath = this.doc.pathItems.add('', paths);
+	var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('diagonalMethod') );
+	GSPath.remove();
+
+	return layer;
 }
 
 GoldenCrop.prototype.createGoldenSpiralPath = function(numOfTurns, offset, w, h, startX, startY) {
@@ -1135,7 +1140,7 @@ executeAction( id11, desc5, DialogModes.NO );
 
 
 /*
- * Creates grid of dividing lines: one-third rule, golden rule, golden diagonal rule (both diagonals)
+ * Creates grid of dividing lines: one-third rule, golden rule, golden triangles (both diagonals), golden diagonal rule
  * [*] denotes optional parameter
  *   [in][*] basicStripSize | from range (0.0, 1.0) -- basic thickness of a strip (as part of shorter edge)
  *   [in][*] maskOpacity    | integer from range [0,100] -- opacity of mask (hiding outside of selected display frame)
@@ -1147,29 +1152,33 @@ executeAction( id11, desc5, DialogModes.NO );
  * colors -- default value: mask color: #000
  *                          golden rule: #000
  *                          one-third rule: #333
- *                          golden diagonal rule (up): #F00
- *                          golden diagonal rule (down): #00F
+ *                          golden triangle rule (up): #F00
+ *                          golden triangle rule (down): #00F
  * stripsThickScale -- default value: 
  *                          golden rule: 1
  *                          one-third rule: 1/2
- *                          golden diagonal rule (all): 1/3
+ *                          golden triangle rule (all): 1/3
  *                          golden spiral (all): 1/3
  * Returns: void
  * TODO: move parameters to user config
  */
 GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, stripsThickScale) {
     if (!basicStripSize) {
-        basicStripSize = .01; // 1%
+        basicStripSize = .005; // 1%
     }
     if (!maskOpacity) {
         maskOpacity = 70;
     }
     if (!colors) {
-        colors = [Stdlib.createRGBColor(0,0,0), Stdlib.createRGBColor(0,0,0), Stdlib.createRGBColor(0x33,0x33,0x33), Stdlib.createRGBColor(255,0,0), Stdlib.createRGBColor(0,0,255),
-                  Stdlib.createRGBColor(0,255,255), Stdlib.createRGBColor(255,0,255), Stdlib.createRGBColor(255,255,0), Stdlib.createRGBColor(128,128,255)];
+        colors = [Stdlib.createRGBColor(0,0,0),
+				 Stdlib.createRGBColor(0,0,0),
+				 Stdlib.createRGBColor(0x33,0x33,0x33),
+				 Stdlib.createRGBColor(0x11,0x11,0x11),
+				 Stdlib.createRGBColor(255,0,0), Stdlib.createRGBColor(0,0,255),
+                  Stdlib.createRGBColor(0,255,255), Stdlib.createRGBColor(255,0,255),Stdlib.createRGBColor(255,255,0), Stdlib.createRGBColor(128,128,255)];
     }
     if (!stripsThickScale) {
-        stripsThickScale = [1, 1/2, 1/3, 1/2];
+        stripsThickScale = [1, 1, 1, 1/2, 1/2];
     }
     
     this.gCrop = Stdlib.createLayerGroup(this.loc.get('GCbySzN'));
@@ -1202,40 +1211,46 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
             this.guidelines.roth.layer = this.makeStrips(third, basicStripSize*stripsThickScale[1], colors[2]);
             if (this.ifApplyFX) this.applyStripFX();
         }
+	
+        // ----- Diagonal method
+        if (this.guidelines.diagmethod.create) {
+			this.guidelines.diagmethod.layer = this.makeDiagonalMethod(basicStripSize*stripsThickScale[2], colors[3]);
+            if (this.ifApplyFX) this.applyStripFX();
+		}
+		
+        // ----- Golden triangle rule (up)
+        if (this.guidelines.gtrianup.create) {
+            this.guidelines.gtrianup.layer = this.makeGoldenTriangle(true, basicStripSize*stripsThickScale[3], colors[4]);
+            if (this.ifApplyFX) this.applyStripFX();
+        }
+    
+        // ----- Golden triangle rule (down)
+        if (this.guidelines.gtriandown.create) {
+            this.guidelines.gtriandown.layer = this.makeGoldenTriangle(false, basicStripSize*stripsThickScale[3], colors[5]);
+            if (this.ifApplyFX) this.applyStripFX();
+        }
 
-        // ----- Golden diagonal rule (up)
-        if (this.guidelines.gdiagup.create) {
-            this.guidelines.gdiagup.layer = this.makeDiagStrip(true, basicStripSize*stripsThickScale[2], colors[3]);
-            if (this.ifApplyFX) this.applyStripFX();
-        }
-    
-        // ----- Golden diagonal rule (down)
-        if (this.guidelines.gdiagdown.create) {
-            this.guidelines.gdiagdown.layer = this.makeDiagStrip(false, basicStripSize*stripsThickScale[2], colors[4]);
-            if (this.ifApplyFX) this.applyStripFX();
-        }
-    
         // ----- Golden spiral (starts at bottom-left)
         if (this.guidelines.gspiralBL.create) {
-            this.guidelines.gspiralBL.layer = this.makeGoldenSpiral(0, basicStripSize*stripsThickScale[3], colors[5]);
+            this.guidelines.gspiralBL.layer = this.makeGoldenSpiral(0, basicStripSize*stripsThickScale[4], colors[6]);
             if (this.ifApplyFX) this.applyStripFX();
         }
     
         // ----- Golden spiral (starts at bottom-left)
         if (this.guidelines.gspiralTL.create) {
-            this.guidelines.gspiralTL.layer = this.makeGoldenSpiral(1, basicStripSize*stripsThickScale[3], colors[6]);
+            this.guidelines.gspiralTL.layer = this.makeGoldenSpiral(1, basicStripSize*stripsThickScale[4], colors[7]);
             if (this.ifApplyFX) this.applyStripFX();
         }
             
         // ----- Golden spiral (starts at bottom-left)
         if (this.guidelines.gspiralTR.create) {
-            this.guidelines.gspiralTR.layer = this.makeGoldenSpiral(2, basicStripSize*stripsThickScale[3], colors[7]);
+            this.guidelines.gspiralTR.layer = this.makeGoldenSpiral(2, basicStripSize*stripsThickScale[4], colors[8]);
             if (this.ifApplyFX) this.applyStripFX();
         }
             
         // ----- Golden spiral (starts at bottom-left)
         if (this.guidelines.gspiralBR.create) {
-            this.guidelines.gspiralBR.layer = this.makeGoldenSpiral(3, basicStripSize*stripsThickScale[3], colors[8]);
+            this.guidelines.gspiralBR.layer = this.makeGoldenSpiral(3, basicStripSize*stripsThickScale[4], colors[9]);
             if (this.ifApplyFX) this.applyStripFX();
         }
     } else {
@@ -1600,14 +1615,15 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
                    cancelTxt:this.loc.get('cancel'),
                    cbElements:[{key:'1', text:this.loc.get('goldenRule'), sel: this.conf.get('golden')},
                                {key:'2', text:this.loc.get('ruleOfThirds'), sel: this.conf.get('roth')},
-                               {key:'3', text:this.loc.get('goldenDiagUp'), sel: this.conf.get('gdiagup')},
-                               {key:'4', text:this.loc.get('goldenDiagDown'), sel: this.conf.get('gdiagdown')},
-                               {key:'5', text:this.loc.get('goldenSpiralBL'), sel: this.conf.get('gspiralBL')},
-                               {key:'6', text:this.loc.get('goldenSpiralTL'), sel: this.conf.get('gspiralTL')},
-                               {key:'7', text:this.loc.get('goldenSpiralTR'), sel: this.conf.get('gspiralTR')},
-                               {key:'8', text:this.loc.get('goldenSpiralBR'), sel: this.conf.get('gspiralBR')}
+                               {key:'3', text:this.loc.get('diagonalMethod'), sel: this.conf.get('diagmethod')},
+                               {key:'4', text:this.loc.get('goldenTriangleUp'), sel: this.conf.get('gtrianup')},
+                               {key:'5', text:this.loc.get('goldenTriangleDown'), sel: this.conf.get('gtriandown')},
+                               {key:'6', text:this.loc.get('goldenSpiralBL'), sel: this.conf.get('gspiralBL')},
+                               {key:'7', text:this.loc.get('goldenSpiralTL'), sel: this.conf.get('gspiralTL')},
+                               {key:'8', text:this.loc.get('goldenSpiralTR'), sel: this.conf.get('gspiralTR')},
+                               {key:'9', text:this.loc.get('goldenSpiralBR'), sel: this.conf.get('gspiralBR')}
                               ],
-                   msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2,3]},
+                   msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2]},
                                {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[4,5,6,7]},
                                {key:'a', text:this.loc.get('selectAll'), action: 'slctAll'},
                                {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
@@ -1618,12 +1634,13 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
     if (!res) return false;
     this.conf.set('golden', res[0]);
     this.conf.set('roth', res[1]);
-    this.conf.set('gdiagup', res[2]);
-    this.conf.set('gdiagdown', res[3]);
-    this.conf.set('gspiralBL', res[4]);
-    this.conf.set('gspiralTL', res[5]);
-    this.conf.set('gspiralTR', res[6]);
-    this.conf.set('gspiralBR', res[7]);
+	this.conf.set('diagmethod', res[2]);
+    this.conf.set('gtrianup', res[3]);
+    this.conf.set('gtriandown', res[4]);
+    this.conf.set('gspiralBL', res[5]);
+    this.conf.set('gspiralTL', res[6]);
+    this.conf.set('gspiralTR', res[7]);
+    this.conf.set('gspiralBR', res[8]);
 
     // Save parameters; crop could be canceled, but the line remains, so save lines settings now
     this.conf.saveSettings();
@@ -1649,8 +1666,9 @@ GoldenCrop.prototype.go = function() {
         // ^[\t ]+([^:]+)(...........) / this.guidelines.\1.create =
         this.guidelines.golden.create = this.conf.get('golden'); // history relict, to be integrated with config and dialog
         this.guidelines.roth.create = this.conf.get('roth');
-        this.guidelines.gdiagup.create = this.conf.get('gdiagup');
-        this.guidelines.gdiagdown.create = this.conf.get('gdiagdown');
+        this.guidelines.diagmethod.create = this.conf.get('diagmethod');
+        this.guidelines.gtrianup.create = this.conf.get('gtrianup');
+        this.guidelines.gtriandown.create = this.conf.get('gtriandown');
         this.guidelines.gspiralBL.create = this.conf.get('gspiralBL');
         this.guidelines.gspiralTL.create = this.conf.get('gspiralTL');
         this.guidelines.gspiralTR.create = this.conf.get('gspiralTR');
@@ -2503,6 +2521,39 @@ Stdlib.flipPath = function(h, v) {
         if (h) desc108.putUnitDouble( cTID( "Wdth" ), cTID( "#Prc" ), -100.000000 );
         if (v) desc108.putUnitDouble( cTID( "Hght" ), cTID( "#Prc" ), -100.000000 );
     executeAction( idTrnf, desc108, DialogModes.NO );
+}
+
+Stdlib.createSubPath = function( pointList, closed, mode ) {
+	if (!closed) closed = true;
+	if (!mode) mode = ShapeOperation.SHAPEADD;
+	var spi = new SubPathInfo();
+	spi.closed = closed;
+	spi.operation = mode;
+	spi.entireSubPath = pointList;
+	return spi;
+}
+
+Stdlib.linePathAPI = function(x1, y1, x2, y2, thickness) {
+	// <=CS4; patth points coordinates must be given in current DIP (!), for example
+	//        72dpi: 1 path 'pixel' => 1 image pixel
+	//       300pdi: 1 path 'pixel' => 300/72 image pixels
+	var doc = app.activeDocument;
+	var DPIFix = 72/doc.resolution; 
+	x1 *= DPIFix; y1 *= DPIFix; x2 *= DPIFix; y2 *= DPIFix; thickness *= DPIFix;
+	
+	var halfSize = thickness/2;
+	var v = [x2-x1, y2-y1];
+	var v_len = Math.sqrt(v[0]*v[0]+v[1]*v[1]);
+	var an = Math.acos(v[1]/v_len);
+	if (x1>x2) an=-an;
+	
+	v=[halfSize*Math.cos(an),halfSize*Math.sin(an)];
+	// Create initial point
+	var points = [Stdlib.createPathPoint([x1+v[0],y1-v[1]]),
+				  Stdlib.createPathPoint([x1-v[0],y1+v[1]]),
+				  Stdlib.createPathPoint([x2-v[0],y2+v[1]]),
+				  Stdlib.createPathPoint([x2+v[0],y2-v[1]])];
+	return points;
 }
 
 Stdlib.createPathPoint = function(point, lHandle, rHandle) {
