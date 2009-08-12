@@ -1,8 +1,4 @@
 <?php
-// Redirect to the correct location.
-$availLangs = array('en','pl');
-$goToLang = 'en'; // def.
-
 /*
 Script Name: Full Operating system language detection
 Author: Harald Hope, Website: http://techpatterns.com/
@@ -24,25 +20,6 @@ Coding conventions:
 http://cvs.sourceforge.net/viewcvs.py/phpbb/phpBB2/docs/codingstandards.htm?rev=1.3
 */
 
-/*
-Changes:
-0.3.6 - added possible $feature values to comment header section
-*/
-
-/******************************************
-Script is currently set to accept 2 parameters, triggered by $feature value.
-for example, get_languages( 'data' ):
-1. 'header' - sets header values, for redirects etc. No data is returned
-2. 'data' - for language data handling, ie for stats, etc.
-	Returns an array of the following 4 item array for each language the os supports:
-	1. full language abbreviation, like en-ca
-	2. primary language, like en
-	3. full language string, like English (Canada)
-	4. primary language string, like English
-*******************************************/
-
-// choice of redirection header or just getting language data
-// to call this you only need to use the $feature parameter
 function get_languages( )
 {
 	// get the languages
@@ -57,11 +34,8 @@ function get_languages( )
 	if ( isset( $_SERVER["HTTP_ACCEPT_LANGUAGE"] ) )
 	{
 		$languages = strtolower( $_SERVER["HTTP_ACCEPT_LANGUAGE"] );
-		// $languages = ' fr-ch;q=0.3, da, en-us;q=0.8, en;q=0.5, fr;q=0.3';
-		// need to remove spaces from strings to avoid error
 		$languages = str_replace( ' ', '', $languages );
 		$languages = explode( ",", $languages );
-		//$languages = explode( ",", $test);// this is for testing purposes only
 
 		foreach ( $languages as $language_list )
 		{
@@ -259,15 +233,4 @@ function languages()
 
 	return $a_languages;
 }
-
-function saveLanguageChoice($lang) {
-}
-
-function printLanguageChangeBar() {
-	global $availLangs;
-	foreach ( $availLangs as $lang ) {
-		echo '<a style="margin-right: 7px" href="/?lang='.$lang.'"><img height="12" src="img/flags/'.$lang.'.png" alt="Language '.$lang.'"/></a>';
-	}
-}
- 
 ?>

@@ -25,7 +25,9 @@ a:hover {
 	background-color: #111;
 	border: 2px solid #333;
 	padding: 1em;
-	width: 880px;
+	width: 875px;
+	height: auto;
+	overflow: auto;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -34,14 +36,15 @@ a:hover {
 	position: absolute;
 	width: 60px;
 	height: 60px;
-	left: 820px; /* #contents.width - #rssBtn.width */
+	left: 825px; /* #contents.width - #rssBtn.width */
 }
 
 #rekPrawo {
     width:160px;
 	height:700px;
 	position: absolute;
-	left: 910px; /* #contents.width + 30px */
+	left: 905px; /* #contents.width + 30px */
+	/*background-color: yellow;*/
 }
 
 #rekOdno {
@@ -50,6 +53,7 @@ a:hover {
 	margin-bottom: 10px;
 	overflow: hidden;
 	padding: 0;
+	/*background-color: green;*/
 }
 
 #rekWiez {
@@ -57,6 +61,16 @@ a:hover {
 	height:600px;
 	overflow: hidden;
 	padding: 0;
+	/*background-color: red;*/
+}
+
+.dlugRekl {
+}
+
+.bigRectRekl {
+}
+
+.reklNaGlownej {
 }
 
 #langBar {
@@ -65,7 +79,7 @@ a:hover {
 
 #menuBar {
 	width: 100%;
-	margin: 1em 0 1em 0em;
+	margin: 1em 0 0.2em 0em;
 	padding: 0;
 	background-color: #111;
 	border-top: 1px solid #333;
@@ -73,13 +87,23 @@ a:hover {
 	text-align: center;
 }
 
-#contents #txttitle {
-	font-size: 350%;
+#menuBar img {
+	margin-bottom: -4px;
+}
+
+#menuBar a:hover {
+	text-decoration: none;
+}
+
+#digpanel {
+	margin-bottom: 1em;
+	border: 1px dashed #261d00;
+	vertical-align: middle;
 	text-align: center;
 }
 
-#contents #txttitle .smaller {
-	font-size: 50%;
+#digpanel_in {
+	margin: auto;
 }
 
 #goldenButtons {
@@ -113,6 +137,7 @@ a:hover {
 }
 
 #newVersionAlert {
+	/* display: none; */
 	width: 80%;
 	border: 2px solid #ffd635;
 	margin-left: auto;
@@ -124,6 +149,51 @@ a:hover {
 	font-size: 200%;
 }
 
+.modTitle {
+	text-align: center;
+	font-size: 200%;
+	font-variant: small-caps;
+}
+
+#features {
+	padding: 0;
+}
+#features .small img {
+	margin-right: 3px;
+	width: 172px;
+	height: 59px;
+}
+
+#features .big {
+	margin: auto;
+	width: 700px;
+	margin-bottom: 2em;
+}
+
+#features .big img {
+	margin-right: 3px;
+	width: 347px;
+	height: 59px;
+}
+
+
+#inTextRekl {
+	/*background-color: lime;*/
+	margin: auto;
+	text-align: center;
+	width: 336px;
+	height: 280;
+}
+
+#contents #txttitle {
+	font-size: 350%;
+	text-align: center;
+}
+
+#contents #txttitle .smaller {
+	font-size: 50%;
+}
+
 #newVersionAlert .wn {
 	font-size: 70%;
 }
@@ -131,22 +201,27 @@ a:hover {
 #footNote {
 	font-size: 50%;
 	color: #666;
+	width: 875px;
+	margin: auto;
 }
 
-div#faq h2 {
+h1 {
 	background-color: #333;
 	padding: 2px;
 	border: 1px solid #555;
+	font-size: 150%;
 }
 
-#digpanel {
-	margin-top: 1em;
-	padding: 10px;
-	border: 4px dashed #261d00;
-	vertical-align: middle;
-	text-align: center;
+h2 {
+	background-color: #444;
+	padding: 2px;
+	border: 1px solid #555;
+	font-size: 130%;
 }
 
-#digpanel_in {
-	margin: auto;
+div#faq h1 {
+	background-color: #333;
+	padding: 2px;
+	border: 1px solid #555;
+	font-size: 150%;
 }

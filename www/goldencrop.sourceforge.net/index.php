@@ -1,23 +1,46 @@
 <?php
-include('lang.inc.php');
+require_once('conf.inc.php');
+require_once('functions.inc.php');
 
-
-if (isset($_GET['lang'])) {
-   if ( in_array( $_GET['lang'], $availLangs ) ) {
-	  $goToLang = $_GET['lang'];
-	  setcookie('GC_LANG',$goToLang, time()+60*60*24*30*12);
-   }
-} else if ( isset($_COOKIE['GC_LANG'])) {
-   if ( in_array( $_COOKIE['GC_LANG'], $availLangs ) ) {
-	  $goToLang = $_COOKIE['GC_LANG'];
-   }
+// Use default if nothing entered
+$module = (!isset($_GET['mod']) || $_GET['mod']=='')?$availModules[0]:$_GET['mod'];
+$saveInCookie = false;
+if ( !isset($_GET['lang']) || $_GET['lang']=='' ) {
+	$language = getLang();
 } else {
-	foreach ( get_languages() as $lang ) {
-	   if ( in_array( $lang[1], $availLangs ) ) {
-		  $goToLang = $lang[1];
-		  break;
-	   }
-	}
+	$language = $_GET['lang'];
+	$saveInCookie = true;
 }
-include('lang_'.$goToLang.'.inc.php');
+
+// ...if incorrect value entered -- redirect!
+$redir = false;
+if (!in_array($module, $availModules)) {
+	$module = $availModules[0];
+	$redir = true;
+}
+
+if (!in_array($language, $availLangs)) {
+	$language = getLang();
+	$redir = true;
+}
+
+if ($redir) {
+	$loc = 'Location: '.$baseURL.$language.'/';
+	if ( $module != $availModules[0] ) {
+		$loc .= $module.'.html';
+	}
+	header( $loc );
+	die();
+}
+
+if ( $saveInCookie ) {
+	saveLanguageChoice($language);
+}
+
+require_once('ad.inc.php');
+// Now we have correct data in $module and $language,
+// and def lang is stored in cookie if needed
+include('mod/'.$language.'/_header.inc.php');
+include('mod/'.$language.'/'.$module.'.inc.php');
+include('mod/'.$language.'/_footer.inc.php');
 ?>

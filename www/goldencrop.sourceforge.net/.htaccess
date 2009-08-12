@@ -1,0 +1,27 @@
+RewriteEngine on
+RewriteBase /
+
+# with lang and mod
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule ^([^/]+)\/(.*)\.(html|php|htm)$ index.php?mod=$2&lang=$1 [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule ^([^/]+)\/(.*)$ index.php?mod=$2&lang=$1 [L]
+
+
+# only lang
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule ^([^/]+)\/$ index.php?lang=$1 [L]
+
+# no lang
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule ^(.*)\.(html|php|htm)$ index.php?mod=$1 [L]
+
+# all other non-existant queries
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule ^(.*)$ index.php?mod=$1&lang=$1 [L]
