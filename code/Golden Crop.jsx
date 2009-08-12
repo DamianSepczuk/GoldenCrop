@@ -145,7 +145,7 @@ localizator.prototype.initStrings = function() {
     str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%'};
     str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldene Dreieck aufwärts'};
     str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldene Dreieck abwärts'};
-	str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonale'};
+    str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonale'};
     str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.'};
     str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen'};
     str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?'};
@@ -885,22 +885,22 @@ GoldenCrop.prototype.makeStrips = function( position, stripSizePrc, color ) {
     const docWidth  = this.docW,
           docHeight = this.docH;
     const stripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);
-	var paths = [];
+    var paths = [];
     // add horizontal strips
     var tmp = docHeight*position;
-	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,docWidth,tmp,stripSize)));
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,docWidth,tmp,stripSize)));
     tmp = docHeight*oneMinusPosition;
-	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,docWidth,tmp,stripSize)));
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,docWidth,tmp,stripSize)));
 
     // add vertical strips
     tmp = docWidth*position;
-	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,docHeight,stripSize)));
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,docHeight,stripSize)));
     tmp = docWidth*oneMinusPosition;
-	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,docHeight,stripSize)));
-	var GSPath = this.doc.pathItems.add('', paths);	
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,docHeight,stripSize)));
+    var GSPath = this.doc.pathItems.add('', paths);
     var StripLayer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('stripAtPrc', Math.round(position*100)) );    
-	GSPath.remove();
-	
+    GSPath.remove();
+    
     return StripLayer;
 }
 
@@ -935,24 +935,24 @@ GoldenCrop.prototype.makeGoldenTriangle = function( direction, stripSize, color 
     var paths = [];
     if (direction) {
         // left-2-right
-		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, h, w, 0, stripSizePx)));
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, h, w, 0, stripSizePx)));
         var x = h/((w/h)+(h/w)),
             y = (w/h)*x;
-		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, 0, x, y, stripSizePx)));
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, 0, x, y, stripSizePx)));
             x = (w*(w/h))/((w/h)+(h/w)),
             y = (-h/w)*x + h;
-		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(x, y, w, h, stripSizePx)));
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(x, y, w, h, stripSizePx)));
     } else {
         // right-2-left
-		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, 0, w, h, stripSizePx)));
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, 0, w, h, stripSizePx)));
         var x = (h/((w/h)+(h/w))),
             y = (w/h)*x;
             x=w-x;
-		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(w, 0, x, y, stripSizePx)));
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(w, 0, x, y, stripSizePx)));
             x = (w*(w/h))/((w/h)+(h/w)),
             y = (-h/w)*x + h;
             x=w-x;
-		paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(x, y, 0, h, stripSizePx)));
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(x, y, 0, h, stripSizePx)));
     }
     /* 
         Normalize -- make sure that whole path is contained by image frame (esp. corner problem)    
@@ -963,34 +963,34 @@ GoldenCrop.prototype.makeGoldenTriangle = function( direction, stripSize, color 
                \    \
                |\
     */
-	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,docHeight/2,docWidth,docHeight/2,docHeight), true, ShapeOperation.SHAPEINTERSECT));    
-	var GSPath = this.doc.pathItems.add('', paths);
-	var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get( direction?'goldenTriangleUp':'goldenTriangleDown') );
-	GSPath.remove();
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,docHeight/2,docWidth,docHeight/2,docHeight), true, ShapeOperation.SHAPEINTERSECT));    
+    var GSPath = this.doc.pathItems.add('', paths);
+    var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get( direction?'goldenTriangleUp':'goldenTriangleDown') );
+    GSPath.remove();
 
     return layer;
 }
 
 GoldenCrop.prototype.makeDiagonalMethod = function( stripSizePrc, color ) {
-	var paths = [];
+    var paths = [];
     const docWidth  = this.docW,
           docHeight = this.docH;
-	const stripSizePx = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);;
-	var minWH = Math.min(docWidth,docHeight);
+    const stripSizePx = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);;
+    var minWH = Math.min(docWidth,docHeight);
 
-	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,0,minWH,minWH,stripSizePx)));
-	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(docWidth-minWH,docHeight-minWH,docWidth,docHeight,stripSizePx)));
-	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,minWH,minWH,0,stripSizePx)));
-	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(docWidth-minWH,docHeight,docWidth,docHeight-minWH,stripSizePx)));
-	
-	// normalize, see: makeGoldenTriangle
-	paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,docHeight/2,docWidth,docHeight/2,docHeight), true, ShapeOperation.SHAPEINTERSECT));
-	
-	var GSPath = this.doc.pathItems.add('', paths);
-	var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('diagonalMethod') );
-	GSPath.remove();
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,0,minWH,minWH,stripSizePx)));
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(docWidth-minWH,docHeight-minWH,docWidth,docHeight,stripSizePx)));
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,minWH,minWH,0,stripSizePx)));
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(docWidth-minWH,docHeight,docWidth,docHeight-minWH,stripSizePx)));
+    
+    // normalize, see: makeGoldenTriangle
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,docHeight/2,docWidth,docHeight/2,docHeight), true, ShapeOperation.SHAPEINTERSECT));
+    
+    var GSPath = this.doc.pathItems.add('', paths);
+    var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('diagonalMethod') );
+    GSPath.remove();
 
-	return layer;
+    return layer;
 }
 
 GoldenCrop.prototype.createGoldenSpiralPath = function(numOfTurns, offset, w, h, startX, startY) {
@@ -1171,10 +1171,10 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
     }
     if (!colors) {
         colors = [Stdlib.createRGBColor(0,0,0),
-				 Stdlib.createRGBColor(0,0,0),
-				 Stdlib.createRGBColor(0x33,0x33,0x33),
-				 Stdlib.createRGBColor(0x11,0x11,0x11),
-				 Stdlib.createRGBColor(255,0,0), Stdlib.createRGBColor(0,0,255),
+                 Stdlib.createRGBColor(0,0,0),
+                 Stdlib.createRGBColor(0x33,0x33,0x33),
+                 Stdlib.createRGBColor(0x11,0x11,0x11),
+                 Stdlib.createRGBColor(255,0,0), Stdlib.createRGBColor(0,0,255),
                   Stdlib.createRGBColor(0,255,255), Stdlib.createRGBColor(255,0,255),Stdlib.createRGBColor(255,255,0), Stdlib.createRGBColor(128,128,255)];
     }
     if (!stripsThickScale) {
@@ -1211,13 +1211,13 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
             this.guidelines.roth.layer = this.makeStrips(third, basicStripSize*stripsThickScale[1], colors[2]);
             if (this.ifApplyFX) this.applyStripFX();
         }
-	
+    
         // ----- Diagonal method
         if (this.guidelines.diagmethod.create) {
-			this.guidelines.diagmethod.layer = this.makeDiagonalMethod(basicStripSize*stripsThickScale[2], colors[3]);
+            this.guidelines.diagmethod.layer = this.makeDiagonalMethod(basicStripSize*stripsThickScale[2], colors[3]);
             if (this.ifApplyFX) this.applyStripFX();
-		}
-		
+        }
+        
         // ----- Golden triangle rule (up)
         if (this.guidelines.gtrianup.create) {
             this.guidelines.gtrianup.layer = this.makeGoldenTriangle(true, basicStripSize*stripsThickScale[3], colors[4]);
@@ -1634,7 +1634,7 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
     if (!res) return false;
     this.conf.set('golden', res[0]);
     this.conf.set('roth', res[1]);
-	this.conf.set('diagmethod', res[2]);
+    this.conf.set('diagmethod', res[2]);
     this.conf.set('gtrianup', res[3]);
     this.conf.set('gtriandown', res[4]);
     this.conf.set('gspiralBL', res[5]);
@@ -2524,36 +2524,36 @@ Stdlib.flipPath = function(h, v) {
 }
 
 Stdlib.createSubPath = function( pointList, closed, mode ) {
-	if (!closed) closed = true;
-	if (!mode) mode = ShapeOperation.SHAPEADD;
-	var spi = new SubPathInfo();
-	spi.closed = closed;
-	spi.operation = mode;
-	spi.entireSubPath = pointList;
-	return spi;
+    if (!closed) closed = true;
+    if (!mode) mode = ShapeOperation.SHAPEADD;
+    var spi = new SubPathInfo();
+    spi.closed = closed;
+    spi.operation = mode;
+    spi.entireSubPath = pointList;
+    return spi;
 }
 
 Stdlib.linePathAPI = function(x1, y1, x2, y2, thickness) {
-	// <=CS4; patth points coordinates must be given in current DIP (!), for example
-	//        72dpi: 1 path 'pixel' => 1 image pixel
-	//       300pdi: 1 path 'pixel' => 300/72 image pixels
-	var doc = app.activeDocument;
-	var DPIFix = 72/doc.resolution; 
-	x1 *= DPIFix; y1 *= DPIFix; x2 *= DPIFix; y2 *= DPIFix; thickness *= DPIFix;
-	
-	var halfSize = thickness/2;
-	var v = [x2-x1, y2-y1];
-	var v_len = Math.sqrt(v[0]*v[0]+v[1]*v[1]);
-	var an = Math.acos(v[1]/v_len);
-	if (x1>x2) an=-an;
-	
-	v=[halfSize*Math.cos(an),halfSize*Math.sin(an)];
-	// Create initial point
-	var points = [Stdlib.createPathPoint([x1+v[0],y1-v[1]]),
-				  Stdlib.createPathPoint([x1-v[0],y1+v[1]]),
-				  Stdlib.createPathPoint([x2-v[0],y2+v[1]]),
-				  Stdlib.createPathPoint([x2+v[0],y2-v[1]])];
-	return points;
+    // <=CS4; patth points coordinates must be given in current DIP (!), for example
+    //        72dpi: 1 path 'pixel' => 1 image pixel
+    //       300pdi: 1 path 'pixel' => 300/72 image pixels
+    var doc = app.activeDocument;
+    var DPIFix = 72/doc.resolution; 
+    x1 *= DPIFix; y1 *= DPIFix; x2 *= DPIFix; y2 *= DPIFix; thickness *= DPIFix;
+    
+    var halfSize = thickness/2;
+    var v = [x2-x1, y2-y1];
+    var v_len = Math.sqrt(v[0]*v[0]+v[1]*v[1]);
+    var an = Math.acos(v[1]/v_len);
+    if (x1>x2) an=-an;
+    
+    v=[halfSize*Math.cos(an),halfSize*Math.sin(an)];
+    // Create initial point
+    var points = [Stdlib.createPathPoint([x1+v[0],y1-v[1]]),
+                  Stdlib.createPathPoint([x1-v[0],y1+v[1]]),
+                  Stdlib.createPathPoint([x2-v[0],y2+v[1]]),
+                  Stdlib.createPathPoint([x2+v[0],y2-v[1]])];
+    return points;
 }
 
 Stdlib.createPathPoint = function(point, lHandle, rHandle) {
