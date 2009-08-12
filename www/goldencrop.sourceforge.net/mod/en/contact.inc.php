@@ -18,4 +18,4 @@
  <li><strong>Krystian Paździor</strong> for intense testing and brilliant ideas</li>
  <li><strong>Arkadius Bazior</strong> for preparing German translation of the script</li>
 </ul>
-<div style="margin: auto; text-align: center; width: 728px; height: 90px;"class="dlugRekl"><?=$AD_bigBanner?></div>
+<div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>

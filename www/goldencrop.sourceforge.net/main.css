@@ -27,7 +27,7 @@ a:hover {
 	padding: 1em;
 	width: 875px;
 	height: auto;
-	overflow: auto;
+	overflow: visible; /*auto - problem in Chrome*/
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -182,7 +182,7 @@ a:hover {
 	margin: auto;
 	text-align: center;
 	width: 336px;
-	height: 280;
+	height: 280px;
 }
 
 #contents #txttitle {

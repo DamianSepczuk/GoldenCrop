@@ -30,7 +30,7 @@ function printMenuItem($_module, $txt) {
 	global $module;
 	echo '<a href="';
 	printUrlToModule($_module);
-    echo '"><img src="img/goldenBullet';
+    echo '"><img alt="*" src="img/goldenBullet';
 	if ($_module == $module) {
 		echo '_act';
 	}

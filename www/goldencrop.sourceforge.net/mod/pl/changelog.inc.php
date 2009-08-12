@@ -8,7 +8,9 @@
   <li>Dodano złote spirale<br />
       <img alt="Golden Spirals" src="img/goldenSpirals.png" />
       </li>
-<div style="margin: auto; text-align: center; width: 728px; height: 90px;"class="dlugRekl"><?=$AD_bigBanner?></div>
+</ul>
+<div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>
+<ul>
   <li>Dodano dialog "Wybierz metodę kompozycji". Za jego pomocą można wybrać, które linie pomocnicze będą wyświetlane. Wybór jest zapamiętywany.<br />
       <img alt="Composition guidelines" src="img/chooseGuidelines.png" />
 	</li>

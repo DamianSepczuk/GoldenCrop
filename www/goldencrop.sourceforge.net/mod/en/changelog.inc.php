@@ -10,7 +10,9 @@
   <li>Golden spirals added<br />
       <img alt="Golden Spirals" src="img/goldenSpirals.png" />
       </li>
-<div style="margin: auto; text-align: center; width: 728px; height: 90px;"class="dlugRekl"><?=$AD_bigBanner?></div>
+</ul>
+<div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>
+<ul>
   <li>"Choose guidelines" dialog added. Now you can choose which guidelines
     would be drawn. Last choice is remembered.<br />
       <img alt="Composition guidelines" src="img/chooseGuidelines.png" />

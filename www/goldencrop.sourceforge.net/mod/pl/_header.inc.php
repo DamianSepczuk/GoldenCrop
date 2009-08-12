@@ -27,7 +27,7 @@
 	</script>
 </head>
 <body>
-	<div id="gclogo"><img alt="Logo skryptu Golden Crop" src="img/GoldenCrop_logo.png"/></div>
+	<div id="gclogo"><a href="/"><img alt="Logo skryptu Golden Crop" src="img/GoldenCrop_logo.png"/></a></div>
 	<div id="contents">
 		<div style="position: absolute">
 			<div id="rssBtn"><a href="rss.php?lang=pl"><img width="60" height="60" src="img/rss_button.png" alt="RSS"/></a></div>
@@ -52,7 +52,7 @@
 		</div>
 		<div id="digpanel"><div id="digpanel_in">
 			<!-- www.stumbleupon.com BEGIN -->
-			<a href="http://www.stumbleupon.com/submit?url=http://goldencrop.sourceforge.net"> <img border="0" src="http://cdn.stumble-upon.com/images/120x20_thumb_black.gif" alt="Thumb Up!" height="16"></a>
+			<a href="http://www.stumbleupon.com/submit?url=http://goldencrop.sourceforge.net"><img border="0" src="http://cdn.stumble-upon.com/images/120x20_thumb_black.gif" alt="Thumb Up!" height="16" /></a>
 			<!-- www.stumbleupon.com END -->
 			<!-- ADDTHIS BUTTON BEGIN -->
 			<script type="text/javascript">

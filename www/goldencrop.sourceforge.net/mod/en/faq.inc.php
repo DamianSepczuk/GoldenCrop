@@ -147,7 +147,6 @@ ENDANSWER
 ?>
 </ol>
 <div id="faq">
-
 <?php
 	foreach ( $faqA as $item ) {
 		if ($item[1]=='install') { 
@@ -157,3 +156,4 @@ ENDANSWER
 		echo '<div>'.$item[2].'</div>';
 	}
 ?>
+</div>
