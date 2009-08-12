@@ -1,99 +1,15 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en-US" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Golden Crop - the ultimate Photoshop© cropping solution Home Page</title>
+<title>Golden Crop for Photoshop - Home Page</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<style type="text/css">
-<!--
-img { border: none; }
-body { background-color: black; 
-		color: white;
-}
-a { text-decoration: none; color: #ffc }
-a:hover {text-decoration: underline; color: #ff3 }
-#gclogo { text-align: center; }
-#rekWiez {
-    width:160px;
-	height:600px;
-	position: absolute;
-	left: 1040px;
-}
-#contents { 
-	background-color: #111;
-	border: 2px solid #333;
-	padding: 1em;
-	width: 1000px;
-	margin-left: auto;
-	margin-right: auto;
+<meta name="description" content="The ultimate Photoshop® cropping solution! See guidelines while cropping, place key elements of the picture at power points." />
+<meta name="keywords" content="action,edition,editor,Fibonacci,snapshot,photo,photography,graphics,graphic,frame,framing,composition,correction,picture,drawing,phi,Photoshop,plug-in,add-on,canvas,program,cropping,bounding box,Rule of Thirds,extending,script,layer,task,shot,golden number,golden division,reduction,enlargement" />
+<meta name="author" content="Damian Sepczuk" />
+<meta name="medium" content="mult" />
+<link rel="image_src" href="http://goldencrop.sourceforge.net/img/GoldenCrop_logoMini.png" />
+<link rel="stylesheet" type="text/css" href="main.css" />
 
-}
-#contents #txttitle {
-	font-size: 350%;
-	text-align: center;
-}
-
-#contents #txttitle .smaller {
-	font-size: 50%;
-}
-
-#goldenButtons {
-	background-color: #000;
-	text-align: center;
-}
-
-#goldenButtons #downloadBtn {
-	display: inline;
-	padding-right: 100px;
-}
-
-#goldenButtons #donateBtn {
-	display: inline;
-}
-
-#goldenButtons * .btnNormal {
-	display: inline;
-}
-
-#goldenButtons * .btnHover {
-	display: none;
-}
-
-#goldenButtons *:hover .btnNormal {
-	display: none;
-}
-
-#goldenButtons *:hover .btnHover {
-	display: inline;
-}
-
-#newVersionAlert {
-	width: 80%;
-	border: 2px solid #ffd635;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 1em;
-	padding: 10px;
-	text-align: center;
-	background-color: #261d00;
-	font-size: 200%;
-}
-
-#newVersionAlert .wn {
-	font-size: 70%;
-}
-
-#footNote {
-	font-size: 50%;
-	color: #666;
-}
-
-div#faq h2 {
-	background-color: #333;
-	padding: 2px;
-	border: 1px solid #555;
-}
--->
-</style>
 <script type="text/javascript">
 <!--
 if (document.images)
@@ -111,11 +27,23 @@ if (document.images)
 </script>
 </head>
 <body>
-<div id="gclogo"><img alt="Golden Crop logo" src="img/GoldenCrop_logo.png"/></div>
-<div id="contents">
-<div style="position: absolute;"><div id="rekWiez"><script type="text/javascript"><!--
+	<div id="gclogo"><img alt="Golden Crop logo" src="img/GoldenCrop_logo.png"/></div>
+	<div id="contents">
+		<div style="position: absolute">
+			<div id="rssBtn"><a href="rss.php?lang=en"><img width="60" height="60" src="img/rss_button.png" alt="RSS"/></a></div>
+			<div id="rekPrawo">
+				<div id="rekOdno"><script type="text/javascript"><!--
 google_ad_client = "pub-4337717722148975";
-/* GC2_160x600, utworzono 09-08-07 */
+google_ad_slot = "7862337384";
+google_ad_width = 160;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+				<div id="rekWiez"><script type="text/javascript"><!--
+google_ad_client = "pub-4337717722148975";
 google_ad_slot = "5357393800";
 google_ad_width = 160;
 google_ad_height = 600;
@@ -123,16 +51,17 @@ google_ad_height = 600;
 </script>
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script></div></div>
-<div id="langs"><?php printLanguageChangeBar(); ?></div>
-<div id="txttitle">
-Golden Crop<br /><span class="smaller">the ultimate Photoshop<sup>®</sup> cropping solution</span>
-</div>
-<p>
-Welcome to the official site of the Golden Crop script! Please choose one of the golden buttons of immediate action or select the topic of your interest from the list below.</p>
+</script></div>
+			</div>
+		</div>
+		<div id="langBar"><?php printLanguageChangeBar(); ?></div>
+		<div id="txttitle">
+			Golden Crop<br />
+			<span class="smaller">the ultimate cropping solution for Photoshop<sup>®</sup></span>
+		</div>
 <div id="newVersionAlert">
 New version <strong>0.85 beta</strong> is available!<br />
-<a class="wn" href="#whatsNew">What's new?</a>
+<a class="wn" href="#whatsNew085beta">What's new?</a>
 </div>
 <div id="goldenButtons">
 	<div id="downloadBtn"><a href="/download.php"><img class="btnNormal" alt="Download button" src="img/download_btn.png" width="273" height="146" /><img class="btnHover" alt="Download button" src="img/download_btn_hover.png" width="273" height="146" /></a>
@@ -141,7 +70,38 @@ New version <strong>0.85 beta</strong> is available!<br />
 		<a href="http://sourceforge.net/project/project_donations.php?group_id=270328"><img class="btnNormal" alt="Download button" src="img/donate_btn.png" width="274" height="146" /><img class="btnHover" alt="Download button" src="img/donate_btn_hover.png" width="274" height="146" /></a>
 	</div>
 </div>
-<p>You can also go directly to <a href="http://sourceforge.net/projects/goldencrop">Sourceforge Golden Crop project page: <img style="vertical-align:middle;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=270328&amp;type=11" width="120" height="30" alt="Get Golden Crop at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a> or download the latest but virtually NOT TESTED version of code from <a href="http://goldencrop.svn.sourceforge.net/viewvc/goldencrop/trunk/code/goldenCrop.jsx?view=log">SVN repository</a>.
+<div id="digpanel"><div id="digpanel_in">
+<!-- www.stumbleupon.com BEGIN -->
+<a href="http://www.stumbleupon.com/submit?url=http://goldencrop.sourceforge.net"> <img border="0" src="http://cdn.stumble-upon.com/images/120x20_thumb_black.gif" alt="Thumb Up!" height="16"></a>
+<!-- www.stumbleupon.com END -->
+<!-- ADDTHIS BUTTON BEGIN -->
+<script type="text/javascript">
+var addthis_pub = "dsfoto";
+var addthis_exclude = 'print';
+var addthis_brand = "Golden Crop";
+var addthis_header_color = "#ffffff";
+var addthis_header_background = "#000000";
+var addthis_hover_delay = 100;
+var addthis_config = {
+     ui_language: "en"
+}
+</script>
+<a href="http://www.addthis.com/bookmark.php?v=20" 
+    onmouseover="return addthis_open(this, '', 'http://goldencrop.sourceforge.net', '[TITLE]');" 
+    onmouseout="addthis_close();" 
+    onclick="return addthis_sendto();"><img 
+    src="http://s7.addthis.com/static/btn/lg-share-en.gif" 
+    width="125" height="16" border="0" alt="Share" /></a>
+
+<a href="http://www.addthis.com/feed.php" 
+       onclick="return addthis_open(this, 'feed', 'http://goldencrop.sourceforge.net/rss.php?lang=en')" title="Subscribe using any feed reader!" target="_blank">
+       <img src="http://s7.addthis.com/static/btn/lg-rss-en.gif" width="125" height="16" alt="Subscribe" style="border:0"/></a>
+
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
+<!-- ADDTHIS BUTTON END -->
+</div></div>
+<p>
+Welcome to the official site of the Golden Crop script! Please choose one of the golden buttons of immediate action or select the topic of your interest from the list below. You can also go directly to <a href="http://sourceforge.net/projects/goldencrop">Sourceforge Golden Crop project page: <img style="vertical-align:middle;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=270328&amp;type=11" width="120" height="30" alt="Get Golden Crop at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a> or download the latest but virtually NOT TESTED version of code from <a href="http://goldencrop.svn.sourceforge.net/viewvc/goldencrop/trunk/code/Golden%20Crop.jsx?view=log">SVN repository</a>.
 </p>
 <p style="text-align: center;">
 <img alt="Positioning cropping frame" src="img/screenShot001.jpg" />
@@ -161,18 +121,19 @@ New version <strong>0.85 beta</strong> is available!<br />
 <div id="faq">
 <h2>Advertisement</h2>
 Why there is an advertisement? In order to allow the developer to buy himself a beer after countless hours he spend coding. At least once a year ;)
-
+<div style="margin: auto; text-align: center">
 <script type="text/javascript"><!--
 google_ad_client = "pub-4337717722148975";
-/* 728x90_goldencrop */
-google_ad_slot = "7670161217";
-google_ad_width = 728;
-google_ad_height = 90;
+/* GC, intext big rect, 336x280, utworzono 09-08-09 */
+google_ad_slot = "5289875209";
+google_ad_width = 336;
+google_ad_height = 280;
 //-->
 </script>
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
+</div>
 
 <h2>What is the Golden Crop script?</h2>
 <p>Golden Crop script designed as an aid for cropping images according to the division rules. The script generates visual guidelines for the <strong>Rule of Thirds</strong>, <strong>Golden Rule</strong> both <strong>Diagonal Golden Rules</strong> and four <strong>Golden Spirals</strong>. Some people think, that aligning vital elements with this guidelines creates special visual impact, making the image more interesting. You can see this guidelines on a picture below:
@@ -266,7 +227,7 @@ The 'select cropping method' dialog is displayed. You can now select cropping me
 <p><strong>Method 3: 'cancel cropping'</strong> The image is not cropped. Neither opacity nor visibility of layers created by Golden Crop is changed. If you want to delete all layers created by the script, just hit [Del].</p>
 <p>After selecting one of above options, script performs its operations and the control returns to the user.
 </p>
-<h2><a name="whatsNew"></a>What's new? (changelog)</h2>
+<h2><a name="whatsNew085beta"></a>What's new? (changelog)</h2>
 <h3>Version 0.85 beta</h3>
 <ul>
   <li>It is now <strong style="font-size:150%; color: red">CS2 compatible</strong>!</li>
@@ -308,7 +269,7 @@ The 'select cropping method' dialog is displayed. You can now select cropping me
 
 <p>
 <a href="http://sourceforge.net/projects/goldencrop/" >
-This site is under construction. If something doesn't work, navigate to sourceforge project page in order to download this script.
+If something doesn't work, navigate to sourceforge project page in order to download this script.
 </a>
 </p>
 <div id="footNote">

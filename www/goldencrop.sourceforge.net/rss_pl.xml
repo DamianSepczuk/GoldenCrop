@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+	<title>Golden Crop for Photoshop</title>
+	<link>http://goldencrop.sourceforge.net</link>
+	<description>Prawdopodobnie najlepsze narzędzie do kadrowania w programie Adobe® Photoshop®. Kadruj z pomocą linii pomocniczych ukazujących mocne punkty obrazu!</description>
+	<language>pl-pl</language>
+	<copyright>Copyright 2009, Damian Sepczuk</copyright>
+    <pubDate>Sun, 09 Aug 2009 17:23:48 GMT</pubDate>
+	<lastBuildDate>Sun, 9 Aug 2009 08:22:05 GMT</lastBuildDate>
+	<webMaster>Golden Crop (goldencrop@o2.pl)</webMaster>
+    <image>
+      <title>Golden Crop for Photoshop</title>
+      <url>http://goldencrop.sourceforge.net/img/GoldenCrop_logoRss.png</url>
+      <link>http://goldencrop.sourceforge.net</link>
+    </image>
+	<rating></rating>
+	<ttl>1440</ttl>
+	<item>
+		<title>Nowa wersja skryptu Golden Crop [0.85 beta] jest dostępna!</title>
+        <link>http://goldencrop.sourceforge.net</link>
+		<comments>http://goldencrop.sourceforge.net/#whatsNew085beta</comments>
+		<enclosure url="https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.85%20beta/Golden%20Crop_v085beta.zip/download" length="23959" type="application/zip" />
+		<description>
+<![CDATA[
+<pre>
+  ==[ Wersja 0.85 beta ]==
+     --{ 2009-08-06 }--
+  * Działa w wersji CS2!
+  * Możliwe jest kontynuowanie przerwanego kadrowania. Skrypt odnajduje grupę 
+    'Golden Crop by SzopeN' i wznawia kadrowanie w trybie interaktywnym.
+    Aby wymusić dodanie nowej grupy 'Golden Crop by SzopeN', przed uruchomieniem
+    skryptu należy zaznaczyć warstwę znajdującą się na samym dole (na przykład warstwę Tła)
+  * Dodano złote spirale
+  * Dodano dialog "Wybierz metodę kompozycji". Za jego pomocą można wybrać, które linie
+    pomocnicze będą wyświetlane. Wybór jest zapamiętywany.
+  * Skrypt zachowuje się jak plug-in. Dostępny jest z menu Plik>Automatyzuj>Golden Crop
+    (uwaga: w wersji CS2 skrypt wciąż znajduje się w menu Plik>Skrypty)
+  * Można nagrać wywołanie skryptu jako część akcji. Przy odtwarzaniu, skrypt dalej
+    będzie działał w trybie interaktywnym. Jedynie wybór linii pomocniczych zostanie
+    zapamiętany (nie pojawi się okno "Wybierz metodę kompozycji")
+  + Rozwiązano problem z sekwencją klawiszy [Alt],[klawisz] w oknach dialogowych
+  + Mała poprawka w sposobie obracania i wykrywania czy kadr jest pionowy czy poziomy
+  ~ Zoptymalizowano i wyczyszczono kod
+</pre>]]></description>
+        <guid isPermaLink="false">http://goldencrop.sourceforge.net/#whatsNew</guid>
+		<pubDate>Sun, 9 Aug 2009 08:22:05 GMT</pubDate>
+		<author>Golden Crop (goldencrop@o2.pl)</author>
+	</item>
+	</channel>
+</rss>

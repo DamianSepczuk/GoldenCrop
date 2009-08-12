@@ -1,99 +1,15 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="pl-PL" xml:lang="pl-PL" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Golden Crop - prawdopodobnie najlepsze narzędzie do kadrowania w programie Adobe® Photoshop® Strona Domowa</title>
+<title>Golden Crop for Photoshop - Strona Domowa</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<style type="text/css">
-<!--
-img { border: none; }
-body { background-color: black; 
-		color: white;
-}
-a { text-decoration: none; color: #ffc }
-a:hover {text-decoration: underline; color: #ff3 }
-#gclogo { text-align: center; }
-#rekWiez {
-    width:160px;
-	height:600px;
-	position: absolute;
-	left: 1040px;
-}
-#contents { 
-	background-color: #111;
-	border: 2px solid #333;
-	padding: 1em;
-	width: 1000px;
-	margin-left: auto;
-	margin-right: auto;
+<meta name="description" content="Prawdopodobnie najlepsze narzędzie do kadrowania w programie Adobe® Photoshop®. Kadruj z pomocą linii pomocniczych ukazujących mocne punkty obrazu!" />
+<meta name="keywords" content="akcja,edycja,edytor,Fibonacci,fotka,foto,fotografia,graficzny,grafika,kadr,kadrowanie,kompozycja,korekcja,obraz,obrazek,phi,Photoshop,plug-in,dodatek,płótno,program,przycinanie,ramka,reguła trzech,rozszerzanie,skrypt,warstwa,zadanie,zdjęcie,złota liczba,złoty podział,zmniejszanie,zwiększanie,action,edition,editor,Fibonacci,snapshot,photo,photography,graphics,graphic,frame,framing,composition,correction,picture,drawing,phi,Photoshop,plug-in,add-on,canvas,program,cropping,bounding box,Rule of Thirds,extending,script,layer,task,shot,golden number,golden division,reduction,enlargement" />
+<meta name="author" content="Damian Sepczuk" />
+<meta name="medium" content="mult" />
+<link rel="image_src" href="http://goldencrop.sourceforge.net/img/GoldenCrop_logoMini.png" />
+<link rel="stylesheet" type="text/css" href="main.css" />
 
-}
-#contents #txttitle {
-	font-size: 350%;
-	text-align: center;
-}
-
-#contents #txttitle .smaller {
-	font-size: 50%;
-}
-
-#goldenButtons {
-	background-color: #000;
-	text-align: center;
-}
-
-#goldenButtons #downloadBtn {
-	display: inline;
-	padding-right: 100px;
-}
-
-#goldenButtons #donateBtn {
-	display: inline;
-}
-
-#goldenButtons * .btnNormal {
-	display: inline;
-}
-
-#goldenButtons * .btnHover {
-	display: none;
-}
-
-#goldenButtons *:hover .btnNormal {
-	display: none;
-}
-
-#goldenButtons *:hover .btnHover {
-	display: inline;
-}
-
-#newVersionAlert {
-	width: 80%;
-	border: 2px solid #ffd635;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 1em;
-	padding: 10px;
-	text-align: center;
-	background-color: #261d00;
-	font-size: 200%;
-}
-
-#newVersionAlert .wn {
-	font-size: 70%;
-}
-
-#footNote {
-	font-size: 50%;
-	color: #666;
-}
-
-div#faq h2 {
-	background-color: #333;
-	padding: 2px;
-	border: 1px solid #555;
-}
--->
-</style>
 <script type="text/javascript">
 <!--
 if (document.images)
@@ -111,11 +27,23 @@ if (document.images)
 </script>
 </head>
 <body>
-<div id="gclogo"><img alt="Golden Crop logo" src="img/GoldenCrop_logo.png"/></div>
-<div id="contents">
-<div style="position: absolute;"><div id="rekWiez"><script type="text/javascript"><!--
+	<div id="gclogo"><img alt="Golden Crop logo" src="img/GoldenCrop_logo.png"/></div>
+	<div id="contents">
+		<div style="position: absolute">
+			<div id="rssBtn"><a href="rss.php?lang=en"><img width="60" height="60" src="img/rss_button.png" alt="RSS"/></a></div>
+			<div id="rekPrawo">
+				<div id="rekOdno"><script type="text/javascript"><!--
 google_ad_client = "pub-4337717722148975";
-/* GC2_160x600, utworzono 09-08-07 */
+google_ad_slot = "7862337384";
+google_ad_width = 160;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+				<div id="rekWiez"><script type="text/javascript"><!--
+google_ad_client = "pub-4337717722148975";
 google_ad_slot = "5357393800";
 google_ad_width = 160;
 google_ad_height = 600;
@@ -123,16 +51,18 @@ google_ad_height = 600;
 </script>
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script></div></div>
-<div id="langs"><?php printLanguageChangeBar(); ?></div>
-<div id="txttitle">
-Golden Crop<br /><span class="smaller">prawdopodobnie najlepsze narzędzie do kadrowania w programie Adobe<sup>®</sup> Photoshop<sup>®</sup></span>
-</div>
+</script></div>
+			</div>
+		</div>
+		<div id="langBar"><?php printLanguageChangeBar(); ?></div>
+		<div id="txttitle">
+			Golden Crop<br />
+			<span class="smaller">prawdopodobnie najlepsze narzędzie do kadrowania w programie Photoshop<sup>®</sup></span>
+		</div>
 <p>
-Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przycisków albo wybierz interesujący Cię temat z listy poniżej.</p>
 <div id="newVersionAlert">
 Nowa wersja <strong>0.85 beta</strong> jest dostępna!<br />
-<a class="wn" href="#whatsNew">Co nowego?</a>
+<a class="wn" href="#whatsNew085beta">Co nowego?</a>
 </div>
 <div id="goldenButtons">
 	<div id="downloadBtn"><a href="/download.php"><img class="btnNormal" alt="Download button" src="img/download_btn.png" width="273" height="146" /><img class="btnHover" alt="Download button" src="img/download_btn_hover.png" width="273" height="146" /></a>
@@ -141,7 +71,37 @@ Nowa wersja <strong>0.85 beta</strong> jest dostępna!<br />
 		<a href="http://sourceforge.net/project/project_donations.php?group_id=270328"><img class="btnNormal" alt="Download button" src="img/donate_btn.png" width="274" height="146" /><img class="btnHover" alt="Download button" src="img/donate_btn_hover.png" width="274" height="146" /></a>
 	</div>
 </div>
-<p>Możesz też przejść bezpośrednio na <a href="http://sourceforge.net/projects/goldencrop">stronę projektu Golden Crop w serwisie Sourceforge: <img style="vertical-align:middle;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=270328&amp;type=11" width="120" height="30" alt="Get Golden Crop at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a> albo pobrać absolutnie najnowszą ale praktycznie NIEPRZETESTOWANĄ wersję skryptu bezpośrednio z <a href="http://goldencrop.svn.sourceforge.net/viewvc/goldencrop/trunk/code/goldenCrop.jsx?view=log">repozytorium SVN</a>.
+<div id="digpanel"><div id="digpanel_in">
+<!-- www.stumbleupon.com BEGIN -->
+<a href="http://www.stumbleupon.com/submit?url=http://goldencrop.sourceforge.net"> <img border="0" src="http://cdn.stumble-upon.com/images/120x20_thumb_black.gif" alt="Thumb Up!" height="16"></a>
+<!-- www.stumbleupon.com END -->
+<!-- ADDTHIS BUTTON BEGIN -->
+<script type="text/javascript">
+var addthis_pub = "dsfoto";
+var addthis_exclude = 'print';
+var addthis_brand = "Golden Crop";
+var addthis_header_color = "#ffffff";
+var addthis_header_background = "#000000";
+var addthis_hover_delay = 100;
+var addthis_config = {
+     ui_language: "pl"
+}
+</script>
+<a href="http://www.addthis.com/bookmark.php?v=20" 
+    onmouseover="return addthis_open(this, '', 'http://goldencrop.sourceforge.net', '[TITLE]');" 
+    onmouseout="addthis_close();" 
+    onclick="return addthis_sendto();"><img 
+    src="http://s7.addthis.com/static/btn/lg-share-pl.gif" 
+    width="125" height="16" border="0" alt="Podziel się" /></a>
+
+<a href="http://www.addthis.com/feed.php" 
+       onclick="return addthis_open(this, 'feed', 'http://goldencrop.sourceforge.net/rss.php?lang=en')" title="Zapisz się używając dowolnego czytnika RSS!" target="_blank">
+       <img src="http://s7.addthis.com/static/btn/lg-rss-en.gif" width="125" height="16" alt="Zapisz się!" style="border:0"/></a>
+
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
+<!-- ADDTHIS BUTTON END -->
+</div></div>
+Witaj na oficjalnej stronie skryptu Golden Crop. Kliknij jeden ze złotych przycisków albo wybierz interesujący Cię temat z listy poniżej. Możesz też przejść bezpośrednio na <a href="http://sourceforge.net/projects/goldencrop">stronę projektu Golden Crop w serwisie Sourceforge: <img style="vertical-align:middle;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=270328&amp;type=11" width="120" height="30" alt="Get Golden Crop at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a> albo pobrać absolutnie najnowszą ale praktycznie NIEPRZETESTOWANĄ wersję skryptu bezpośrednio z <a href="http://goldencrop.svn.sourceforge.net/viewvc/goldencrop/trunk/code/Golden%20Crop.jsx?view=log">repozytorium SVN</a>.
 </p>
 <p style="text-align: center;">
 <img alt="Positioning cropping frame" src="img/screenShot001.jpg" />
@@ -161,19 +121,19 @@ Nowa wersja <strong>0.85 beta</strong> jest dostępna!<br />
 <div id="faq">
 <h2>Reklama</h2>
 Dlaczego wyświetlana jest reklama? Żeby autor skryptu, po wyczerpujących godzinach spędzonych na kodowani, miał na piwo... raz na pół roku ;)
-
+<div style="margin: auto; text-align: center">
 <script type="text/javascript"><!--
 google_ad_client = "pub-4337717722148975";
-/* 728x90_goldencrop */
-google_ad_slot = "7670161217";
-google_ad_width = 728;
-google_ad_height = 90;
+/* GC, intext big rect, 336x280, utworzono 09-08-09 */
+google_ad_slot = "5289875209";
+google_ad_width = 336;
+google_ad_height = 280;
 //-->
 </script>
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
-
+</div>
 <h2>Czym jest skrypt Golden Crop?</h2>
 <p>Skrypt Golden Crop został zaprojektowany w celu ułatwienia kadrowania zdjęć zgodnie z regułami podziału. Generuje on wizualne prowadnice dla <strong>Reguły Trzech</strong>, <strong>Złotej Reguły</strong>, <strong>Trójkątnej Złotej Reguły</strong> w obu kierunkach oraz czterech <strong>Złotych Spiral</strong>. W czasach przed fotografią, w malarstwie utrwalił się kanon podziału płótna, dotyczący ważnych elementów obrazu przedstawionego. Pionierzy fotografii przenieśli te reguły do nowo powstającej sztuki. Umiejscowienie ważnych elementów zdjęcia zgodnie z regułami podziału może sprawić, że praca stanie się bardziej interesująca i przyciągająca uwagę. Na poniższym obrazku możesz zobaczyć jak wyglądają prowadnice generowane przez skrypt:
 <img style="margin: auto; display:block" alt="Prowadnice" src="img/guidelines.png"/><br />
@@ -263,7 +223,7 @@ Wyświetlane jest okno wyboru trybu przycinania. Możesz w nim wybrać metodę p
 <p><strong>Opcja 3: 'Wróć do przycinania'</strong> Wybranie tej opcji powoduje powrót do trybu kadrowania.</p>
 <p>Po wybraniu opcji 1 lub 2 wykonywane są odpowiednie akcje, po czym skrypt kończy swe działanie i zwraca pełną kontrolę użytkownikowi.
 </p>
-<h2><a name="whatsNew"></a>Co nowego? (wykaz zmian)</h2>
+<h2><a name="whatsNew085beta"></a>Co nowego? (wykaz zmian)</h2>
 <h3>Wersja 0.85 beta</h3>
 <ul>
   <li>Działa w wersji <strong style="font-size:150%; color: red">CS2</strong>!</li>
@@ -303,7 +263,7 @@ Wyświetlane jest okno wyboru trybu przycinania. Możesz w nim wybrać metodę p
 
 <p>
 <a href="http://sourceforge.net/projects/goldencrop/" >
-Ta strona jest w trakcie tworzenia. Jeśli coś nie działa, przejdź bezpośrednio na stronę projektu aby pobrać skrypt
+Jeśli coś nie działa, przejdź bezpośrednio na stronę projektu aby pobrać skrypt.
 </a>
 </p>
 <div id="footNote">

@@ -1,9 +1,6 @@
 <?php
 include('lang.inc.php');
 
-// Redirect to the correct location.
-$availLangs = array('en','pl');
-$goToLang = 'en'; // def.
 
 if (isset($_GET['lang'])) {
    if ( in_array( $_GET['lang'], $availLangs ) ) {

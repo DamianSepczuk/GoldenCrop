@@ -1,0 +1,152 @@
+body {
+	background-color: black; 
+	color: white;
+}
+
+img {
+	border: none;
+}
+
+a {
+	text-decoration: none;
+	color: #ffc;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: #ff3;
+}
+
+#gclogo {
+	text-align: center;
+}
+
+#contents { 
+	background-color: #111;
+	border: 2px solid #333;
+	padding: 1em;
+	width: 880px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#rssBtn {
+	position: absolute;
+	width: 60px;
+	height: 60px;
+	left: 820px; /* #contents.width - #rssBtn.width */
+}
+
+#rekPrawo {
+    width:160px;
+	height:700px;
+	position: absolute;
+	left: 910px; /* #contents.width + 30px */
+}
+
+#rekOdno {
+    width:160px;
+	height:90px;
+	margin-bottom: 10px;
+	overflow: hidden;
+	padding: 0;
+}
+
+#rekWiez {
+    width:160px;
+	height:600px;
+	overflow: hidden;
+	padding: 0;
+}
+
+#langBar {
+	position: absolute;
+}
+
+#menuBar {
+	width: 100%;
+	margin: 1em 0 1em 0em;
+	padding: 0;
+	background-color: #111;
+	border-top: 1px solid #333;
+	border-bottom: 1px solid #333;
+	text-align: center;
+}
+
+#contents #txttitle {
+	font-size: 350%;
+	text-align: center;
+}
+
+#contents #txttitle .smaller {
+	font-size: 50%;
+}
+
+#goldenButtons {
+	background-color: #000;
+	text-align: center;
+}
+
+#goldenButtons #downloadBtn {
+	display: inline;
+	padding-right: 100px;
+}
+
+#goldenButtons #donateBtn {
+	display: inline;
+}
+
+#goldenButtons * .btnNormal {
+	display: inline;
+}
+
+#goldenButtons * .btnHover {
+	display: none;
+}
+
+#goldenButtons *:hover .btnNormal {
+	display: none;
+}
+
+#goldenButtons *:hover .btnHover {
+	display: inline;
+}
+
+#newVersionAlert {
+	width: 80%;
+	border: 2px solid #ffd635;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 1em;
+	padding: 10px;
+	text-align: center;
+	background-color: #261d00;
+	font-size: 200%;
+}
+
+#newVersionAlert .wn {
+	font-size: 70%;
+}
+
+#footNote {
+	font-size: 50%;
+	color: #666;
+}
+
+div#faq h2 {
+	background-color: #333;
+	padding: 2px;
+	border: 1px solid #555;
+}
+
+#digpanel {
+	margin-top: 1em;
+	padding: 10px;
+	border: 4px dashed #261d00;
+	vertical-align: middle;
+	text-align: center;
+}
+
+#digpanel_in {
+	margin: auto;
+}

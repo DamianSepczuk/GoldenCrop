@@ -1,4 +1,8 @@
 <?php
+// Redirect to the correct location.
+$availLangs = array('en','pl');
+$goToLang = 'en'; // def.
+
 /*
 Script Name: Full Operating system language detection
 Author: Harald Hope, Website: http://techpatterns.com/
