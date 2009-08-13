@@ -54,6 +54,7 @@ Installing the Golden Crop script is really simple. In fact, if you only want to
 	<li>On 32-bit systems (most common): <pre>C:\Program Files\Adobe\Adobe Photoshop CS4\Presets\Scripts\</pre></li>
 	<li>64-bit version of Photoshop® on 64-bit system: <pre>C:\Program Files\Adobe\Adobe Photoshop CS4 (64 Bit)\Presets\Scripts\</pre></li>
 	<li>32-bit version of Photoshop® on 64-bit system: <pre>C:\Program Files (x86)\Adobe\Adobe Photoshop CS4\Presets\Scripts\</pre></li>
+	<li>On Mac: <pre>Installation - Applications/Adobe Photoshop CS(x)/Scripts/</pre></li>
 </ul>
 <p><strong>Caution</strong>: if there is a file named ‘goldenCrop’ (or ‘goldenCrop.jsx’) in the folder, where the ‘Golden Crop.jsx’ file was copied, you should delete the file ‘goldenCrop’ (or ‘goldenCrop.jsx’) because it is an older version of the Golden Crop script.</p>
 You can also simply "enter" into the archive and drag the file to desired location.
