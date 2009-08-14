@@ -31,9 +31,9 @@
 
 var debug = true;
 
-// set to "en"   for English, 
-//        "pl"   for Polish
-//        "de"   for German
+// set to "en"   for English 
+//        "pl"   for Polish (Polski)
+//        "de"   for German (Deutsch)
 //        "auto" to use Photoshop language
 var lang = "auto";
 /************************
@@ -67,7 +67,7 @@ Copyright 2009, GNU GPL License
 
 http://goldencrop.sourceforge.net
 Thanks to:
- - Krystian for testing and fiving ideas
+ - Krystian for testing and giving ideas
  - Arkadius Bazior for German translation
 </about>
     <menu>automate</menu>
@@ -87,6 +87,7 @@ Thanks to:
                  /gspiralTL [($$$/SzopeNSoft/GoldenCrop/gspiralTL=Golden Spiral top-left) /boolean]
                  /gspiralTR [($$$/SzopeNSoft/GoldenCrop/gspiralTR=Golden Spiral top-right) /boolean]
                  /gspiralBR [($$$/SzopeNSoft/GoldenCrop/gspiralBR=Golden Spiral bottom-right) /boolean]
+                 /lthick    [($$$/SzopeNSoft/GoldenCrop/lthick=Line thickness) /double]
                  >>] 
               >> 
             >>]]></terminology>
@@ -145,7 +146,7 @@ localizator.prototype.initStrings = function() {
     str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%'};
     str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldene Dreieck aufwärts'};
     str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldene Dreieck abwärts'};
-    str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonale'};
+    str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:''};
     str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.'};
     str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen'};
     str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?'};
@@ -165,6 +166,8 @@ localizator.prototype.initStrings = function() {
     str['ok'] = {en:'OK', pl:'OK', de:'OK'};
     str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale', de:'Alle Goldenen Spiralen'};
     str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln'};
+	str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii'};
+	str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)'};
 
 }
 
@@ -410,7 +413,7 @@ function dialogMenuMChoice( menuDesc ) {
     this.desc = menuDesc;
 }
 
-dialogMenuMChoice.prototype.show = function () {
+dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
     // helper function
     function _repeatString( str, n ) {
         var out = '';
@@ -422,10 +425,10 @@ dialogMenuMChoice.prototype.show = function () {
 
     var menuDesc = this.desc;
     
-    var cbElements = menuDesc.cbElements;
-    var msElements = menuDesc.msElements;
+    var cbElements = this.cbElements = menuDesc.cbElements;
+    var msElements = this.msElements = menuDesc.msElements;
     
-    var dlg = new Window('dialog', menuDesc.caption);
+    var dlg = this.dlg = new Window('dialog', menuDesc.caption);
     dlg.preferredSize.width = 155;
     
     with (dlg)
@@ -433,7 +436,7 @@ dialogMenuMChoice.prototype.show = function () {
        orientation = 'column';
        alignChildren = 'fill';
        add('statictext', undefined, menuDesc.question);
-       var g1 = add('group', undefined, undefined);
+       var g1 = add('group', undefined, {name: 'g1'});
 
        with (g1) {
            var g1_cb = add('group', undefined, undefined);
@@ -497,8 +500,9 @@ dialogMenuMChoice.prototype.show = function () {
                }
           }
        }
-   
-   
+       if (hasCustomControl) {
+	       this.customControls = add('group', undefined, undefined, {name: 'customControls'});
+	   }
        var okBtn = add('button', undefined, this.desc.okTxt, {name: 'ok'});
        var cancelBtn = add('button', undefined, this.desc.cancelTxt, {name: 'cancel'});
        defaultElement = okBtn;
@@ -548,6 +552,11 @@ dialogMenuMChoice.prototype.show = function () {
            }
         }
     }
+}
+
+dialogMenuMChoice.prototype.show = function () {
+	var dlg = this.dlg;
+	var cbElements = this.cbElements;
     dlg.center();
     var result = dlg.show();
     if ( result != 1 ) {
@@ -832,12 +841,13 @@ GoldenCrop.prototype.loadConfig = function() {
                     roth:{value:true, desc:'ruleOfThirds'},
                     diagmethod:{value:true, desc:'diagonalMethod'},
                     gtrianup:{value:true, desc:'goldenTriangleUp'},
-                    gtriandown:{value:true, desc:'goldenTriangleDown'},
+                    gtriandown:{value:false, desc:'goldenTriangleDown'},
                     gspiralBL:{value:false, desc:'goldenSpiralBL'},
                     gspiralTL:{value:false, desc:'goldenSpiralTL'},
                     gspiralTR:{value:false, desc:'goldenSpiralTR'},
-                    gspiralBR:{value:false, desc:'goldenSpiralBR'}
-                    /*{name:'', value:'', desc:''},*/
+                    gspiralBR:{value:false, desc:'goldenSpiralBR'},
+                    lthick:{value:5, desc:'lineThickness'}
+                    /*{value:'', desc:''},*/
                     };
     this.conf = new configurator(paramsID, UUID);
     this.conf.loadSettings();
@@ -897,7 +907,7 @@ GoldenCrop.prototype.makeStrips = function( position, stripSizePrc, color ) {
     paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,docHeight,stripSize)));
     tmp = docWidth*oneMinusPosition;
     paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,docHeight,stripSize)));
-    var GSPath = this.doc.pathItems.add('', paths);
+    var GSPath = this.doc.pathItems.add('', paths);    
     var StripLayer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('stripAtPrc', Math.round(position*100)) );    
     GSPath.remove();
     
@@ -1119,7 +1129,18 @@ var id11 = cTID( "setd" );
     desc5.putReference( id12, ref3 );
     var id18 = cTID( "T   " );
         var desc6 = new ActionDescriptor();
-    var id21 = cTID( "DrSh" );
+        var idFrFX = cTID( "FrFX" );
+            var desc33 = new ActionDescriptor();
+            desc33.putEnumerated( cTID( "Styl" ), cTID( "FStl" ), cTID( "OutF" ) );
+            desc33.putUnitDouble( cTID( "Sz  " ), cTID( "#Pxl" ), this.strokeWidth );
+                var desc34 = new ActionDescriptor();
+                desc34.putDouble( cTID( "Rd  " ), 255.000000 );
+                desc34.putDouble( cTID( "Grn " ), 255.000000 );
+                desc34.putDouble( cTID( "Bl  " ), 255.000000 );
+            desc33.putObject( cTID( "Clr " ), cTID( "RGBC" ), desc34 );
+        desc6.putObject( idFrFX, cTID( "FrFX" ), desc33 );
+    /*
+		var id21 = cTID( "DrSh" );
             var desc7 = new ActionDescriptor();
             desc7.putBoolean( cTID( "enab" ), true );
             desc7.putEnumerated( cTID( "Md  " ), cTID( "BlnM" ), cTID( "Scrn" ) );
@@ -1133,7 +1154,7 @@ var id11 = cTID( "setd" );
             desc7.putUnitDouble( cTID( "Dstn" ), cTID( "#Pxl" ), 0 );
             desc7.putUnitDouble( cTID( "Ckmt" ), cTID( "#Pxl" ), 0 );
             desc7.putUnitDouble( cTID( "blur" ), cTID( "#Pxl" ), 3 );
-        desc6.putObject( id21, cTID( "DrSh" ), desc7 );
+        desc6.putObject( id21, cTID( "DrSh" ), desc7 );*/
     desc5.putObject( id18, cTID( "Lefx" ), desc6 );
 executeAction( id11, desc5, DialogModes.NO );
 }
@@ -1164,7 +1185,7 @@ executeAction( id11, desc5, DialogModes.NO );
  */
 GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, stripsThickScale) {
     if (!basicStripSize) {
-        basicStripSize = .005; // 1%
+        basicStripSize = Math.round(this.conf.get('lthick'))/1000;
     }
     if (!maskOpacity) {
         maskOpacity = 70;
@@ -1180,7 +1201,11 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
     if (!stripsThickScale) {
         stripsThickScale = [1, 1, 1, 1/2, 1/2];
     }
-    
+    const docWidth  = this.docW,
+          docHeight = this.docH;
+    const stripSizePx = Math.max(1,Math.min(docWidth, docHeight) * basicStripSize);
+    this.strokeWidth = Math.max(1,(stripSizePx)/16);
+	
     this.gCrop = Stdlib.createLayerGroup(this.loc.get('GCbySzN'));
     Stdlib.moveToFront();
     
@@ -1196,7 +1221,7 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
         anyGuidelines |= this.guidelines[gline].create;
     }
     if (anyGuidelines) {
-        this.gCropDivRules = Stdlib.createLayerGroup(this.loc.get('divRules'), 50);
+        this.gCropDivRules = Stdlib.createLayerGroup(this.loc.get('divRules'), 75);
         
         // ----- Golden rule
         if (this.guidelines.golden.create) {
@@ -1596,7 +1621,7 @@ GoldenCrop.prototype.findCropToContinue = function() {
 
                if ( this.gCropDivRules && this.gCropDivRules.layers.length) {
                    this.gCropDivRules.visible = true;
-                   this.gCropDivRules.opacity = 50;
+                   this.gCropDivRules.opacity = 75;
                } else {
                    // TODO: add bogus layer AND transform it to match active crop mask as needed
                    // this.addBogusLayer();
@@ -1624,12 +1649,25 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
                                {key:'9', text:this.loc.get('goldenSpiralBR'), sel: this.conf.get('gspiralBR')}
                               ],
                    msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2]},
-                               {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[4,5,6,7]},
+                               {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[5,6,7,8]},
                                {key:'a', text:this.loc.get('selectAll'), action: 'slctAll'},
                                {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
                               ]
                   };
     var dlg = new dialogMenuMChoice(menuDesc);
+	dlg.construct(true);
+	// Add thickness slider
+	dlg.customControls.orientation = 'row';
+	dlg.customControls.alignChildren = 'fill';
+	dlg.customControls.add('statictext', undefined, this.loc.get('lineThicknessProm'));
+	dlg.customControls.tSlider = dlg.customControls.add('slider', undefined, this.conf.get('lthick'), 1, 30, {name: 'thickness'});
+	dlg.customControls.tSlider.jumpdelta = 10;
+	dlg.customControls.tSlider.jump = 1;
+	dlg.customControls.tSlider.onChanging = function() {dlg.customControls.tValTxt.text = Math.round(dlg.customControls.tSlider.value);}
+	dlg.customControls.tSlider.onChange = function() {dlg.customControls.tSlider.value = Math.round(dlg.customControls.tSlider.value);}
+	dlg.customControls.tValTxt = dlg.customControls.add('statictext', undefined);
+	dlg.customControls.tValTxt.preferredSize = [20, -1];
+	dlg.customControls.tSlider.onChanging();
     var res = dlg.show();
     if (!res) return false;
     this.conf.set('golden', res[0]);
@@ -1641,6 +1679,7 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
     this.conf.set('gspiralTL', res[6]);
     this.conf.set('gspiralTR', res[7]);
     this.conf.set('gspiralBR', res[8]);
+	this.conf.set('lthick', Math.round(dlg.customControls.tSlider.value));
 
     // Save parameters; crop could be canceled, but the line remains, so save lines settings now
     this.conf.saveSettings();
@@ -2304,7 +2343,7 @@ Stdlib.maskModesEnum = {noMask:false, revealAll:1, hideAll:2, revealSelection:3,
  * Returns void 
  * Remark: It is faster than standard API at least in CS4.
  * Remark: Do not pass an argument or pass undefined to get default value
- * Example: Stdlib.createLayerGroup('my group', 50, Stdlib.colorsEnum.red, Stdlib.blendModesEnum.passThrough);
+ * Example: Stdlib.createLayerGroup('my group', 75, Stdlib.colorsEnum.red, Stdlib.blendModesEnum.passThrough);
  */
 Stdlib.createLayerGroup = function(name, opacity, color, blendMode, userMask, vectorMask, restrictChannels) {
     var doc = app.activeDocument;

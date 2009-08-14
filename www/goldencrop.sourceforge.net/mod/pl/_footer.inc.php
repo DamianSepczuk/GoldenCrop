@@ -7,10 +7,9 @@
 				<a href="http://jigsaw.w3.org/css-validator/check/referer">
 					<img style="border:0;width:88px;height:31px"
 						src="http://jigsaw.w3.org/css-validator/images/vcss"
-						alt="Poprawny CSS!" />
-				</a>
+						alt="Poprawny CSS!" /></a>
 				<a href="http://sourceforge.net/projects/goldencrop"><img style="margin-bottom:30px; vertical-align:middle;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=270328&amp;type=11" width="120" height="30" alt="Get Golden Crop at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
-				<a href="<?=getUrlToModule('privPolicy')?>" style="font-size:200%;"> ** POLITYKA PRYWATNOŚCI ** </a>
+				<a href="<?=getUrlToModule('privPolicy')?>" style="font-size:100%;"> ** POLITYKA PRYWATNOŚCI ** </a>
 				<!--<a href="http://sourceforge.net/projects/goldencrop/">If something doesn't work, navigate to sourceforge project page in order to download this script.</a>-->
 			</p>
 			<p>All trademarks used are properties of their respective owners. Please visit the sites of the respective owners. NO warranty as to 100% accuracy is intended or implied. Any omissions are without intent to infringe. We cannot guarantee 100% accuracy of the contact information presented here. Products or trademarks named are used for reference, without any implied endorsement by their holders and without intent to infringe. This site does not condone activities and actions that breach the rights of copyright owners. As a site visitor it is your responsibility to obey all laws governing copyright in each country. This site respects copyright and other laws. This site requires all site visitors users to comply with copyright and other laws. This site does not by the supply of the information on this site authorize you to infringe the copyright or other rights of third parties.</p>

@@ -3,14 +3,21 @@
 <html lang="en-US" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>Golden Crop for Photoshop - Home Page</title>
-	<base href="http://goldencrop.sourceforge.net/"/>
+	<base href="http://goldencrop.sourceforge.net/" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="en" />
 	<meta name="description" content="The ultimate cropping solution for Photoshop®! See guidelines while cropping, place key elements of the picture at power points." />
 	<meta name="keywords" content="action,edition,editor,Fibonacci,snapshot,photo,photography,graphics,graphic,frame,framing,composition,correction,picture,drawing,phi,Photoshop,plug-in,add-on,canvas,program,cropping,bounding box,Rule of Thirds,extending,script,layer,task,shot,golden number,golden division,reduction,enlargement" />
 	<meta name="author" content="Damian Sepczuk" />
+	<meta name="revisit-after" content="7 days" />
 	<meta name="medium" content="mult" />
 	<link rel="image_src" href="http://goldencrop.sourceforge.net/img/GoldenCrop_logoMini.png" />
 	<link rel="stylesheet" type="text/css" href="/main.css" />
+	<link rel="start" href="http://goldencrop.sourceforge.net/" title="Golden Crop for Photoshop - Home Page" />
+	<link rel="alternate" lang="en" href="http://goldencrop.sourceforge.net/en/" />
+	<link rel="alternate" lang="pl" href="http://goldencrop.sourceforge.net/pl/" />
+	<link rel="next" href="http://goldencrop.sourceforge.net/about.html" />
+	<link rel="help" href="http://goldencrop.sourceforge.net/faq.html" />
 	<script type="text/javascript">
 	<!--
 	if (document.images)

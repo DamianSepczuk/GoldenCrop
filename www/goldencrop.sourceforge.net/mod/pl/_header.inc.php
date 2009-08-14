@@ -5,11 +5,17 @@
 	<title>Golden Crop for Photoshop - Strona Domowa</title>
 	<base href="http://goldencrop.sourceforge.net/"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="pl" />
 	<meta name="description" content="Prawdopodobnie najlepsze narzędzie do kadrowania w programie Adobe® Photoshop®. Kadruj z pomocą linii pomocniczych ukazujących mocne punkty obrazu!" />
-	<meta name="keywords" content="akcja,edycja,edytor,Fibonacci,fotka,foto,fotografia,graficzny,grafika,kadr,kadrowanie,kompozycja,korekcja,obraz,obrazek,phi,Photoshop,plug-in,dodatek,płótno,program,przycinanie,ramka,reguła trzech,rozszerzanie,skrypt,warstwa,zadanie,zdjęcie,złota liczba,złoty podział,zmniejszanie,zwiększanie,action,edition,editor,Fibonacci,snapshot,photo,photography,graphics,graphic,frame,framing,composition,correction,picture,drawing,phi,Photoshop,plug-in,add-on,canvas,program,cropping,bounding box,Rule of Thirds,extending,script,layer,task,shot,golden number,golden division,reduction,enlargement" />	<meta name="author" content="Damian Sepczuk" />
+	<meta name="keywords" content="akcja,edycja,edytor,Fibonacci,fotka,foto,fotografia,graficzny,grafika,kadr,kadrowanie,kompozycja,korekcja,obraz,obrazek,phi,Photoshop,plug-in,dodatek,płótno,program,przycinanie,ramka,reguła trzech,rozszerzanie,skrypt,warstwa,zadanie,zdjęcie,złota liczba,złoty podział,zmniejszanie,zwiększanie,action,editor,Fibonacci,photo,frame,add-on,canvas,script,layer,task" />
+	<meta name="author" content="Damian Sepczuk" />
+	<meta name="revisit-after" content="7 days" />
 	<meta name="medium" content="mult" />
 	<link rel="image_src" href="http://goldencrop.sourceforge.net/img/GoldenCrop_logoMini.png" />
 	<link rel="stylesheet" type="text/css" href="/main.css" />
+	<link rel="start" href="http://goldencrop.sourceforge.net/" title="Golden Crop for Photoshop - Strona Domowa" />
+	<link rel="alternate" lang="en" href="http://goldencrop.sourceforge.net/en/" />
+	<link rel="alternate" lang="pl" href="http://goldencrop.sourceforge.net/pl/" />
 	<script type="text/javascript">
 	<!--
 	if (document.images)
