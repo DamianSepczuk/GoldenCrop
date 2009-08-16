@@ -1,11 +1,11 @@
 ﻿#target photoshop
 #strict on
 /**
-* @@@BUILDINFO@@@ Golden Crop.jsx 0.85beta Thu Aug 06 2009 17:11:43 GMT+0200
+* @@@BUILDINFO@@@ Golden Crop.jsx 0.90beta Thu Aug 16 2009 20:00:00 GMT+0200
 */
 
 /*****************************************
- * Golden crop script, v0.85 beta
+ * Golden crop script, v0.90 beta
  *
  * Copyright 2009, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
  * 
@@ -61,7 +61,7 @@ var lang = "auto";
 // BEGIN__HARVEST_EXCEPTION_ZSTRING
 <javascriptresource>
     <name>$$$/SzopeNSoft/GoldenCrop/AppName=Golden Crop</name>
-    <about>Golden Crop script v0.85 beta by Damian Sepczuk aka SzopeN
+    <about>Golden Crop script v0.90 beta by Damian Sepczuk aka SzopeN
 
 Copyright 2009, GNU GPL License
 
@@ -102,7 +102,7 @@ if ( lang != "auto" )
 $.level = debug?1:0;
 
 const szAppName = "Golden Crop",
-      szVersion = "0.85 beta";
+      szVersion = "0.90 beta";
 const UUID = '2c910bcd-8e34-4779-a885-bb214df640a3';
 // ---------------------------------------------------------------------
 function localizator(secretNumber) {
@@ -146,7 +146,7 @@ localizator.prototype.initStrings = function() {
     str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%'};
     str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldene Dreieck aufwärts'};
     str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldene Dreieck abwärts'};
-    str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:''};
+    str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonal-Methode'};
     str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.'};
     str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen'};
     str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?'};
@@ -166,9 +166,8 @@ localizator.prototype.initStrings = function() {
     str['ok'] = {en:'OK', pl:'OK', de:'OK'};
     str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale', de:'Alle Goldenen Spiralen'};
     str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln'};
-	str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii'};
-	str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)'};
-
+    str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Linienstärke'};
+    str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Linienstärke (‰ der kürzeren Kante)'};
 }
 
 // Returns translations in CVS format
@@ -501,8 +500,8 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
           }
        }
        if (hasCustomControl) {
-	       this.customControls = add('group', undefined, undefined, {name: 'customControls'});
-	   }
+           this.customControls = add('group', undefined, undefined, {name: 'customControls'});
+       }
        var okBtn = add('button', undefined, this.desc.okTxt, {name: 'ok'});
        var cancelBtn = add('button', undefined, this.desc.cancelTxt, {name: 'cancel'});
        defaultElement = okBtn;
@@ -555,8 +554,8 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
 }
 
 dialogMenuMChoice.prototype.show = function () {
-	var dlg = this.dlg;
-	var cbElements = this.cbElements;
+    var dlg = this.dlg;
+    var cbElements = this.cbElements;
     dlg.center();
     var result = dlg.show();
     if ( result != 1 ) {
@@ -1140,7 +1139,7 @@ var id11 = cTID( "setd" );
             desc33.putObject( cTID( "Clr " ), cTID( "RGBC" ), desc34 );
         desc6.putObject( idFrFX, cTID( "FrFX" ), desc33 );
     /*
-		var id21 = cTID( "DrSh" );
+        var id21 = cTID( "DrSh" );
             var desc7 = new ActionDescriptor();
             desc7.putBoolean( cTID( "enab" ), true );
             desc7.putEnumerated( cTID( "Md  " ), cTID( "BlnM" ), cTID( "Scrn" ) );
@@ -1205,7 +1204,7 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
           docHeight = this.docH;
     const stripSizePx = Math.max(1,Math.min(docWidth, docHeight) * basicStripSize);
     this.strokeWidth = Math.max(1,(stripSizePx)/16);
-	
+    
     this.gCrop = Stdlib.createLayerGroup(this.loc.get('GCbySzN'));
     Stdlib.moveToFront();
     
@@ -1655,19 +1654,19 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
                               ]
                   };
     var dlg = new dialogMenuMChoice(menuDesc);
-	dlg.construct(true);
-	// Add thickness slider
-	dlg.customControls.orientation = 'row';
-	dlg.customControls.alignChildren = 'fill';
-	dlg.customControls.add('statictext', undefined, this.loc.get('lineThicknessProm'));
-	dlg.customControls.tSlider = dlg.customControls.add('slider', undefined, this.conf.get('lthick'), 1, 30, {name: 'thickness'});
-	dlg.customControls.tSlider.jumpdelta = 10;
-	dlg.customControls.tSlider.jump = 1;
-	dlg.customControls.tSlider.onChanging = function() {dlg.customControls.tValTxt.text = Math.round(dlg.customControls.tSlider.value);}
-	dlg.customControls.tSlider.onChange = function() {dlg.customControls.tSlider.value = Math.round(dlg.customControls.tSlider.value);}
-	dlg.customControls.tValTxt = dlg.customControls.add('statictext', undefined);
-	dlg.customControls.tValTxt.preferredSize = [20, -1];
-	dlg.customControls.tSlider.onChanging();
+    dlg.construct(true);
+    // Add thickness slider
+    dlg.customControls.orientation = 'row';
+    dlg.customControls.alignChildren = 'fill';
+    dlg.customControls.add('statictext', undefined, this.loc.get('lineThicknessProm'));
+    dlg.customControls.tSlider = dlg.customControls.add('slider', undefined, this.conf.get('lthick'), 1, 30, {name: 'thickness'});
+    dlg.customControls.tSlider.jumpdelta = 10;
+    dlg.customControls.tSlider.jump = 1;
+    dlg.customControls.tSlider.onChanging = function() {dlg.customControls.tValTxt.text = Math.round(dlg.customControls.tSlider.value);}
+    dlg.customControls.tSlider.onChange = function() {dlg.customControls.tSlider.value = Math.round(dlg.customControls.tSlider.value);}
+    dlg.customControls.tValTxt = dlg.customControls.add('statictext', undefined);
+    dlg.customControls.tValTxt.preferredSize = [20, -1];
+    dlg.customControls.tSlider.onChanging();
     var res = dlg.show();
     if (!res) return false;
     this.conf.set('golden', res[0]);
@@ -1679,7 +1678,7 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
     this.conf.set('gspiralTL', res[6]);
     this.conf.set('gspiralTR', res[7]);
     this.conf.set('gspiralBR', res[8]);
-	this.conf.set('lthick', Math.round(dlg.customControls.tSlider.value));
+    this.conf.set('lthick', Math.round(dlg.customControls.tSlider.value));
 
     // Save parameters; crop could be canceled, but the line remains, so save lines settings now
     this.conf.saveSettings();

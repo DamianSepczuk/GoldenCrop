@@ -17,6 +17,27 @@
 	<rating></rating>
 	<ttl>1440</ttl>
 	<item>
+		<title>New version of Golden Crop [0.90 beta] available!</title>
+        <link>http://goldencrop.sourceforge.net</link>
+		<comments>http://goldencrop.sourceforge.net/</comments>
+		<enclosure url="https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.90%20beta/Golden%20Crop_v090beta.zip/download" length="23959" type="application/zip" />
+		<description>
+<![CDATA[
+<pre>
+  ==[ Version 0.90 beta ]==
+     --{ 2009-08-16 }--
+  * New composition method: Diagonal Rule
+  * User customizable line thickness
+  * New translation: German
+  * Faster layers creation
+  * Lines are more visible on a dark background (white stroke added)
+  * User-friendly error information is shown when there is no open document
+</pre>]]></description>
+        <guid isPermaLink="false">http://goldencrop.sourceforge.net/</guid>
+		<pubDate>Sun, 16 Aug 2009 19:00:00 GMT</pubDate>
+		<author>Golden Crop (goldencrop@o2.pl)</author>
+	</item>
+	<item>
 		<title>New version of Golden Crop [0.85 beta] available!</title>
         <link>http://goldencrop.sourceforge.net</link>
 		<comments>http://goldencrop.sourceforge.net/#whatsNew085beta</comments>

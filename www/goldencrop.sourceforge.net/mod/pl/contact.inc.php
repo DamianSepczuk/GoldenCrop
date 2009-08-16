@@ -1,5 +1,5 @@
 <div class="modTitle">Kontakt i linki</div>
-<div style="float: right; position:relative; margin: 2em; text-align: center; width: 336px; height: 280px;" class="bigRectRekl"><?=$AD_intextBigRect?></div>
+<div style="float: right; position:relative; margin-left: 2em; text-align: center; width: 336px; height: 280px;" class="bigRectRekl"><?=$AD_intextBigRect?></div>
 <h1>Projekt</h1>
 <p>Jeśli posiadasz swoją stronę internetową i chcesz wesprzeć projekt Golden Crop, możesz umieścić na niej odnośnik do tej strony WWW. Możesz użyć przykładowego przycisku (kod HTML poniżej) albo zaprojektować swój (po czym podesłać go autorowi, aby wrzucił na tą stronę).</p>
 <table>

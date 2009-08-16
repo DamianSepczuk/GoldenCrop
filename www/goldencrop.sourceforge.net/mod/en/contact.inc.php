@@ -1,5 +1,5 @@
 <div class="modTitle">Contact and links</div>
-<div style="float: right; position:relative; margin: 2em; text-align: center; width: 336px; height: 280px;" class="bigRectRekl"><?=$AD_intextBigRect?></div>
+<div style="float: right; position:relative; margin-left: 2em; text-align: center; width: 336px; height: 280px;" class="bigRectRekl"><?=$AD_intextBigRect?></div>
 <h1>The Project</h1>
 <p>If you have your own web site and want to support the Golden Crop project, you can display the Golden Crop link button on your web pages. Use the following HTML code:</p>
 <table>

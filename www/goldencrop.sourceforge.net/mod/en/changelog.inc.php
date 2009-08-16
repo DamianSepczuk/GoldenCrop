@@ -1,4 +1,19 @@
 <div class="modTitle">Changelog</div>
+<h1>Version 0.90 beta</h1>
+<ul>
+	<li><img src="img/features/diagonalRule.png" alt="Diagonal Rule" /><br />
+	New composition method: <strong style="font-size:150%; color: red">Diagonal Rule</strong></li>
+	<li><img src="img/features/thicknessControl.png" alt="Thickness control" /><br />
+	User customizable line thickness</li>
+	<li>New translation: <strong style="font-size:150%; color: #ffd635">German</strong></li>
+</ul>
+<div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>
+<ul>
+	<li>Faster layers creation</li>
+	<li>Lines are more visible on a dark background (white stroke added)</li>
+	<li>User-friendly error information is shown when there is no open document</li>
+</ul>
+<div style="margin: auto; text-align: center; width: 336px; height: 280px;" class="bigRectRekl"><?=$AD_intextBigRect?></div>
 <h1>Version 0.85 beta</h1>
 <ul>
   <li>It is now <strong style="font-size:150%; color: red">CS2 compatible</strong>!</li>
@@ -10,9 +25,6 @@
   <li>Golden spirals added<br />
       <img alt="Golden Spirals" src="img/goldenSpirals.png" />
       </li>
-</ul>
-<div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>
-<ul>
   <li>"Choose guidelines" dialog added. Now you can choose which guidelines
     would be drawn. Last choice is remembered.<br />
       <img alt="Composition guidelines" src="img/chooseGuidelines.png" />
@@ -26,4 +38,3 @@
   <li>Minor fix in rotation, detecting portrait/landscape crop</li>
   <li>Code cleanup and optimization</li>
 </ul>
-<div style="margin: auto; text-align: center; width: 336px; height: 280px;" class="bigRectRekl"><?=$AD_intextBigRect?></div>
