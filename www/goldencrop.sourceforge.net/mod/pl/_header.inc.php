@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="pl-PL" xml:lang="pl-PL" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>Golden Crop for Photoshop - Strona Domowa</title>
+	<title>Golden Crop for Photoshop - [--TITLE--]</title>
 	<base href="http://goldencrop.sourceforge.net/"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="Content-Language" content="pl" />
@@ -72,6 +72,16 @@
 				 ui_language: "pl"
 			}
 			</script>
+			<!-- dodajdo.com start 
+			dodajdo_pokaz() -  parametry
+			1 - this
+			2 - twoje id
+			3 - tytul - jesli nie podany document.title
+			4 - url - jesli nie podany location.href
+			5 - tabelka z wlasnymi szybkimi skrotami do uslug - jesli pusta to domyslne,  jesli -1 to wylacz, jesli inna wartosc to wstaw
+			--><script type="text/javascript" src="http://dodajdo.com/app.js?id=3773"></script>
+			<a onmouseover="return dodajdo_pokaz(this,3773,'Golden Crop for Photoshop', 'http://goldencrop.sourceforge.net/')" onmouseout="dodajdo_zamknij()" class="dodajdo" href="http://dodajdo.com/zakladki.php" onclick="window.open('http://dodajdo.com/zakladki.php?id=3773&amp;url='+encodeURIComponent('http://goldencrop.sourceforge.net/')+'&amp;tytul='+encodeURIComponent('Golden Crop for Photoshop'),'dodajdo','scrollbars=yes,menubar=no,width=630,height=540,resizable=yes,toolbar=no,location=no,status=no'); return false;"><img src="http://dodajdo.com/bookmarks4.gif" alt="dodajdo" /></a>
+			<!-- dodajdo.com koniec -->
 			<a href="http://www.addthis.com/bookmark.php?v=20" 
 				onmouseover="return addthis_open(this, '', 'http://goldencrop.sourceforge.net', '[TITLE]');" 
 				onmouseout="addthis_close();" 

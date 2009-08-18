@@ -1,3 +1,4 @@
+<?php $title = 'Pobierz (download)'?>
 <div class="modTitle">Download</div>
 
 <div style="float: right; position:relative; margin-left: auto; text-align: center; width: 336px; height: 280px;" class="bigRectRekl"><?=$AD_intextBigRect?></div>

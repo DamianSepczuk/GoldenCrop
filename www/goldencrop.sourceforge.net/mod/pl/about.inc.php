@@ -1,3 +1,4 @@
+<?php $title = 'Informacje o skrypcie'?>
 <div class="modTitle">Informacje o skrypcie <strong>Golden Crop</strong></div>
 <p>Skrypt Golden Crop został napisany w języku <em>Java Script</em>, wykorzystując model obiektowy udostępniany przez Adobe<sup>®</sup> Photoshop<sup>®</sup>. Został zaprojektowany aby pomóc kadrować zdjęcia zgodnie z regułami kompozycji. Dodatkowo potrafi obracać zdjęcia o dowolny kąt i dowolnie rozszerzać płótno używając (praktycznie) niedestrukcyjnych metod.</p>
 

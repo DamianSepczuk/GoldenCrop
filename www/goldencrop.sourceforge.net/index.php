@@ -40,7 +40,12 @@ if ( $saveInCookie ) {
 require_once('ad.inc.php');
 // Now we have correct data in $module and $language,
 // and def lang is stored in cookie if needed
+$title = '';
+ob_start();
 include('mod/'.$language.'/_header.inc.php');
 include('mod/'.$language.'/'.$module.'.inc.php');
 include('mod/'.$language.'/_footer.inc.php');
+$pageSrc = ob_get_clean();
+$pageSrc = str_replace('[--TITLE--]',$title,$pageSrc);
+echo $pageSrc;
 ?>

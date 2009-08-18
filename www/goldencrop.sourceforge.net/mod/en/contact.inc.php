@@ -1,3 +1,4 @@
+<?php $title = 'Contact and links'?>
 <div class="modTitle">Contact and links</div>
 <div style="float: right; position:relative; margin-left: 2em; text-align: center; width: 336px; height: 280px;" class="bigRectRekl"><?=$AD_intextBigRect?></div>
 <h1>The Project</h1>

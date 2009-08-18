@@ -133,7 +133,6 @@ localizator.prototype.initStrings = function() {
     str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil'};
     str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij płótno', de:'Arbeitsfläche aufteilen'};
     str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskę kadrującą', de:'Erstelle Schnittmaske'};
-    str['cancel'] = {en:'Cancel', pl:'Anuluj', de:'Abbrechen'};
     str['bgOnLayer'] = {en:'Background on layer', pl:'Tło na warstwie', de:'Hintergrund auf Ebene'};
     str['bgFill'] = {en:'Background fill', pl:'Wypełnienie tła', de:'Hintergrund füllen'};
     str['-grid'] = {en:' - grid', pl:' - siatka', de:' - Rastern'};
@@ -144,9 +143,9 @@ localizator.prototype.initStrings = function() {
     str['cropMask'] = {en:'Crop mask', pl:'Maska kadrująca', de:'Schnittmaske'};
     str['divRules'] = {en:'Dividing rules', pl:'Reguły podziału', de:'Trennungsregeln'};
     str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%'};
-    str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldene Dreieck aufwärts'};
-    str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldene Dreieck abwärts'};
-    str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonal-Methode'};
+    str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldener Dreieck oben'};
+    str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldener Dreieck unten'};
+    str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonale Methode'};
     str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.'};
     str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen'};
     str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?'};
@@ -164,10 +163,12 @@ localizator.prototype.initStrings = function() {
     str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie', de:'Alles Auswählen'};
     str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie', de:'Nichts Auswählen'};
     str['ok'] = {en:'OK', pl:'OK', de:'OK'};
+    str['cancel'] = {en:'Cancel', pl:'Anuluj', de:'Abbrechen'};
     str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale', de:'Alle Goldenen Spiralen'};
     str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln'};
-    str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Linienstärke'};
-    str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Linienstärke (‰ der kürzeren Kante)'};
+    str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Liniendicke'};
+    str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Liniendicke (‰ kurze Seite)'};
+
 }
 
 // Returns translations in CVS format

@@ -1,3 +1,4 @@
+<?php $title = 'Privacy Policy'?>
 <div class="modTitle">Privacy Policy for http://goldencrop.sourceforge.net</div>
 <p>This page is using cookies to remember user language. Moreover due to the use of Google Adsense, some other cookies could be used. For details see Google Adsens Privacy Policy.</p>
 <p> If you require any more information or have any questions about our privacy policy, please feel free to contact us by email at the adres given in the "Contact" section. </p> 

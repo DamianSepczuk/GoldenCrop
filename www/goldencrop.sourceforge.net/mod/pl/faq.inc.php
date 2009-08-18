@@ -1,3 +1,4 @@
+<?php $title = 'FAQ, Często Zadawane Pytania'?>
 <div class="modTitle"><b>F</b>requently <b>A</b>sked <b>Q</b>uestions, <br />czyli<br />
 <b>C</b>zęsto <b>Z</b>adawane <b>P</b>ytania
 </div>
@@ -55,7 +56,7 @@ Instalacja skryptu Golden Crop jest naprawdę prosta. Powiem więcej, jeśli chc
 	<li>W systemie 32-bitowym (najbardziej popularne): <pre>C:\Program Files\Adobe\Adobe Photoshop CS4\Presets\Scripts\</pre></li>
 	<li>64-bitowa wersja programu Photoshop® na 64-bitowym systemie: <pre>C:\Program Files\Adobe\Adobe Photoshop CS4 (64 Bit)\Presets\Scripts\</pre></li>
 	<li>32-bitowa wersja programu Photoshop® na 64-bitowym systemie: <pre>C:\Program Files (x86)\Adobe\Adobe Photoshop CS4\Presets\Scripts\</pre></li>
-	<li>W systemie Mac OS: <pre>Installation - Applications/Adobe Photoshop CS(x)/Scripts/</pre></li>
+	<li>W systemie Mac OS: <pre>/Applications/Adobe Photoshop CS4/Presets/Scripts/</pre></li>
 </ul><p> Jeśli posiadasz polską wersję programu Photoshop®, zmień końcówki ścieżek z '\Presets\Scripts\' na 'Ustawienia\Skrypty\'. Możesz też po prostu "wejść" do archiwum i przeciągnąć plik 'Golden Crop.jsx' do jednego z powyższych folderów. Ta metoda została używa w filmiku pokazującym proces instalacji.</p>
 <p><strong>UWAGA: Jeśli w katalogu, do którego przekopiowano skrypt, znajduje się plik 'goldenCrop' ('goldenCrop.jsx') należy go usunąć, gdyż zawiera starą wersję skryptu.</strong></p>
 </li>

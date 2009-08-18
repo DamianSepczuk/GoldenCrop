@@ -1,3 +1,4 @@
+<?php $title = 'About'?>
 <div class="modTitle">About the <strong>Golden Crop</strong> script</div>
 <p>Golden Crop is a script written in <em>Java Script</em> language using Adobe<sup>®</sup> Photoshop<sup>®</sup> object model. It was designed to help cropping pictures according to some composition rules. Besides that, you can rotate and extend canvas using (nearly) non-destructive methods.</p>
 <h1>Features</h1>

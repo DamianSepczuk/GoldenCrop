@@ -1,3 +1,4 @@
+<?php $title = 'Zasoby Source Forge'?>
 <div class="modTitle">Zasoby Source Forge </div>
 <div style="float: right; position:relative; margin-left: auto; text-align: center; width: 336px; height: 280px;" class="bigRectRekl"><?=$AD_intextBigRect?></div>
 <h1>Inne pliki</h1>

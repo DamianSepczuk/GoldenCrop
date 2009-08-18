@@ -1,3 +1,4 @@
+<?php $title = 'Dziennik zmian'?>
 <div class="modTitle">Dziennik zmian</div>
 <h1>Wersja 0.90 beta</h1>
 <ul>

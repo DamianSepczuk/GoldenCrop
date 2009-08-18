@@ -1,3 +1,4 @@
+<?php $title = 'Changelog'?>
 <div class="modTitle">Changelog</div>
 <h1>Version 0.90 beta</h1>
 <ul>

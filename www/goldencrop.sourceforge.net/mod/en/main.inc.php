@@ -1,3 +1,4 @@
+<?php $title = 'Home Page'?>
 		<div id="newVersionAlert">
 			New version <strong>0.90 beta</strong> is available!<br />
 			<a class="wn" href="<?=getUrlToModule('changelog')?>">What's new?</a>

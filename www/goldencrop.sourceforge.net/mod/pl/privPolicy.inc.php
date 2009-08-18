@@ -1,3 +1,4 @@
+<?php $title = 'Polityka Prywatności'?>
 <div class="modTitle">Polityka Prywatności dla strony http://goldencrop.sourceforge.net</div>
 <p>Ta strona używa <em>cookies</em> do zapamiętywania języka użytkownika. Zastosowanie na stronie reklam Google Adsense, może spowodować użycie dodatkowych plików cookies. Aby uzyskać szczegóły zapoznaj się z Polityką Prywatności Google Adsens.</p>
 <p>Jeśli potrzebujesz więcej informacji lub masz jakiekolwiek pytania odnośnie niniejszej Polityki Prywatności, skontaktuj się z nami pisząc maila na adres podany w dziale "Kontakt".</p> 

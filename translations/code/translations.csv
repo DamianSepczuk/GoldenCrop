@@ -1,38 +1,40 @@
-"AvailLangs";"en";"pl";"de"
-"chCropMethod";"Choose crop style";"Wybierz styl przycinania";"Wähle Schnittstil"
-"chCropMethodQ";"Choose crop style";"Wybierz styl przycinania";"Wähle Schnittstil"
-"cropCanvas";"Crop canvas (simple crop)";"Przytnij płótno";"Arbeitsfläche aufteilen"
-"mkCropMask";"Make crop mask";"Stwórz maskę kadrującą";"Erstelle Schnittmaske"
-"bgOnLayer";"Background on layer";"Tło na warstwie";"Hintergrund auf Ebene"
-"bgFill";"Background fill";"Wypełnienie tła";"Hintergrund füllen"
-"-grid";" - grid";" - siatka";" - Rastern"
-"-resize";" - resize";" - przeskalowanie";" - Skalieren"
-"-reveal";" - reveal";" - rozszerzanie";" - Einblenden"
-"-crop";" - crop";" - przycinanie";" - Beschneiden"
-"GCbySzN";"Golden Crop by SzopeN";"Golden Crop by SzopeN";"Golden Crop by SzopeN"
-"cropMask";"Crop mask";"Maska kadrująca";"Schnittmaske"
-"divRules";"Dividing rules";"Reguły podziału";"Trennungsregeln"
-"canvExtDet";"Canvas extension detected.";"Wykryto rozszerzenie płótna.";"Erweiterung der Arbeitsfläche zeigen"
-"canvExtDetQ";"What to do with canvas?";"Co mam zrobić z płótnem?";"Was mache ich mit der Arbeitsfläche?"
-"extendCanvas";"Extend canvas";"Rozszerz płótno";"Erweiterte Arbeitsfläche"
-"dontExtCanv";"Crop without extension";"Przytnij bez rozszerzania";"Schnitt ohne Erweiterung"
-"retToCropping";"Return to cropping";"Wróć do kadrowania";"Zurück zum Schneiden"
-"chCompMethod";"Composition method";"Metoda kompozycji";"Kompositionsmethode"
-"chCompMethodQ";"Choose composition guidelines";"Wybierz metodę kompozycji";"Auswahl der Kompositionslinien"
-"goldenRule";"Golden Rule";"Złoty podział";"Goldene Regel"
-"ruleOfThirds";"Rule of Thirds";"Reguła trzech";"Drittel-Regel"
-"goldenTriangleUp";"Golden triangle upwards";"Złoty trójkąt w górę";"Goldene Dreieck aufwärts"
-"goldenTriangleDown";"Golden triangle downwards";"Złoty trójkąt w dół";"Goldene Dreieck abwärts"
-"diagonalMethod";"Diagonal method";"Metoda przekątnych";"Diagonale Regel"
-"goldenSpiralBL";"Golden Spiral bottom-left";"Złota spirala lewo-dół";"Goldene Spirale unten links"
-"goldenSpiralTL";"Golden Spiral top-left";"Złota spirala lewo-góra";"Goldene Spirale oben links"
-"goldenSpiralTR";"Golden Spiral top-right";"Złota spirala prawo-góra";"Goldene Spirale oben rechts"
-"goldenSpiralBR";"Golden Spiral bottom-right";"Złota spirala prawo-dół";"Goldene Spirale unten rechts"
-"selectAll";"Select All";"Zaznacz wszystkie";"Alles Auswählen"
-"deselectAll";"Deselect All";"Odznacz wszystkie";"Nichts Auswählen"
-"allGoldenSpirals";"All Golden Spirals";"Wszystkie Złote Spirale";"Alle Goldenen Spiralen"
-"basicRules";"Basic rules";"Podstawowe podziały";"Grundregeln"
-"ok";"OK";"OK";"OK"
-"cancel";"Cancel";"Anuluj";"Abbrechen"
-"stripAtPrc";"Strip at %1%%";"Paski na %1%%";"Linien auf %1%%"
-"openB4Run";"Open the document in which you want the script to run.";"Otwórz dokument, w którym chcesz uruchomić ten skrypt.";"Öffne das Dokument, in dem das Script ablaufen soll."
+"AvailLangs";"en";"pl";"de";"es"
+"chCropMethod";"Choose crop style";"Wybierz styl przycinania";"Wähle Schnittstil";
+"chCropMethodQ";"Choose crop style";"Wybierz styl przycinania";"Wähle Schnittstil";
+"cropCanvas";"Crop canvas (simple crop)";"Przytnij płótno";"Arbeitsfläche aufteilen";
+"mkCropMask";"Make crop mask";"Stwórz maskę kadrującą";"Erstelle Schnittmaske";
+"bgOnLayer";"Background on layer";"Tło na warstwie";"Hintergrund auf Ebene";
+"bgFill";"Background fill";"Wypełnienie tła";"Hintergrund füllen";
+"-grid";" - grid";" - siatka";" - Rastern";
+"-resize";" - resize";" - przeskalowanie";" - Skalieren";
+"-reveal";" - reveal";" - rozszerzanie";" - Einblenden";
+"-crop";" - crop";" - przycinanie";" - Beschneiden";
+"GCbySzN";"Golden Crop by SzopeN";"Golden Crop by SzopeN";"Golden Crop by SzopeN";
+"cropMask";"Crop mask";"Maska kadrująca";"Schnittmaske";
+"divRules";"Dividing rules";"Reguły podziału";"Trennungsregeln";
+"stripAtPrc";"Strip at %1%%";"Paski na %1%%";"Linien auf %1%%";
+"goldenTriangleUp";"Golden triangle upwards";"Złoty trójkąt w górę";"Goldener Dreieck oben";
+"goldenTriangleDown";"Golden triangle downwards";"Złoty trójkąt w dół";"Goldener Dreieck unten";
+"diagonalMethod";"Diagonal method";"Metoda przekątnych";"Diagonale Methode";
+"openB4Run";"Open the document in which you want the script to run.";"Otwórz dokument, w którym chcesz uruchomić ten skrypt.";"Öffne das Dokument, in dem das Script ablaufen soll.";
+"canvExtDet";"Canvas extension detected.";"Wykryto rozszerzenie płótna.";"Erweiterung der Arbeitsfläche zeigen";
+"canvExtDetQ";"What to do with canvas?";"Co mam zrobić z płótnem?";"Was mache ich mit der Arbeitsfläche?";
+"extendCanvas";"Extend canvas";"Rozszerz płótno";"Erweiterte Arbeitsfläche";
+"dontExtCanv";"Crop without extension";"Przytnij bez rozszerzania";"Schnitt ohne Erweiterung";
+"retToCropping";"Return to cropping";"Wróć do kadrowania";"Zurück zum Schneiden";
+"chCompMethod";"Composition method";"Metoda kompozycji";"Kompositionsmethode";
+"chCompMethodQ";"Choose composition guidelines";"Wybierz metodę kompozycji";"Auswahl der Kompositionslinien";
+"goldenRule";"Golden Rule";"Złoty podział";"Goldene Regel";
+"ruleOfThirds";"Rule of Thirds";"Reguła trzech";"Drittel-Regel";
+"goldenSpiralBL";"Golden Spiral bottom-left";"Złota spirala lewo-dół";"Goldene Spirale unten links";
+"goldenSpiralTL";"Golden Spiral top-left";"Złota spirala lewo-góra";"Goldene Spirale oben links";
+"goldenSpiralTR";"Golden Spiral top-right";"Złota spirala prawo-góra";"Goldene Spirale oben rechts";
+"goldenSpiralBR";"Golden Spiral bottom-right";"Złota spirala prawo-dół";"Goldene Spirale unten rechts";
+"selectAll";"Select All";"Zaznacz wszystkie";"Alles Auswählen";
+"deselectAll";"Deselect All";"Odznacz wszystkie";"Nichts Auswählen";
+"ok";"OK";"OK";"OK";
+"cancel";"Cancel";"Anuluj";"Abbrechen";
+"allGoldenSpirals";"All Golden Spirals";"Wszystkie Złote Spirale";"Alle Goldenen Spiralen";
+"basicRules";"Basic rules";"Podstawowe podziały";"Grundregeln";
+"lineThickness";"Line thickness";"Grubość linii";"Liniendicke";
+"lineThicknessProm";"Line thickness (‰ of shorter edge): ";"Grubość linii (‰ krótszego boku)";"Liniendicke (‰ kurze Seite)";
