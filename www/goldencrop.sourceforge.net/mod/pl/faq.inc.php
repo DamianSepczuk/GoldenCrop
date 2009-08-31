@@ -126,6 +126,7 @@ $faqA[] = array('Podziękowania','acknowledgements',<<<ENDANSWER
 <ul>
  <li><strong>Krystian Paździor</strong> -- intensywne testowanie po nocach i błyskotliwe pomysły</li>
  <li><strong>Arkadius Bazior</strong> -- opracowanie niemieckiej wersji językowej skryptu</li>
+ <li><strong>Cristiano007</strong> -- opracowanie hiszpańskiej wersji językowej skryptu</li>
 </ul>
 <p>W imieniu swoim oraz wszystkich użytkowników skryptu <strong>dziękuję Wam za włożoną pracę i poświęcony czas</strong>! </p>
 ENDANSWER

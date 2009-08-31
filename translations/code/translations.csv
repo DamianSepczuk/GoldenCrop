@@ -1,40 +1,40 @@
 "AvailLangs";"en";"pl";"de";"es"
-"chCropMethod";"Choose crop style";"Wybierz styl przycinania";"Wähle Schnittstil";
-"chCropMethodQ";"Choose crop style";"Wybierz styl przycinania";"Wähle Schnittstil";
-"cropCanvas";"Crop canvas (simple crop)";"Przytnij płótno";"Arbeitsfläche aufteilen";
-"mkCropMask";"Make crop mask";"Stwórz maskę kadrującą";"Erstelle Schnittmaske";
-"bgOnLayer";"Background on layer";"Tło na warstwie";"Hintergrund auf Ebene";
-"bgFill";"Background fill";"Wypełnienie tła";"Hintergrund füllen";
-"-grid";" - grid";" - siatka";" - Rastern";
-"-resize";" - resize";" - przeskalowanie";" - Skalieren";
-"-reveal";" - reveal";" - rozszerzanie";" - Einblenden";
-"-crop";" - crop";" - przycinanie";" - Beschneiden";
-"GCbySzN";"Golden Crop by SzopeN";"Golden Crop by SzopeN";"Golden Crop by SzopeN";
-"cropMask";"Crop mask";"Maska kadrująca";"Schnittmaske";
-"divRules";"Dividing rules";"Reguły podziału";"Trennungsregeln";
-"stripAtPrc";"Strip at %1%%";"Paski na %1%%";"Linien auf %1%%";
-"goldenTriangleUp";"Golden triangle upwards";"Złoty trójkąt w górę";"Goldener Dreieck oben";
-"goldenTriangleDown";"Golden triangle downwards";"Złoty trójkąt w dół";"Goldener Dreieck unten";
-"diagonalMethod";"Diagonal method";"Metoda przekątnych";"Diagonale Methode";
-"openB4Run";"Open the document in which you want the script to run.";"Otwórz dokument, w którym chcesz uruchomić ten skrypt.";"Öffne das Dokument, in dem das Script ablaufen soll.";
-"canvExtDet";"Canvas extension detected.";"Wykryto rozszerzenie płótna.";"Erweiterung der Arbeitsfläche zeigen";
-"canvExtDetQ";"What to do with canvas?";"Co mam zrobić z płótnem?";"Was mache ich mit der Arbeitsfläche?";
-"extendCanvas";"Extend canvas";"Rozszerz płótno";"Erweiterte Arbeitsfläche";
-"dontExtCanv";"Crop without extension";"Przytnij bez rozszerzania";"Schnitt ohne Erweiterung";
-"retToCropping";"Return to cropping";"Wróć do kadrowania";"Zurück zum Schneiden";
-"chCompMethod";"Composition method";"Metoda kompozycji";"Kompositionsmethode";
-"chCompMethodQ";"Choose composition guidelines";"Wybierz metodę kompozycji";"Auswahl der Kompositionslinien";
-"goldenRule";"Golden Rule";"Złoty podział";"Goldene Regel";
-"ruleOfThirds";"Rule of Thirds";"Reguła trzech";"Drittel-Regel";
-"goldenSpiralBL";"Golden Spiral bottom-left";"Złota spirala lewo-dół";"Goldene Spirale unten links";
-"goldenSpiralTL";"Golden Spiral top-left";"Złota spirala lewo-góra";"Goldene Spirale oben links";
-"goldenSpiralTR";"Golden Spiral top-right";"Złota spirala prawo-góra";"Goldene Spirale oben rechts";
-"goldenSpiralBR";"Golden Spiral bottom-right";"Złota spirala prawo-dół";"Goldene Spirale unten rechts";
-"selectAll";"Select All";"Zaznacz wszystkie";"Alles Auswählen";
-"deselectAll";"Deselect All";"Odznacz wszystkie";"Nichts Auswählen";
-"ok";"OK";"OK";"OK";
-"cancel";"Cancel";"Anuluj";"Abbrechen";
-"allGoldenSpirals";"All Golden Spirals";"Wszystkie Złote Spirale";"Alle Goldenen Spiralen";
-"basicRules";"Basic rules";"Podstawowe podziały";"Grundregeln";
-"lineThickness";"Line thickness";"Grubość linii";"Liniendicke";
-"lineThicknessProm";"Line thickness (‰ of shorter edge): ";"Grubość linii (‰ krótszego boku)";"Liniendicke (‰ kurze Seite)";
+"chCropMethod";"Choose crop style";"Wybierz styl przycinania";"Wähle Schnittstil";"Escoja tipo de recorte"
+"chCropMethodQ";"Choose crop style";"Wybierz styl przycinania";"Wähle Schnittstil";"Escoja tipo de recorte"
+"cropCanvas";"Crop canvas (simple crop)";"Przytnij płótno";"Arbeitsfläche aufteilen";"Recortar el lienzo"
+"mkCropMask";"Make crop mask";"Stwórz maskę kadrującą";"Erstelle Schnittmaske";"Hacer máscara de recorte"
+"bgOnLayer";"Background on layer";"Tło na warstwie";"Hintergrund auf Ebene";"Fondo sobre capa"
+"bgFill";"Background fill";"Wypełnienie tła";"Hintergrund füllen";"Relleno de fondo"
+"-grid";" - grid";" - siatka";" - Rastern";"- grilla"
+"-resize";" - resize";" - przeskalowanie";" - Skalieren";"- re-escalar"
+"-reveal";" - reveal";" - rozszerzanie";" - Einblenden";"- revelar"
+"-crop";" - crop";" - przycinanie";" - Beschneiden";"- recortar"
+"GCbySzN";"Golden Crop by SzopeN";"Golden Crop by SzopeN";"Golden Crop by SzopeN";"Recorte Dorado por SzopeN"
+"cropMask";"Crop mask";"Maska kadrująca";"Schnittmaske";"Máscara de recorte"
+"divRules";"Dividing rules";"Reguły podziału";"Trennungsregeln";"Reglas de división"
+"stripAtPrc";"Strip at %1%%";"Paski na %1%%";"Linien auf %1%%";"Cinta al %1%%"
+"goldenTriangleUp";"Golden triangle upwards";"Złoty trójkąt w górę";"Goldener Dreieck oben";"Triángulo dorado hacia arriba"
+"goldenTriangleDown";"Golden triangle downwards";"Złoty trójkąt w dół";"Goldener Dreieck unten";"Triángulo dorado hacia abajo"
+"diagonalMethod";"Diagonal method";"Metoda przekątnych";"Diagonale Methode";"Método Diagonal"
+"openB4Run";"Open the document in which you want the script to run.";"Otwórz dokument, w którym chcesz uruchomić ten skrypt.";"Öffne das Dokument, in dem das Script ablaufen soll.";"Abrir el documento en el cual quiere correr el script"
+"canvExtDet";"Canvas extension detected.";"Wykryto rozszerzenie płótna.";"Erweiterung der Arbeitsfläche zeigen";"Extensión del lienzo detectada"
+"canvExtDetQ";"What to do with canvas?";"Co mam zrobić z płótnem?";"Was mache ich mit der Arbeitsfläche?";"¿Qué hacer con el lienzo?"
+"extendCanvas";"Extend canvas";"Rozszerz płótno";"Erweiterte Arbeitsfläche";"Extender el lienzo"
+"dontExtCanv";"Crop without extension";"Przytnij bez rozszerzania";"Schnitt ohne Erweiterung";"Recortar sin extensón"
+"retToCropping";"Return to cropping";"Wróć do kadrowania";"Zurück zum Schneiden";"Volver a recorte"
+"chCompMethod";"Composition method";"Metoda kompozycji";"Kompositionsmethode";"Método de composición"
+"chCompMethodQ";"Choose composition guidelines";"Wybierz metodę kompozycji";"Auswahl der Kompositionslinien";"Escoja guías de composición"
+"goldenRule";"Golden Rule";"Złoty podział";"Goldene Regel";"Regla Dorada"
+"ruleOfThirds";"Rule of Thirds";"Reguła trzech";"Drittel-Regel";"Regla de los Tercios"
+"goldenSpiralBL";"Golden Spiral bottom-left";"Złota spirala lewo-dół";"Goldene Spirale unten links";"Espiral Dorada abajo-izquierda"
+"goldenSpiralTL";"Golden Spiral top-left";"Złota spirala lewo-góra";"Goldene Spirale oben links";"Espiral Dorada arriba-izquierda"
+"goldenSpiralTR";"Golden Spiral top-right";"Złota spirala prawo-góra";"Goldene Spirale oben rechts";"Espiral Dorada arriba-derecha"
+"goldenSpiralBR";"Golden Spiral bottom-right";"Złota spirala prawo-dół";"Goldene Spirale unten rechts";"Espiral Dorada abajo-derecha"
+"selectAll";"Select All";"Zaznacz wszystkie";"Alles Auswählen";"Seleccione Todo"
+"deselectAll";"Deselect All";"Odznacz wszystkie";"Nichts Auswählen";"Deseleccione Todo"
+"ok";"OK";"OK";"OK";"OK"
+"cancel";"Cancel";"Anuluj";"Abbrechen";"Cancelar"
+"allGoldenSpirals";"All Golden Spirals";"Wszystkie Złote Spirale";"Alle Goldenen Spiralen";"Todas las Espirales Doradas"
+"basicRules";"Basic rules";"Podstawowe podziały";"Grundregeln";"Reglas Básicas"
+"lineThickness";"Line thickness";"Grubość linii";"Liniendicke";"Grosor de la línea"
+"lineThicknessProm";"Line thickness (‰ of shorter edge): ";"Grubość linii (‰ krótszego boku)";"Liniendicke (‰ kurze Seite)";"Grosor de la línea (‰ de lado corto)"
