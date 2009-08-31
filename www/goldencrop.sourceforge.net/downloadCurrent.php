@@ -1,6 +1,7 @@
 <?php
-$dloadVer = '0.90 beta';
-$location = 'https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.90%20beta/Golden%20Crop_v090beta.zip/download';
+$dloadVer = '0.91 beta';
+$location = 'http://matrix.inten.pl/~szopen/files/goldencrop/Golden%20Crop_v091beta.zip';
+// https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.91%20beta/Golden%20Crop_v091beta.zip/download
 
 // Simple download counter...
 include('db_settings.inc.php');

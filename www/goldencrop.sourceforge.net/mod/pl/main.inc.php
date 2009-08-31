@@ -1,6 +1,6 @@
 <?php $title = 'Strona Domowa'?>
 		<div id="newVersionAlert">
-			Nowa wersja <strong>0.90 beta</strong> jest dostępna!<br />
+			Nowa wersja <strong>0.91 beta</strong> jest dostępna!<br />
 			<a class="wn" href="<?=getUrlToModule('changelog')?>">Co nowego?</a>
 		</div>
 		<div id="goldenButtons">

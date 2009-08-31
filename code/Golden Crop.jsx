@@ -168,8 +168,8 @@ localizator.prototype.initStrings = function() {
     str['cancel'] = {en:'Cancel', pl:'Anuluj', de:'Abbrechen', es:'Cancelar'};
     str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale', de:'Alle Goldenen Spiralen', es:'Todas las Espirales Doradas'};
     str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln', es:'Reglas Básicas'};
-    str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Liniendicke', es:'Grosor de la línea'};
-    str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Liniendicke (‰ kurze Seite)', es:'Grosor de la línea (‰ de lado corto)'};
+    str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Liniendicke', es:'Grosor de línea'};
+    str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Liniendicke (‰ kurze Seite)', es:'Grosor de línea (‰ del borde más corto)'};
 }
 
 // Returns translations in CVS format

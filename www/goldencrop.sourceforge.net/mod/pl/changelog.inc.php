@@ -1,5 +1,9 @@
 <?php $title = 'Dziennik zmian'?>
 <div class="modTitle">Dziennik zmian</div>
+<ul>
+	<li>Nowy język: <strong style="font-size:150%; color: #ffd635">hiszpański</strong></li>
+</ul>
+<div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>
 <h1>Wersja 0.90 beta</h1>
 <ul>
 	<li><img src="img/features/diagonalRule.png" alt="Metoda Przekątnych" /><br />
@@ -7,9 +11,6 @@
 	<li><img src="img/features/thicknessControl.png" alt="Kontrola grubości linii" /><br />
 	Kontrola grubości linii</li>
 	<li>Nowy język: <strong style="font-size:150%; color: #ffd635">niemiecki</strong></li>
-</ul>
-<div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>
-<ul>
 	<li>Szybsze tworzenie warstw</li>
 	<li>Linie lepiej widoczne na ciemnym tle (dodany biały obrys)</li>
 	<li>Lepsza reakcja na próbę uruchomienia skryptu bez otwartego dokumentu</li>

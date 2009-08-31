@@ -1,5 +1,10 @@
 <?php $title = 'Changelog'?>
 <div class="modTitle">Changelog</div>
+<h1>Version 0.91 beta</h1>
+<ul>
+	<li>New translation: <strong style="font-size:150%; color: #ffd635">Spanish</strong></li>
+</ul>
+<div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>
 <h1>Version 0.90 beta</h1>
 <ul>
 	<li><img src="img/features/diagonalRule.png" alt="Diagonal Rule" /><br />
@@ -7,9 +12,6 @@
 	<li><img src="img/features/thicknessControl.png" alt="Thickness control" /><br />
 	User customizable line thickness</li>
 	<li>New translation: <strong style="font-size:150%; color: #ffd635">German</strong></li>
-</ul>
-<div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>
-<ul>
 	<li>Faster layers creation</li>
 	<li>Lines are more visible on a dark background (white stroke added)</li>
 	<li>User-friendly error information is shown when there is no open document</li>

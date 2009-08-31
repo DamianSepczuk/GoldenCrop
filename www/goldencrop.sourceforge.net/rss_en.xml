@@ -17,6 +17,22 @@
 	<rating></rating>
 	<ttl>1440</ttl>
 	<item>
+		<title>New version of Golden Crop [0.91 beta] available!</title>
+        <link>http://goldencrop.sourceforge.net</link>
+		<comments>http://goldencrop.sourceforge.net/</comments>
+		<enclosure url="http://matrix.inten.pl/~szopen/files/goldencrop/Golden%20Crop_v091beta.zip" length="25798" type="application/zip" />
+		<description>
+<![CDATA[
+<pre>
+  ==[ Version 0.91 beta ]==
+     --{ 2009-08-31 }--
+  * New translation: Spanish
+</pre>]]></description>
+        <guid isPermaLink="false">http://goldencrop.sourceforge.net/</guid>
+		<pubDate>Sun, 31 Aug 2009 18:00:00 GMT</pubDate>
+		<author>Golden Crop (goldencrop@o2.pl)</author>
+	</item>
+	<item>
 		<title>New version of Golden Crop [0.90 beta] available!</title>
         <link>http://goldencrop.sourceforge.net</link>
 		<comments>http://goldencrop.sourceforge.net/</comments>
