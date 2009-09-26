@@ -1,7 +1,7 @@
 ﻿#target photoshop
 #strict on
 /**
-* @@@BUILDINFO@@@ Golden Crop.jsx 0.90beta Thu Aug 16 2009 20:00:00 GMT+0200
+* @@@BUILDINFO@@@ Golden Crop.jsx 0.92beta Thu Seo 02 2009 20:00:00 GMT+0200
 */
 
 /*****************************************
@@ -864,7 +864,7 @@ GoldenCrop.prototype.loadConfig = function() {
                     gspiralBR: {create: this.conf.get('gspiralBR')}};
                     
     this.ifApplyFX = true;
-    this.ifSuspendHistory = isSC3plus();
+    this.ifSuspendHistory = false && isSC3plus();
     this.loc = localizator.getInstance();
     this.conf.setMessage(this.loc.get('GCbySzN'));
 }
@@ -1304,14 +1304,10 @@ GoldenCrop.prototype.freeTransform = function() {
  */
 GoldenCrop.prototype.simpleCrop = function() {
     // TODO get selection bounds from this.croppingBounds
-    this.doc.activeLayer = this.cropMask;
-    Stdlib.loadVectorMaskSelection(); // could be empty but it is no problem
-    if ( Stdlib.hasSelection() ) {
-        this.doc.selection.invert();
-        // crop to selection
-        executeAction( cTID( "Crop" ), new ActionDescriptor(), DialogModes.NO );
-        this.doc.selection.deselect();
-    }
+    var b = this.cropBounds;
+    Stdlib.selectRect(b[1],b[0],b[3],b[2]);
+    executeAction( cTID( "Crop" ), new ActionDescriptor(), DialogModes.NO );
+    this.doc.selection.deselect();
     this.gCrop.remove();
 }
 
@@ -1516,8 +1512,15 @@ GoldenCrop.prototype.restoreUserGCGroupSettings = function () {
 GoldenCrop.prototype.interactiveCrop = function () {
     var docW = this.docW;
     var docH = this.docH;
+
     do {
-        this.cropAccepted = Stdlib.userGoToFreeTransform(this.doc, this.gCrop);
+        if ( this.goIntoInteractiveMode ) {
+            this.cropAccepted = Stdlib.userGoToFreeTransform(this.doc, this.gCrop);
+        } else {
+            this.cropAccepted = true;
+            this.doc.activeLayer = this.cropMask;
+        }
+    
         if ( !this.cropAccepted ) break;
         
         this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.cropMask);
@@ -1563,7 +1566,8 @@ GoldenCrop.prototype.interactiveCrop = function () {
         // Detect cropping mode
         if ( cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
             // cropping only inside picture frame
-            this.cropMethod = this.chooseCropMethod();
+            if ( this.cropMethod === false )
+                this.cropMethod = this.chooseCropMethod();
             if ( this.rotateCanvasA && this.cropMethod == 'SIMPLE' ) {
                 // cancel background pop even when there is a rotation
                 this.popBackground = false;
@@ -1582,7 +1586,8 @@ GoldenCrop.prototype.interactiveCrop = function () {
                    // rotation uncovers needed canvas, i.e. no further extension after roattion is needed
                    this.revealMethod = 'false';
                } else {
-                   this.revealMethod = this.chooseRevealAction();
+                  if ( this.cropMethod === false )
+                    this.revealMethod = this.chooseRevealAction();
                }
                 if ( !(this.revealMethod === 0) ) {
                     if ( this.revealMethod == 'EXTCANVAS' ) {
@@ -1596,7 +1601,7 @@ GoldenCrop.prototype.interactiveCrop = function () {
     } while ( this.revealMethod === 0 || this.cropMethod === 0)
 };
 
-GoldenCrop.prototype.findCropToContinue = function() {
+GoldenCrop.prototype.findCropToResume = function() {
    // old version !this.conf.isRunFromAction()
    // select last (bottom) layer to force adding new GC group (i.e. don't search for existing ones)
    if (this.doc.activeLayer != this.doc.layers[this.doc.layers.length-1]) {
@@ -1694,7 +1699,19 @@ GoldenCrop.prototype.go = function() {
    var docW = this.docW = parseInt(this.doc.width.as("px"));
    var docH = this.docH = parseInt(this.doc.height.as("px"));
 
-   this.findCropToContinue();
+    // New action mechanizm
+    // !== false   - indicates some method
+    // x !== y <=> !(x === y) -- only the second form gives right value in CS2 and (CS3, CS4)
+    // false       - indicates no action
+    this.cropAccepted  = false;
+    this.cropMethod    = false;
+    this.revealMethod  = false;
+    this.popBackground = false;
+    this.rotateCanvasA = false;
+    this.goIntoInteractiveMode = true;
+    // ---!!!
+
+   this.findCropToResume();
    if (!this.skipGridCreation) {
        if (this.conf.isDisplayNormalDialog()) {
            if(!this.showGuidelinesDialog()) {
@@ -1721,21 +1738,18 @@ GoldenCrop.prototype.go = function() {
         } else {
             this.makeGrid();
         }
+    } else {
+        // Test for having 'Alt'&'Ctrl' keys pressed - it YES, do simple crop
+        if (ScriptUI.environment.keyboardState.shiftKey &&
+            ScriptUI.environment.keyboardState.ctrlKey) {
+            this.cropMethod = 'SIMPLE';
+            this.revealMethod = 'EXTCANVAS';
+            this.goIntoInteractiveMode = false;
+        }
     }
-    // New action mechanizm
-    // !== false   - indicates some method
-    // x !== y <=> !(x === y) -- only the second form gives right value in CS2 and (CS3, CS4)
-    // false       - indicates no action
-    this.cropAccepted  = false;
-    this.cropMethod    = false;
-    this.revealMethod  = false;
-    this.popBackground = false;
-    this.rotateCanvasA = false;
-    // ---!!!
+
     var cropFunctions  = {SIMPLE:'simpleCrop()', MASK:'maskOutCrop()'};
     var revealVuncions = {EXTCANVAS:'doRevealPopBackround()'};
-
-
 
     if ( this.ifSuspendHistory ) {
         this.doc.suspendHistory(szAppName + this.loc.get('-resize'), 'this.interactiveCrop()');
@@ -1774,7 +1788,7 @@ GoldenCrop.prototype.go = function() {
                 eval('this.'+revealingFunction);
             }
         }
-
+ 
         if ( this.cropMethod ) {
             var cropFunction = cropFunctions[this.cropMethod];
             if ( this.ifSuspendHistory ) {
@@ -2622,6 +2636,20 @@ Stdlib.moveToFront = function() {
             ref59.putEnumerated( charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Frnt" ) );
         desc67.putReference( charIDToTypeID( "T   " ), ref59 );
     executeAction( idmove, desc67, DialogModes.NO );
+}
+
+Stdlib.selectRect = function(t,l,b,r) {
+    var desc4233 = new ActionDescriptor();
+        var ref1054 = new ActionReference();
+        ref1054.putProperty( cTID('Chnl'), cTID('fsel') );
+    desc4233.putReference( cTID('null'), ref1054 );
+        var desc4234 = new ActionDescriptor();
+        desc4234.putUnitDouble( cTID('Top '), cTID('#Pxl'), t );
+        desc4234.putUnitDouble( cTID('Left'), cTID('#Pxl'), l );
+        desc4234.putUnitDouble( cTID('Btom'), cTID('#Pxl'), b );
+        desc4234.putUnitDouble( cTID('Rght'), cTID('#Pxl'), r );
+    desc4233.putObject( cTID('T   '), cTID('Rctn'), desc4234 );
+    executeAction( cTID('setd'), desc4233, DialogModes.NO );
 }
 // ===END: stdlib.js====================================================================================================================
 
