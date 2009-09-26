@@ -11,6 +11,7 @@
 	<meta name="author" content="Damian Sepczuk" />
 	<meta name="revisit-after" content="7 days" />
 	<meta name="medium" content="mult" />
+	<meta name="verify-v1" content="6R/FA+R2nc31onXuRSjfpegXry33nB0zhC9ZdMhx17A=" />
 	<link rel="image_src" href="http://goldencrop.sourceforge.net/img/GoldenCrop_logoMini.png" />
 	<link rel="stylesheet" type="text/css" href="/main.css" />
 	<link rel="start" href="http://goldencrop.sourceforge.net/" title="Golden Crop for Photoshop - Home Page" />

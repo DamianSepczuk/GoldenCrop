@@ -1,5 +1,6 @@
 <?php $title = 'Dziennik zmian'?>
 <div class="modTitle">Dziennik zmian</div>
+<h1>Wersja 0.91 beta</h1>
 <ul>
 	<li>Nowy język: <strong style="font-size:150%; color: #ffd635">hiszpański</strong></li>
 </ul>
