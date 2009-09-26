@@ -1739,7 +1739,7 @@ GoldenCrop.prototype.go = function() {
             this.makeGrid();
         }
     } else {
-        // Test for having 'Alt'&'Ctrl' keys pressed - it YES, do simple crop
+        // Test for having 'Ctrl'+'Shift' keys pressed - it YES, do simple crop
         if (ScriptUI.environment.keyboardState.shiftKey &&
             ScriptUI.environment.keyboardState.ctrlKey) {
             this.cropMethod = 'SIMPLE';
