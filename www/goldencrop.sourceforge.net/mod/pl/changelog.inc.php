@@ -1,10 +1,15 @@
 <?php $title = 'Dziennik zmian'?>
 <div class="modTitle">Dziennik zmian</div>
-<h1>Wersja 0.91 beta</h1>
+<h1>Wersja 0.92 beta</h1>
 <ul>
-	<li>Nowy język: <strong style="font-size:150%; color: #ffd635">hiszpański</strong></li>
+	<li>Nowe tłumaczenie na <strong style="font-size:150%; color: #ffd635">język rosyjski</strong>, dzięki Vlad Kovnerov</li>
+	<li><strong style="font-size:150%; color: #ffd635">Przytrzymaj Ctrl+Shift</strong> (Command+Shift na Macu) aby automatycznie wykadrować zdjęcie (przy istniejącej masce kadrowania)</li>
 </ul>
 <div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>
+<h1>Wersja 0.91 beta</h1>
+<ul>
+	<li>Nowe tłumaczenie na <strong style="font-size:150%; color: #ffd635">język hiszpański</strong></li>
+</ul>
 <h1>Wersja 0.90 beta</h1>
 <ul>
 	<li><img src="img/features/diagonalRule.png" alt="Metoda Przekątnych" /><br />

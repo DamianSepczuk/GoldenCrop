@@ -1,0 +1,77 @@
+                  =========================================
+
+                                 Golden Crop
+
+                      http://goldencrop.sourceforge.net
+                  =========================================
+
+                             C H A N G E L O G
+
+                                 -~=o=~-
+
+  ==[ Version 0.91 beta ]==
+     --{ 2009-11-29 }--
+  * New translation: Russian
+  * Hold Ctrl+Shift for auto crop (when existing crop mask found)  
+								 
+                                 -~=o=~-
+								 
+  ==[ Version 0.91 beta ]==
+     --{ 2009-08-31 }--
+  * New translation: Spanish
+
+                                 -~=o=~-
+  
+  ==[ Version 0.90 beta ]==
+     --{ 2009-08-16 }--
+  * New composition method: Diagonal Rule
+  * User customizable line thickness
+  * New translation: German
+  * Faster layers creation
+  * Lines are more visible on a dark background (white stroke added)
+  * User-friendly error information is shown when there is no open document
+
+                                 -~=o=~-
+
+  ==[ Version 0.85 beta ]==
+     --{ 2009-08-06 }--
+  * It is now CS2 compatible!
+  * Golden spirals added
+  * "Choose guidelines" dialog added. Now you can choose which guidelines
+    would be drawn. Last choice is remembered.
+  * Ability to continue interrupted crop added. The script finds the 'Golden
+    Crop by SzopeN'  group and resumes crop in interactive mode
+	To force adding new 'Golden Crop by SzopeN' group, select the bottommost
+	layer (for example: Background)
+  * The script behaves like a plugin, now resides in File>Automate>Golden Crop
+  * It can be recorded in action (though it is still user-interactive,
+    only guidelines choice is saved)
+  + [Alt],[key] problem fixed in dialog boxes
+  + Minor fix in rotation, detecting portrait/landscape crop
+  ~ Code cleanup and optimization
+
+                                 -~=o=~-
+
+  ==[ Version 0.77 beta ]==
+     --{ 2009-07-28 }--
+
+  * PL and EN translation added. Now it is multi-lingual!
+  * Rotation of crop mask is now respected
+  * Auto detect horizontal and vertical crops, minimize rotation
+  * Works A LOT faster!
+  * Some fragments of code totally re-written
+  * You can now disable (from code) suspendHistory (CS2-compatible?)
+  * Some documentation (WWW, video) added
+  * Language-dependant Photoshop constants removed (Blend Mode names)
+  * Added in-code documentation
+  * Some improvements to stdlib by xbytor made :)
+
+                                 -~=o=~-
+
+  ==[ Version 0.62 beta ]==
+     --{ 2009-07-21 }--
+
+  * Initial release
+  * Mostly working :) 
+
+                                 -~=o=~-

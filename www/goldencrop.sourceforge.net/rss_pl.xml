@@ -17,6 +17,23 @@
 	<rating></rating>
 	<ttl>1440</ttl>
 	<item>
+		<title>Nowa wersja skryptu Golden Crop [0.92 beta] jest dostępna!</title>
+        <link>http://goldencrop.sourceforge.net</link>
+		<comments>http://goldencrop.sourceforge.net/</comments>
+		<enclosure url="https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.92%20beta/Golden%20Crop_v092beta.zip/download" length="26845" type="application/zip" />
+		<description>
+<![CDATA[
+<pre>
+  ==[ Wersja 0.92 beta ]==
+     --{ 2009-11-29 }--
+  * Nowe tłumaczenie na język rozyjski
+  * Przytrzymaj Ctrl+Shift (Command+Shift na Macu) aby automatycznie wykadrować zdjęcie (przy istniejącej masce kadrowania)
+</pre>]]></description>
+        <guid isPermaLink="false">http://goldencrop.sourceforge.net/</guid>
+		<pubDate>Sun, 31 Aug 2009 18:00:00 GMT</pubDate>
+		<author>Golden Crop (goldencrop@o2.pl)</author>
+	</item>
+	<item>
 		<title>Nowa wersja skryptu Golden Crop [0.91 beta] jest dostępna!</title>
         <link>http://goldencrop.sourceforge.net</link>
 		<comments>http://goldencrop.sourceforge.net/</comments>

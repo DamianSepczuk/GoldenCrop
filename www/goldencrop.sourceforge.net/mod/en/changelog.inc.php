@@ -1,10 +1,15 @@
 <?php $title = 'Changelog'?>
 <div class="modTitle">Changelog</div>
+<h1>Version 0.92 beta</h1>
+<ul>
+	<li>New translation: <strong style="font-size:150%; color: #ffd635">Russian</strong>, thanks to Vlad Kovnerov</li>
+	<li><strong style="font-size:150%; color: #ffd635">Hold Ctrl+Shift</strong> (Command+Shift on Mac) for auto crop (when existing crop mask found)</li>
+</ul>
+<div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>
 <h1>Version 0.91 beta</h1>
 <ul>
 	<li>New translation: <strong style="font-size:150%; color: #ffd635">Spanish</strong></li>
 </ul>
-<div style="margin: auto; text-align: center; width: 728px; height: 90px;" class="dlugRekl"><?=$AD_bigBanner?></div>
 <h1>Version 0.90 beta</h1>
 <ul>
 	<li><img src="img/features/diagonalRule.png" alt="Diagonal Rule" /><br />
