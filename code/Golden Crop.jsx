@@ -163,6 +163,7 @@ localizator.prototype.initStrings = function() {
     str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'Złota spirala lewo-góra', de:'Goldene Spirale oben links', es:'Espiral Dorada arriba-izquierda', ru:'Золотая спираль вверху-слева'};
     str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'Złota spirala prawo-góra', de:'Goldene Spirale oben rechts', es:'Espiral Dorada arriba-derecha', ru:'Золотая спираль вверху-справа'};
     str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'Złota spirala prawo-dół', de:'Goldene Spirale unten rechts', es:'Espiral Dorada abajo-derecha', ru:'Золотая спираль внизу-справа'};
+    str['goldenSpiral'] = {en:'Golden Spiral', pl:'Złota spirala', de:'Goldene Spirale', es:'Espiral Dorada', ru:'Золотая спираль'};
     str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie', de:'Alles Auswählen', es:'Seleccione Todo', ru:'Выбрать все'};
     str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie', de:'Nichts Auswählen', es:'Deseleccione Todo', ru:'Убрать все'};
     str['ok'] = {en:'OK', pl:'OK', de:'OK', es:'OK', ru:'OK'};
@@ -1112,7 +1113,7 @@ GoldenCrop.prototype.makeGoldenSpiral = function( orientation, stripSizePrc, col
             Stdlib.flipPath(1,0);
             break;
     }
-    var SpiralLayer = Stdlib.createSolidFillLayer(undefined, color, 'Golden spiral' );
+    var SpiralLayer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('goldenSpiral') );
     GSPath.remove();
 }
 
