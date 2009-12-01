@@ -866,7 +866,7 @@ GoldenCrop.prototype.loadConfig = function() {
                     gspiralBR: {create: this.conf.get('gspiralBR')}};
                     
     this.ifApplyFX = true;
-    this.ifSuspendHistory = false && isSC3plus();
+    this.ifSuspendHistory = true && isSC3plus();
     this.loc = localizator.getInstance();
     this.conf.setMessage(this.loc.get('GCbySzN'));
 }
