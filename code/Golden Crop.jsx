@@ -1,11 +1,11 @@
 ﻿#target photoshop
 #strict on
 /**
-* @@@BUILDINFO@@@ Golden Crop.jsx 0.92beta Thu Seo 02 2009 20:00:00 GMT+0200
+* @@@BUILDINFO@@@ Golden Crop.jsx 0.92a beta Thu Seo 02 2009 20:00:00 GMT+0200
 */
 
 /*****************************************
- * Golden crop script, v0.92 beta
+ * Golden crop script, v0.92a beta
  *
  * Copyright 2009, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
  * 
@@ -36,6 +36,7 @@ var debug = true;
 //        "de"   for German (Deutsch)
 //        "es"   for Spanish (Español)
 //        "ru"   for Russian (Русский)
+//        "it"   for Italian (Italiano)
 //        "auto" to use Photoshop language
 var lang = "auto";
 /************************
@@ -63,7 +64,7 @@ var lang = "auto";
 // BEGIN__HARVEST_EXCEPTION_ZSTRING
 <javascriptresource>
     <name>$$$/SzopeNSoft/GoldenCrop/AppName=Golden Crop</name>
-    <about>Golden Crop script v0.92 beta by Damian Sepczuk aka SzopeN
+    <about>Golden Crop script v0.92a beta by Damian Sepczuk aka SzopeN
 
 Copyright 2009, GNU GPL License
 
@@ -72,6 +73,8 @@ Thanks to:
  - Krystian for testing and giving ideas
  - Arkadius Bazior for German translation
  - Cristiano007 for Spanish translation
+ - Vlad Kovnerov for Russian translation
+ - Mantra for Italian translation
 </about>
     <menu>automate</menu>
     <enableinfo>true</enableinfo>
@@ -105,7 +108,7 @@ if ( lang != "auto" )
 $.level = debug?1:0;
 
 const szAppName = "Golden Crop",
-      szVersion = "0.92 beta";
+      szVersion = "0.92a beta";
 const UUID = '2c910bcd-8e34-4779-a885-bb214df640a3';
 // ---------------------------------------------------------------------
 function localizator(secretNumber) {
@@ -132,46 +135,46 @@ localizator.prototype.initStrings = function() {
     var str = this.str = new Array();
 
     // Entries below were generated using localizator.loadCVSsaveAsJSCodeFile function
-    str['chCropMethod'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'Вид кадрирования'};
-    str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'Выберите вид кадрирования'};
-    str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij płótno', de:'Arbeitsfläche aufteilen', es:'Recortar el lienzo', ru:'Обрезать холст'};
-    str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskę kadrującą', de:'Erstelle Schnittmaske', es:'Hacer máscara de recorte', ru:'Создать маску'};
-    str['bgOnLayer'] = {en:'Background on layer', pl:'Tło na warstwie', de:'Hintergrund auf Ebene', es:'Fondo sobre capa', ru:'Фоновый слой'};
-    str['bgFill'] = {en:'Background fill', pl:'Wypełnienie tła', de:'Hintergrund füllen', es:'Relleno de fondo', ru:'Фоновая заливка'};
-    str['-grid'] = {en:' - grid', pl:' - siatka', de:' - Rastern', es:'- grilla', ru:' - сетка'};
-    str['-resize'] = {en:' - resize', pl:' - przeskalowanie', de:' - Skalieren', es:'- re-escalar', ru:' - размер'};
-    str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie', de:' - Einblenden', es:'- revelar', ru:' - показ'};
-    str['-crop'] = {en:' - crop', pl:' - przycinanie', de:' - Beschneiden', es:'- recortar', ru:' - обрезка'};
-    str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN', de:'Golden Crop by SzopeN', es:'Recorte Dorado por SzopeN', ru:'Golden Crop от SzopeN'};
-    str['cropMask'] = {en:'Crop mask', pl:'Maska kadrująca', de:'Schnittmaske', es:'Máscara de recorte', ru:'Маска кадрирвания'};
-    str['divRules'] = {en:'Dividing rules', pl:'Reguły podziału', de:'Trennungsregeln', es:'Reglas de división', ru:'Правила разделения'};
-    str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%', es:'Cinta al %1%%', ru:'Линии на %1%%'};
-    str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldener Dreieck oben', es:'Triángulo dorado hacia arriba', ru:'Золотой треугольник вверх'};
-    str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldener Dreieck unten', es:'Triángulo dorado hacia abajo', ru:'Золотой треугольник вниз'};
-    str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonale Methode', es:'Método Diagonal', ru:'Метод диагоналей'};
-    str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.', es:'Abrir el documento en el cual quiere correr el script', ru:'Откройте файл, в котором вы хотели бы запустить скрипт.'};
-    str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen', es:'Extensión del lienzo detectada', ru:'Обнаружено увеличение холста'};
-    str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?', es:'?Qué hacer con el lienzo?', ru:'Что следует предпринять?'};
-    str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz płótno', de:'Erweiterte Arbeitsfläche', es:'Extender el lienzo', ru:'Увеличить размеры'};
-    str['dontExtCanv'] = {en:'Crop without extension', pl:'Przytnij bez rozszerzania', de:'Schnitt ohne Erweiterung', es:'Recortar sin extensón', ru:'Обрезать без увеличения'};
-    str['retToCropping'] = {en:'Return to cropping', pl:'Wróć do kadrowania', de:'Zurück zum Schneiden', es:'Volver a recorte', ru:'Вернуться к кадрированию'};
-    str['chCompMethod'] = {en:'Composition method', pl:'Metoda kompozycji', de:'Kompositionsmethode', es:'Método de composición', ru:'Метод построения композиции'};
-    str['chCompMethodQ'] = {en:'Choose composition guidelines', pl:'Wybierz metodę kompozycji', de:'Auswahl der Kompositionslinien', es:'Escoja guías de composición', ru:'Выберите тип направляющих линий'};
-    str['goldenRule'] = {en:'Golden Rule', pl:'Złoty podział', de:'Goldene Regel', es:'Regla Dorada', ru:'Золотое сечение'};
-    str['ruleOfThirds'] = {en:'Rule of Thirds', pl:'Reguła trzech', de:'Drittel-Regel', es:'Regla de los Tercios', ru:'Правило третей'};
-    str['goldenSpiralBL'] = {en:'Golden Spiral bottom-left', pl:'Złota spirala lewo-dół', de:'Goldene Spirale unten links', es:'Espiral Dorada abajo-izquierda', ru:'Золотая спираль внизу-слева'};
-    str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'Złota spirala lewo-góra', de:'Goldene Spirale oben links', es:'Espiral Dorada arriba-izquierda', ru:'Золотая спираль вверху-слева'};
-    str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'Złota spirala prawo-góra', de:'Goldene Spirale oben rechts', es:'Espiral Dorada arriba-derecha', ru:'Золотая спираль вверху-справа'};
-    str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'Złota spirala prawo-dół', de:'Goldene Spirale unten rechts', es:'Espiral Dorada abajo-derecha', ru:'Золотая спираль внизу-справа'};
-    str['goldenSpiral'] = {en:'Golden Spiral', pl:'Złota spirala', de:'Goldene Spirale', es:'Espiral Dorada', ru:'Золотая спираль'};
-    str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie', de:'Alles Auswählen', es:'Seleccione Todo', ru:'Выбрать все'};
-    str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie', de:'Nichts Auswählen', es:'Deseleccione Todo', ru:'Убрать все'};
-    str['ok'] = {en:'OK', pl:'OK', de:'OK', es:'OK', ru:'OK'};
-    str['cancel'] = {en:'Cancel', pl:'Anuluj', de:'Abbrechen', es:'Cancelar', ru:'Отмена'};
-    str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale', de:'Alle Goldenen Spiralen', es:'Todas las Espirales Doradas', ru:'Все золотые спирали'};
-    str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln', es:'Reglas Básicas', ru:'Основные правила'};
-    str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Liniendicke', es:'Grosor de línea', ru:'Толщина линий'};
-    str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Liniendicke (‰ kurze Seite)', es:'Grosor de línea (‰ del borde más corto)', ru:'Толщина линий (‰ меньшей стороны): '};
+    str['chCropMethod'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'Вид кадрирования', it:'Scegli stile taglieria'};
+    str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'Выберите вид кадрирования', it:'Scegli stile taglieria'};
+    str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij płótno', de:'Arbeitsfläche aufteilen', es:'Recortar el lienzo', ru:'Обрезать холст', it:'Taglieria (Semplice taglieria)'};
+    str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskę kadrującą', de:'Erstelle Schnittmaske', es:'Hacer máscara de recorte', ru:'Создать маску', it:'Crea maschera taglieria'};
+    str['bgOnLayer'] = {en:'Background on layer', pl:'Tło na warstwie', de:'Hintergrund auf Ebene', es:'Fondo sobre capa', ru:'Фоновый слой', it:'Sfondo del livello'};
+    str['bgFill'] = {en:'Background fill', pl:'Wypełnienie tła', de:'Hintergrund füllen', es:'Relleno de fondo', ru:'Фоновая заливка', it:'Riempimento sfondo'};
+    str['-grid'] = {en:' - grid', pl:' - siatka', de:' - Rastern', es:'- grilla', ru:' - сетка', it:' - griglia'};
+    str['-resize'] = {en:' - resize', pl:' - przeskalowanie', de:' - Skalieren', es: - re-escalar', ru:' - размер', it:' - cambia dimensioni'};
+    str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie', de:' - Einblenden', es:' - revelar', ru:' - показ', it:' - rivela'};
+    str['-crop'] = {en:' - crop', pl:' - przycinanie', de:' - Beschneiden', es:' - recortar', ru:' - обрезка', it:' - taglia'};
+    str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN', de:'Golden Crop by SzopeN', es:'Recorte Dorado por SzopeN', ru:'Golden Crop от SzopeN', it:'Taglieria d'oro di SzopeN'};
+    str['cropMask'] = {en:'Crop mask', pl:'Maska kadrująca', de:'Schnittmaske', es:'Máscara de recorte', ru:'Маска кадрирвания', it:'Mascheria taglieria'};
+    str['divRules'] = {en:'Dividing rules', pl:'Reguły podziału', de:'Trennungsregeln', es:'Reglas de división', ru:'Правила разделения', it:'Regole della divisione'};
+    str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%', es:'Cinta al %1%%', ru:'Линии на %1%%', it:'Guida a %1%%'};
+    str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldener Dreieck oben', es:'Triángulo dorado hacia arriba', ru:'Золотой треугольник вверх', it:'Triangolo d'oro all'insù'};
+    str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldener Dreieck unten', es:'Triángulo dorado hacia abajo', ru:'Золотой треугольник вниз', it:'Triangolo d'oro all'ingiù'};
+    str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonale Methode', es:'Método Diagonal', ru:'Метод диагоналей', it:'Metodo Diagonale'};
+    str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.', es:'Abrir el documento en el cual quiere correr el script', ru:'Откройте файл, в котором вы хотели бы запустить скрипт.', it:'Apri il documento nel quale vuoi applicare lo script.'};
+    str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen', es:'Extensión del lienzo detectada', ru:'Обнаружено увеличение холста', it:'Estensione quadro  trovato.'};
+    str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?', es:'?Qué hacer con el lienzo?', ru:'Что следует предпринять?', it:'Cosa fare con il quatro?'};
+    str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz płótno', de:'Erweiterte Arbeitsfläche', es:'Extender el lienzo', ru:'Увеличить размеры', it:'Esteso quadro'};
+    str['dontExtCanv'] = {en:'Crop without extension', pl:'Przytnij bez rozszerzania', de:'Schnitt ohne Erweiterung', es:'Recortar sin extensón', ru:'Обрезать без увеличения', it:'Taglia senza estensione'};
+    str['retToCropping'] = {en:'Return to cropping', pl:'Wróć do kadrowania', de:'Zurück zum Schneiden', es:'Volver a recorte', ru:'Вернуться к кадрированию', it:'Torna alla taglieria'};
+    str['chCompMethod'] = {en:'Composition method', pl:'Metoda kompozycji', de:'Kompositionsmethode', es:'Método de composición', ru:'Метод построения композиции', it:'Metodo di composizione'};
+    str['chCompMethodQ'] = {en:'Choose composition guidelines', pl:'Wybierz metodę kompozycji', de:'Auswahl der Kompositionslinien', es:'Escoja guías de composición', ru:'Выберите тип направляющих линий', it:'Sciegli guide di composizione'};
+    str['goldenRule'] = {en:'Golden Rule', pl:'Złoty podział', de:'Goldene Regel', es:'Regla Dorada', ru:'Золотое сечение', it:'Regola d'oro'};
+    str['ruleOfThirds'] = {en:'Rule of Thirds', pl:'Reguła trzech', de:'Drittel-Regel', es:'Regla de los Tercios', ru:'Правило третей', it:'Regola dei terzi'};
+    str['goldenSpiralBL'] = {en:'Golden Spiral bottom-left', pl:'Złota spirala lewo-dół', de:'Goldene Spirale unten links', es:'Espiral Dorada abajo-izquierda', ru:'Золотая спираль внизу-слева', it:'Spirale d'oro in basso a sinistra'};
+    str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'Złota spirala lewo-góra', de:'Goldene Spirale oben links', es:'Espiral Dorada arriba-izquierda', ru:'Золотая спираль вверху-слева', it:'Spirale d'oro in alto a sinistra'};
+    str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'Złota spirala prawo-góra', de:'Goldene Spirale oben rechts', es:'Espiral Dorada arriba-derecha', ru:'Золотая спираль вверху-справа', it:'Spirale d'oro in alto a destra'};
+    str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'Złota spirala prawo-dół', de:'Goldene Spirale unten rechts', es:'Espiral Dorada abajo-derecha', ru:'Золотая спираль внизу-справа', it:'Spirale d'oro in basso a destra'};
+    str['goldenSpiral'] = {en:'Golden Spiral', pl:'Złota spirala', de:'Goldene Spirale', es:'Espiral Dorada', ru:'Золотая спираль', it:'Spirale d'oro'};
+    str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie', de:'Alles Auswählen', es:'Seleccione Todo', ru:'Выбрать все', it:'Seleziona Tutto'};
+    str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie', de:'Nichts Auswählen', es:'Deseleccione Todo', ru:'Убрать все', it:'Deselezionare Tutto'};
+    str['ok'] = {en:'OK', pl:'OK', de:'OK', es:'OK', ru:'OK', it:'OK'};
+    str['cancel'] = {en:'Cancel', pl:'Anuluj', de:'Abbrechen', es:'Cancelar', ru:'Отмена', it:'cancellare'};
+    str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale', de:'Alle Goldenen Spiralen', es:'Todas las Espirales Doradas', ru:'Все золотые спирали', it:'Tutte le spirali d'oro'};
+    str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln', es:'Reglas Básicas', ru:'Основные правила', it:'Regole fondamentali'};
+    str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Liniendicke', es:'Grosor de línea', ru:'Толщина линий', it:'Grossezza guida'};
+    str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Liniendicke (‰ kurze Seite)', es:'Grosor de línea (‰ del borde más corto)', ru:'Толщина линий (‰ меньшей стороны): ', it:'Grossezza guida (‰ di taglio più corto): '};
 }
 
 // Returns translations in CVS format
