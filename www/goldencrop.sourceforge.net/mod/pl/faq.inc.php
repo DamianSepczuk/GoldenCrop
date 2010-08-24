@@ -26,7 +26,7 @@ ENDANSWER
 );
 // =======================================================
 $faqA[] = array('Kto może go używać?','whoCanUse',<<<ENDANSWER
-<p>Każdy kto chce... i ma zainstalowany program Adobe® Photoshop® w wersji CS2, CS3 lub CS4. Skrypt powinien działać w systemie operacyjnym Microsoft Windows oraz Mac OS. Wsparcie dla wersji poniżej CS2 nie jest przewidziane z powodu zaawansowanych możliwości obsługi skryptów.</p>
+<p>Każdy kto chce... i ma zainstalowany program Adobe® Photoshop® w wersji CS2, CS3, CS4 lub CS5. Skrypt powinien działać w systemie operacyjnym Microsoft Windows oraz Mac OS. Wsparcie dla wersji poniżej CS2 nie jest przewidziane z powodu zaawansowanych możliwości obsługi skryptów.</p>
 ENDANSWER
 );
 // =======================================================
@@ -128,6 +128,7 @@ $faqA[] = array('Podziękowania','acknowledgements',<<<ENDANSWER
  <li><strong>Arkadius Bazior</strong> -- opracowanie niemieckiej wersji językowej skryptu</li>
  <li><strong>Cristiano007</strong> -- opracowanie hiszpańskiej wersji językowej skryptu</li>
  <li><strong>Vlad Kovnerov</strong> -- opracowanie rosyjskiej wersji językowej skryptu</li>
+ <li><strong>Mantra Giovanni</strong> -- opracowanie włoskiej wersji językowej skryptu</li>
 </ul>
 <p>W imieniu swoim oraz wszystkich użytkowników skryptu <strong>dziękuję Wam za włożoną pracę i poświęcony czas</strong>! </p>
 ENDANSWER

@@ -5,8 +5,8 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-$dloadVer = '0.92 beta';
-$location = 'https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.92%20beta/Golden%20Crop_v092beta.zip/download';
+$dloadVer = '0.93 beta';
+$location = 'https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.93%20beta/Golden%20Crop_v093beta.zip/download';
 
 // Simple download counter...
 include('db_settings.inc.php');

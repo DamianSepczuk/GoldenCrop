@@ -1,5 +1,10 @@
 <?php $title = 'Dziennik zmian'?>
 <div class="modTitle">Dziennik zmian</div>
+<h1>Wersja 0.93 beta</h1>
+<ul>
+	<li>Poprzwki kompatybilności z PS CS5: w menu pokazywanym przez skrypt skróty klawiszowe znów działają!</li>
+	<li>Tłumaczenie na <strong style="font-size:150%; color: #ffd635">język włoski</strong>, dzięki Mantra Giovanni</li>
+</ul>
 <h1>Wersja 0.92 beta</h1>
 <ul>
 	<li>Nowe tłumaczenie na <strong style="font-size:150%; color: #ffd635">język rosyjski</strong>, dzięki Vlad Kovnerov</li>

@@ -1,13 +1,13 @@
 ﻿#target photoshop
 #strict on
 /**
-* @@@BUILDINFO@@@ Golden Crop.jsx 0.92a beta Thu Seo 02 2009 20:00:00 GMT+0200
+* @@@BUILDINFO@@@ Golden Crop.jsx 0.93 Tue Aug 24 2010 20:15:04 GMT+0200
 */
 
 /*****************************************
  * Golden crop script, v0.92a beta
  *
- * Copyright 2009, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
+ * Copyright 2009-2010, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -352,6 +352,7 @@ dialogMenu.prototype.show = function () {
             var caption = '['+(key=='esc'?'':'&')+elements[i].key+'] ' + elements[i].text;
             var capLen = caption.length + (key=='esc'?-1:0);
             var e = add('button', undefined, caption + _repeatString(' ', (maxCaptionLen-capLen)*1.4), {name: btnName, justify: 'left'});
+            if ( key!='esc' && isCS5() ) e.shortcutKey = '~'; // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
             if ( btnName=='ok' || !!elements[i].def ) {
                 defaultElement = e;
             }
@@ -362,7 +363,19 @@ dialogMenu.prototype.show = function () {
             }
             elements[i].obj = e;
        }
-       if( isCS4() ){
+       if ( isCS5() ) {
+           defaultElement.active = true; // def element isn't ficused in CS5
+           var f = function (e) {
+               for ( var i = 0; i<elements.length; ++i )
+               {
+                   if ( e.keyName == elements[i].key.toUpperCase() ) {
+                       elements[i].obj.notify();
+                       break;
+                   }
+               }
+           }
+           dlg.addEventListener('keydown', f, false); // Documentation doesn't mention that Window object implement keydown event. But it works, more or less... :)
+       } else if ( isCS4() ) {
            addEventListener('keydown', function (e) {
                // Next funny thing about PS CS4
                // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
@@ -436,7 +449,7 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
     
     var dlg = this.dlg = new Window('dialog', menuDesc.caption);
     dlg.preferredSize.width = 155;
-    
+    var shortcutChar = '&';
     with (dlg)
     {
        orientation = 'column';
@@ -453,9 +466,10 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
                for ( var i = 0; i<cbElements.length; ++i ) {
                     var key = cbElements[i].key.toLowerCase();
                     var cbName = 'op'+i;
-                    var caption = '[&'+cbElements[i].key+'] ' + cbElements[i].text;
+                    var caption = '['+shortcutChar+cbElements[i].key+'] ' + cbElements[i].text;
                     var capLen = caption.length;
                     var e = add('checkbox', undefined, caption, {name: cbName});
+                    if ( isCS5() ) e.shortcutKey = '~'; // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
                     e.value = !!cbElements[i].sel;
                     cbElements[i].obj = e;
                }
@@ -465,8 +479,9 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
                orientation = 'column';
                alignChildren = 'fill';
 
+               // Compute max caption length
                var maxCaptionLen = -Infinity;
-               msElements.push
+               // msElements.push //[?] this was some strange leftover
                for ( var i = 0; i<msElements.length; ++i ) {
                    var capLen = msElements[i].text.length + msElements[i].key.length + 3;
                    if ( capLen > maxCaptionLen ) maxCaptionLen = capLen;
@@ -476,11 +491,13 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
                     var key = msElements[i].key.toLowerCase();
                     var btnName = 'op'+i;
                     //var caption = '[&'+msElements[i].key+'] ' + msElements[i].text;
-                    var caption = msElements[i].text + ' [&'+msElements[i].key+']';
+                    var caption = msElements[i].text + ' ['+shortcutChar+msElements[i].key+']';
                     var capLen = caption.length;
+                    //                                        \/ Try to align button's text to left (doesn't work with space, try some space-like chars)
                     var e = add('button', undefined, caption /*+ _repeatString(' ', (maxCaptionLen-capLen)*1.4)*/, {name: btnName});
+                    if ( isCS5() ) e.shortcutKey = '~'; // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
                     e.elements = msElements[i].elements;
-                   e.action = msElements[i].action;
+                    e.action = msElements[i].action;
                     e.onClick = function() {
                         switch ( this.action ) {
                             case 'slctAll':
@@ -511,11 +528,24 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
        }
        var okBtn = add('button', undefined, this.desc.okTxt, {name: 'ok'});
        var cancelBtn = add('button', undefined, this.desc.cancelTxt, {name: 'cancel'});
-       defaultElement = okBtn;
-       cancelElement = cancelBtn;
+       dlg.defaultElement = okBtn;
+       dlg.cancelElement = cancelBtn;
        var allElements = cbElements.concat(msElements);
        
-       if( isCS4() ){
+       if ( isCS5() ) {
+           okBtn.active = true; // def element isn't ficused in CS5
+           var f = function (e) {
+               for ( var i = 0; i<allElements.length; ++i )
+               {
+                   if ( e.keyName == allElements[i].key.toUpperCase() ) {
+                       allElements[i].obj.notify();
+                       // allElements[i].obj.active = true; // [?] check default behaviour in other PS versions
+                       break;
+                   }
+               }
+           }
+           dlg.addEventListener('keydown', f, false); // Documentation doesn't mention that Window object implement keydown event. But it works, more or less... :)
+       } else if ( isCS4() ) {
            addEventListener('keydown', function (e) {
                // Next funny thing about PS CS4
                // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
@@ -1860,7 +1890,9 @@ try {
    delete lvl; 
 } 
 
+isCS4plus = function()  { return isSC3plus() || isCS5() };
 isSC3plus = function()  { return isCS3() || isCS4() }; 
+isCS5 = function()  { return psVersion.match(/^12\./) != null; };
 isCS4 = function()  { return psVersion.match(/^11\./) != null; }; 
 isCS3 = function()  { return psVersion.match(/^10\./) != null; }; 
 isCS2 = function()  { return psVersion.match(/^9\./) != null; }; 

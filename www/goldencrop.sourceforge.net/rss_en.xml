@@ -17,6 +17,23 @@
 	<rating></rating>
 	<ttl>1440</ttl>
 	<item>
+		<title>New version of Golden Crop [0.93 beta] available!</title>
+        <link>http://goldencrop.sourceforge.net</link>
+		<comments>http://goldencrop.sourceforge.net/</comments>
+		<enclosure url="https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.93%20beta/Golden%20Crop_v093beta.zip/download" length="27724" type="application/zip" />
+		<description>
+<![CDATA[
+<pre>
+  ==[ Version 0.93 beta ]==
+     --{ 2010-08-24 }--
+  * CS5 compatibility fixes: keyboard shortcuts in script's menu are working again!
+  * New translation: Italian
+</pre>]]></description>
+        <guid isPermaLink="false">http://goldencrop.sourceforge.net/</guid>
+		<pubDate>Tue, 24 Aug 2010 20:00:00 GMT</pubDate>
+		<author>Golden Crop (goldencrop@o2.pl)</author>
+	</item>
+	<item>
 		<title>New version of Golden Crop [0.92 beta] available!</title>
         <link>http://goldencrop.sourceforge.net</link>
 		<comments>http://goldencrop.sourceforge.net/</comments>
@@ -24,7 +41,7 @@
 		<description>
 <![CDATA[
 <pre>
-  ==[ Version 0.91 beta ]==
+  ==[ Version 0.92 beta ]==
      --{ 2009-11-29 }--
   * New translation: Russian
   * Hold Ctrl+Shift (Command+Shift on Macu) for auto crop (when existing crop mask found)  

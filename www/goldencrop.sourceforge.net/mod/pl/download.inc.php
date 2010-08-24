@@ -5,7 +5,7 @@
 <table>
 <tr>
 	<td><a href="/downloadCurrent.php"><img src="/img/downloadLatest.png" alt="Download Latest" /></a></td>
-	<td><a href="/downloadCurrent.php">Pobierz najnowszą wersję 0.91 beta</a></td>
+	<td><a href="/downloadCurrent.php">Pobierz najnowszą wersję 0.93 beta</a></td>
 </tr>
 <tr>
 	<td><a href="https://sourceforge.net/projects/goldencrop/files/"><img src="/img/downloadOld.png" alt="Download Old" /></a></td>

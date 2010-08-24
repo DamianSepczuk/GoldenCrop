@@ -1,5 +1,10 @@
 <?php $title = 'Changelog'?>
 <div class="modTitle">Changelog</div>
+<h1>Version 0.93 beta</h1>
+<ul>
+	<li>CS5 compatibility fixes: keyboard shortcuts in script's menu are working again!</li>
+	<li>New translation: <strong style="font-size:150%; color: #ffd635">Italian</strong>, thanks to Mantra Giovanni</li>
+</ul>
 <h1>Version 0.92 beta</h1>
 <ul>
 	<li>New translation: <strong style="font-size:150%; color: #ffd635">Russian</strong>, thanks to Vlad Kovnerov</li>

@@ -17,6 +17,23 @@
 	<rating></rating>
 	<ttl>1440</ttl>
 	<item>
+		<title>Nowa wersja skryptu Golden Crop [0.93 beta] jest dostępna!</title>
+        <link>http://goldencrop.sourceforge.net</link>
+		<comments>http://goldencrop.sourceforge.net/</comments>
+		<enclosure url="https://sourceforge.net/projects/goldencrop/files/goldencrop/Golden%20Crop%20v0.93%20beta/Golden%20Crop_v093beta.zip/download" length="27724" type="application/zip" />
+		<description>
+<![CDATA[
+<pre>
+  ==[ Wersja 0.92 beta ]==
+     --{ 2010-08-24 }--
+  * Poprzwki kompatybilności z PS CS5: w menu pokazywanym przez skrypt skróty klawiszowe znów działają!
+  * Nowe tłumaczenie na język włoski, dzięki Mantra Giovanni
+</pre>]]></description>
+        <guid isPermaLink="false">http://goldencrop.sourceforge.net/</guid>
+		<pubDate>Sun, 31 Aug 2009 18:00:00 GMT</pubDate>
+		<author>Golden Crop (goldencrop@o2.pl)</author>
+	</item>
+	<item>
 		<title>Nowa wersja skryptu Golden Crop [0.92 beta] jest dostępna!</title>
         <link>http://goldencrop.sourceforge.net</link>
 		<comments>http://goldencrop.sourceforge.net/</comments>

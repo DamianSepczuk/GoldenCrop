@@ -24,7 +24,7 @@ ENDANSWER
 );
 // =======================================================
 $faqA[] = array('Who can use it?','whoCanUse',<<<ENDANSWER
-<p>Anyone who wants... and have Adobe® Photoshop® CS2, CS3 or CS4 installed. This script should work both on Windows and Mac version of the software. Adobe® Photoshop® versions earlier than CS2 will not be supported due to lack of scripting possibilities.</p>
+<p>Anyone who wants... and have Adobe® Photoshop® CS2, CS3, CS4 or CS5 installed. This script should work both on Windows and Mac version of the software. Adobe® Photoshop® versions earlier than CS2 will not be supported due to lack of scripting possibilities.</p>
 ENDANSWER
 );
 // =======================================================
@@ -129,6 +129,7 @@ $faqA[] = array('Acknowledgements','acknowledgements',<<<ENDANSWER
  <li><strong>Arkadius Bazior</strong> for preparing German translation of the script</li>
  <li><strong>Cristiano007</strong> for Spanish translation</li>
  <li><strong>Vlad Kovnerov</strong> for Russian translation</li>
+ <li><strong>Mantra Giovanni</strong> for Italian translation</li>
 </ul>
 ENDANSWER
 );
