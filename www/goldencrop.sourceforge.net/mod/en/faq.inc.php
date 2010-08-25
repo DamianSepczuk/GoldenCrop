@@ -62,7 +62,7 @@ You can also simply "enter" into the archive and drag the file to desired locati
 </li>
 <li>If Photoshop is running, restart it. Otherwise simply run it.</li>
 <li>In Photoshop® open the file you want to crop.</li>
-<li>Run the script choosing <strong>File>Scripts>Golden Crop</strong> from Photoshop® menu. Feel free to assign a keyboard shortcut through 'Edit>Keyboard Shortcuts' [Alt+Shift+Ctrl+K]! My preferred one is [Ctrl+Shift+Q].</li>
+<li>Run the script choosing <strong>File&gt;Automate&gt;Golden Crop</strong> from Photoshop® menu (note: in CS2 it is still under <strong>File&gt;Scripts</strong> menu). Feel free to assign a keyboard shortcut through 'Edit>Keyboard Shortcuts' [Alt+Shift+Ctrl+K]! My preferred one is [Ctrl+Shift+Q].</li>
 <li>Now the script is running in Photoshop®. See next question for instruction how to use it. ...or just play with it!</li>
 </ol>
 <h3>Uninstallation </h3>

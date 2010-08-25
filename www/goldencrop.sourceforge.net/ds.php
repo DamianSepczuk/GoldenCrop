@@ -46,6 +46,11 @@ if (!mysqli_connect_error()) {
 			print('<tr><td>'.$row['version'] . '</td><td align="right">' . $row['count'].'</td></tr>');
 		}
 	}
+	$res = $conn->query('SELECT sum(`count`) as `sum`  FROM `download_stats`');
+	if ($res) {
+		$row = $res->fetch_assoc();
+		print('<tr><td>SUM:</td><td align="right">' . $row['sum'].'</td></tr>');
+	}
 	$conn->close();
 }
 ?>
