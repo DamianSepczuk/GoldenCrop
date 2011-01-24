@@ -83,7 +83,7 @@ Thanks to:
     <terminology><![CDATA[<<
              /Version 1 
              /Events << 
-               /c4f6f3f7-1b93-47af-bab5-287c581c5fa8 [($$$/SzopeNSoft/GoldenCrop/AppName=Golden Crop) /noDirectParam <<
+               /c4f6f3f7-1b93-47af-bab5-287c581c5fa8 [($$$/SzopeNSoft/GoldenCrop/AppName=Golden Crop) /imageReference <<
                  /golden [($$$/SzopeNSoft/GoldenCrop/golden=Golden Rule) /boolean]
                  /roth [($$$/SzopeNSoft/GoldenCrop/roth=Rule of Thirds) /boolean]
                  /diagmethod [($$$/SzopeNSoft/GoldenCrop/diagmethod=Diagonal Method) /boolean]
@@ -364,7 +364,7 @@ dialogMenu.prototype.show = function () {
             elements[i].obj = e;
        }
        if ( isCS5() ) {
-           defaultElement.active = true; // def element isn't ficused in CS5
+           defaultElement.active = true; // def element isn't focused in CS5
            var f = function (e) {
                for ( var i = 0; i<elements.length; ++i )
                {
@@ -1734,6 +1734,15 @@ GoldenCrop.prototype.go = function() {
    var docW = this.docW = parseInt(this.doc.width.as("px"));
    var docH = this.docH = parseInt(this.doc.height.as("px"));
 
+      
+   if ( confirm("Square?",1) ) {
+       if (docW > docH) {
+           docW = this.docW = docH;
+       } else {
+           docH = this.docH = docW;
+       }
+   }
+   
     // New action mechanizm
     // !== false   - indicates some method
     // x !== y <=> !(x === y) -- only the second form gives right value in CS2 and (CS3, CS4)
@@ -1890,8 +1899,9 @@ try {
    delete lvl; 
 } 
 
-isCS4plus = function()  { return isSC3plus() || isCS5() };
-isSC3plus = function()  { return isCS3() || isCS4() }; 
+isCS5plus = function()  { return isCS5() };
+isCS4plus = function()  { return isCS4() || isCS5plus() };
+isSC3plus = function()  { return isCS3() || isCS4plus() }; 
 isCS5 = function()  { return psVersion.match(/^12\./) != null; };
 isCS4 = function()  { return psVersion.match(/^11\./) != null; }; 
 isCS3 = function()  { return psVersion.match(/^10\./) != null; }; 
