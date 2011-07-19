@@ -8,7 +8,7 @@
  * Golden crop script, v0.93 beta
  *
  * Copyright 2009-2010, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -27,11 +27,11 @@
  ************************/
 var debug = true;
 
-// set to "en"   for English 
+// set to "en"   for English
 //        "pl"   for Polish (Polski)
 //        "de"   for German (Deutsch)
-//        "es"   for Spanish (Español)
-//        "ru"   for Russian (Русский)
+//        "es"   for Spanish (Espanol)
+//        "ru"   for Russian (???????)
 //        "it"   for Italian (Italiano)
 //        "auto" to use Photoshop language
 var lang = "auto";
@@ -77,8 +77,8 @@ Thanks to:
     <eventid>c4f6f3f7-1b93-47af-bab5-287c581c5fa8</eventid>
     <category>szopensoft</category>
     <terminology><![CDATA[<<
-             /Version 1 
-             /Events << 
+             /Version 1
+             /Events <<
                /c4f6f3f7-1b93-47af-bab5-287c581c5fa8 [($$$/SzopeNSoft/GoldenCrop/AppName=Golden Crop) /imageReference <<
                  /golden [($$$/SzopeNSoft/GoldenCrop/golden=Golden Rule) /boolean]
                  /roth [($$$/SzopeNSoft/GoldenCrop/roth=Rule of Thirds) /boolean]
@@ -90,8 +90,8 @@ Thanks to:
                  /gspiralTR [($$$/SzopeNSoft/GoldenCrop/gspiralTR=Golden Spiral top-right) /boolean]
                  /gspiralBR [($$$/SzopeNSoft/GoldenCrop/gspiralBR=Golden Spiral bottom-right) /boolean]
                  /lthick    [($$$/SzopeNSoft/GoldenCrop/lthick=Line thickness) /double]
-                 >>] 
-              >> 
+                 >>]
+              >>
             >>]]></terminology>
 </javascriptresource>
 // END__HARVEST_EXCEPTION_ZSTRING
@@ -132,46 +132,46 @@ localizator.prototype.initStrings = function() {
         var str = this.str = new Array();
 
         // Entries below were generated using localizator.loadCVSsaveAsJSCodeFile function
-        str['chCropMethod'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'Вид кадрирования', it:'Scegli stile taglieria'};
-        str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'Выберите вид кадрирования', it:'Scegli stile taglieria'};
-        str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij płótno', de:'Arbeitsfläche aufteilen', es:'Recortar el lienzo', ru:'Обрезать холст', it:'Taglieria (Semplice taglieria)'};
-        str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskę kadrującą', de:'Erstelle Schnittmaske', es:'Hacer máscara de recorte', ru:'Создать маску', it:'Crea maschera taglieria'};
-        str['bgOnLayer'] = {en:'Background on layer', pl:'Tło na warstwie', de:'Hintergrund auf Ebene', es:'Fondo sobre capa', ru:'Фоновый слой', it:'Sfondo del livello'};
-        str['bgFill'] = {en:'Background fill', pl:'Wypełnienie tła', de:'Hintergrund füllen', es:'Relleno de fondo', ru:'Фоновая заливка', it:'Riempimento sfondo'};
-        str['-grid'] = {en:' - grid', pl:' - siatka', de:' - Rastern', es:'- grilla', ru:' - сетка', it:' - griglia'};
-        str['-resize'] = {en:' - resize', pl:' - przeskalowanie', de:' - Skalieren', es:' - re-escalar', ru:' - размер', it:' - cambia dimensioni'};
-        str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie', de:' - Einblenden', es:' - revelar', ru:' - показ', it:' - rivela'};
-        str['-crop'] = {en:' - crop', pl:' - przycinanie', de:' - Beschneiden', es:' - recortar', ru:' - обрезка', it:' - taglia'};
-        str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN', de:'Golden Crop by SzopeN', es:'Recorte Dorado por SzopeN', ru:'Golden Crop от SzopeN', it:'Taglieria d\'oro di SzopeN'};
-        str['cropMask'] = {en:'Crop mask', pl:'Maska kadrująca', de:'Schnittmaske', es:'Máscara de recorte', ru:'Маска кадрирвания', it:'Mascheria taglieria'};
-        str['divRules'] = {en:'Dividing rules', pl:'Reguły podziału', de:'Trennungsregeln', es:'Reglas de división', ru:'Правила разделения', it:'Regole della divisione'};
-        str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%', es:'Cinta al %1%%', ru:'Линии на %1%%', it:'Guida a %1%%'};
-        str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldener Dreieck oben', es:'Triángulo dorado hacia arriba', ru:'Золотой треугольник вверх', it:'Triangolo d\'oro all\'insù'};
-        str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldener Dreieck unten', es:'Triángulo dorado hacia abajo', ru:'Золотой треугольник вниз', it:'Triangolo d\'oro all\'ingiù'};
-        str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonale Methode', es:'Método Diagonal', ru:'Метод диагоналей', it:'Metodo Diagonale'};
-        str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.', es:'Abrir el documento en el cual quiere correr el script', ru:'Откройте файл, в котором вы хотели бы запустить скрипт.', it:'Apri il documento nel quale vuoi applicare lo script.'};
-        str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen', es:'Extensión del lienzo detectada', ru:'Обнаружено увеличение холста', it:'Estensione quadro  trovato.'};
-        str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?', es:'?Qué hacer con el lienzo?', ru:'Что следует предпринять?', it:'Cosa fare con il quatro?'};
-        str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz płótno', de:'Erweiterte Arbeitsfläche', es:'Extender el lienzo', ru:'Увеличить размеры', it:'Esteso quadro'};
-        str['dontExtCanv'] = {en:'Crop without extension', pl:'Przytnij bez rozszerzania', de:'Schnitt ohne Erweiterung', es:'Recortar sin extensón', ru:'Обрезать без увеличения', it:'Taglia senza estensione'};
-        str['retToCropping'] = {en:'Return to cropping', pl:'Wróć do kadrowania', de:'Zurück zum Schneiden', es:'Volver a recorte', ru:'Вернуться к кадрированию', it:'Torna alla taglieria'};
-        str['chCompMethod'] = {en:'Composition method', pl:'Metoda kompozycji', de:'Kompositionsmethode', es:'Método de composición', ru:'Метод построения композиции', it:'Metodo di composizione'};
-        str['chCompMethodQ'] = {en:'Choose composition guidelines', pl:'Wybierz metodę kompozycji', de:'Auswahl der Kompositionslinien', es:'Escoja guías de composición', ru:'Выберите тип направляющих линий', it:'Sciegli guide di composizione'};
-        str['goldenRule'] = {en:'Golden Rule', pl:'Złoty podział', de:'Goldene Regel', es:'Regla Dorada', ru:'Золотое сечение', it:'Regola d\'oro'};
-        str['ruleOfThirds'] = {en:'Rule of Thirds', pl:'Reguła trzech', de:'Drittel-Regel', es:'Regla de los Tercios', ru:'Правило третей', it:'Regola dei terzi'};
-        str['goldenSpiralBL'] = {en:'Golden Spiral bottom-left', pl:'Złota spirala lewo-dół', de:'Goldene Spirale unten links', es:'Espiral Dorada abajo-izquierda', ru:'Золотая спираль внизу-слева', it:'Spirale d\'oro in basso a sinistra'};
-        str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'Złota spirala lewo-góra', de:'Goldene Spirale oben links', es:'Espiral Dorada arriba-izquierda', ru:'Золотая спираль вверху-слева', it:'Spirale d\'oro in alto a sinistra'};
-        str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'Złota spirala prawo-góra', de:'Goldene Spirale oben rechts', es:'Espiral Dorada arriba-derecha', ru:'Золотая спираль вверху-справа', it:'Spirale d\'oro in alto a destra'};
-        str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'Złota spirala prawo-dół', de:'Goldene Spirale unten rechts', es:'Espiral Dorada abajo-derecha', ru:'Золотая спираль внизу-справа', it:'Spirale d\'oro in basso a destra'};
-        str['goldenSpiral'] = {en:'Golden Spiral', pl:'Złota spirala', de:'Goldene Spirale', es:'Espiral Dorada', ru:'Золотая спираль', it:'Spirale d\'oro'};
-        str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie', de:'Alles Auswählen', es:'Seleccione Todo', ru:'Выбрать все', it:'Seleziona Tutto'};
-        str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie', de:'Nichts Auswählen', es:'Deseleccione Todo', ru:'Убрать все', it:'Deselezionare Tutto'};
+        str['chCropMethod'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'??? ????????????', it:'Scegli stile taglieria'};
+        str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'???????? ??? ????????????', it:'Scegli stile taglieria'};
+        str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij płótno', de:'Arbeitsfläche aufteilen', es:'Recortar el lienzo', ru:'???????? ?????', it:'Taglieria (Semplice taglieria)'};
+        str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskę kadrującą', de:'Erstelle Schnittmaske', es:'Hacer máscara de recorte', ru:'??????? ?????', it:'Crea maschera taglieria'};
+        str['bgOnLayer'] = {en:'Background on layer', pl:'Tło na warstwie', de:'Hintergrund auf Ebene', es:'Fondo sobre capa', ru:'??????? ????', it:'Sfondo del livello'};
+        str['bgFill'] = {en:'Background fill', pl:'Wypełnienie tła', de:'Hintergrund füllen', es:'Relleno de fondo', ru:'??????? ???????', it:'Riempimento sfondo'};
+        str['-grid'] = {en:' - grid', pl:' - siatka', de:' - Rastern', es:'- grilla', ru:' - ?????', it:' - griglia'};
+        str['-resize'] = {en:' - resize', pl:' - przeskalowanie', de:' - Skalieren', es:' - re-escalar', ru:' - ??????', it:' - cambia dimensioni'};
+        str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie', de:' - Einblenden', es:' - revelar', ru:' - ?????', it:' - rivela'};
+        str['-crop'] = {en:' - crop', pl:' - przycinanie', de:' - Beschneiden', es:' - recortar', ru:' - ???????', it:' - taglia'};
+        str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN', de:'Golden Crop by SzopeN', es:'Recorte Dorado por SzopeN', ru:'Golden Crop ?? SzopeN', it:'Taglieria d\'oro di SzopeN'};
+        str['cropMask'] = {en:'Crop mask', pl:'Maska kadrująca', de:'Schnittmaske', es:'Máscara de recorte', ru:'????? ???????????', it:'Mascheria taglieria'};
+        str['divRules'] = {en:'Dividing rules', pl:'Reguły podziału', de:'Trennungsregeln', es:'Reglas de división', ru:'??????? ??????????', it:'Regole della divisione'};
+        str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%', es:'Cinta al %1%%', ru:'????? ?? %1%%', it:'Guida a %1%%'};
+        str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldener Dreieck oben', es:'Triángulo dorado hacia arriba', ru:'??????? ??????????? ?????', it:'Triangolo d\'oro all\'insu'};
+        str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldener Dreieck unten', es:'Triángulo dorado hacia abajo', ru:'??????? ??????????? ????', it:'Triangolo d\'oro all\'ingiu'};
+        str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonale Methode', es:'Método Diagonal', ru:'????? ??????????', it:'Metodo Diagonale'};
+        str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.', es:'Abrir el documento en el cual quiere correr el script', ru:'???????? ????, ? ??????? ?? ?????? ?? ????????? ??????.', it:'Apri il documento nel quale vuoi applicare lo script.'};
+        str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen', es:'Extensión del lienzo detectada', ru:'?????????? ?????????? ??????', it:'Estensione quadro  trovato.'};
+        str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?', es:'?Qué hacer con el lienzo?', ru:'??? ??????? ????????????', it:'Cosa fare con il quatro?'};
+        str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz płótno', de:'Erweiterte Arbeitsfläche', es:'Extender el lienzo', ru:'????????? ???????', it:'Esteso quadro'};
+        str['dontExtCanv'] = {en:'Crop without extension', pl:'Przytnij bez rozszerzania', de:'Schnitt ohne Erweiterung', es:'Recortar sin extensón', ru:'???????? ??? ??????????', it:'Taglia senza estensione'};
+        str['retToCropping'] = {en:'Return to cropping', pl:'Wróć do kadrowania', de:'Zurück zum Schneiden', es:'Volver a recorte', ru:'????????? ? ????????????', it:'Torna alla taglieria'};
+        str['chCompMethod'] = {en:'Composition method', pl:'Metoda kompozycji', de:'Kompositionsmethode', es:'Método de composición', ru:'????? ?????????? ??????????', it:'Metodo di composizione'};
+        str['chCompMethodQ'] = {en:'Choose composition guidelines', pl:'Wybierz metodę kompozycji', de:'Auswahl der Kompositionslinien', es:'Escoja guías de composición', ru:'???????? ??? ???????????? ?????', it:'Sciegli guide di composizione'};
+        str['goldenRule'] = {en:'Golden Rule', pl:'Złoty podział', de:'Goldene Regel', es:'Regla Dorada', ru:'??????? ???????', it:'Regola d\'oro'};
+        str['ruleOfThirds'] = {en:'Rule of Thirds', pl:'Reguła trzech', de:'Drittel-Regel', es:'Regla de los Tercios', ru:'??????? ??????', it:'Regola dei terzi'};
+        str['goldenSpiralBL'] = {en:'Golden Spiral bottom-left', pl:'Złota spirala lewo-dół', de:'Goldene Spirale unten links', es:'Espiral Dorada abajo-izquierda', ru:'??????? ??????? ?????-?????', it:'Spirale d\'oro in basso a sinistra'};
+        str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'Złota spirala lewo-góra', de:'Goldene Spirale oben links', es:'Espiral Dorada arriba-izquierda', ru:'??????? ??????? ??????-?????', it:'Spirale d\'oro in alto a sinistra'};
+        str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'Złota spirala prawo-góra', de:'Goldene Spirale oben rechts', es:'Espiral Dorada arriba-derecha', ru:'??????? ??????? ??????-??????', it:'Spirale d\'oro in alto a destra'};
+        str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'Złota spirala prawo-dół', de:'Goldene Spirale unten rechts', es:'Espiral Dorada abajo-derecha', ru:'??????? ??????? ?????-??????', it:'Spirale d\'oro in basso a destra'};
+        str['goldenSpiral'] = {en:'Golden Spiral', pl:'Złota spirala', de:'Goldene Spirale', es:'Espiral Dorada', ru:'??????? ???????', it:'Spirale d\'oro'};
+        str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie', de:'Alles Auswählen', es:'Seleccione Todo', ru:'??????? ???', it:'Seleziona Tutto'};
+        str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie', de:'Nichts Auswählen', es:'Deseleccione Todo', ru:'?????? ???', it:'Deselezionare Tutto'};
         str['ok'] = {en:'OK', pl:'OK', de:'OK', es:'OK', ru:'OK', it:'OK'};
-        str['cancel'] = {en:'Cancel', pl:'Anuluj', de:'Abbrechen', es:'Cancelar', ru:'Отмена', it:'cancellare'};
-        str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale', de:'Alle Goldenen Spiralen', es:'Todas las Espirales Doradas', ru:'Все золотые спирали', it:'Tutte le spirali d\'oro'};
-        str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln', es:'Reglas Básicas', ru:'Основные правила', it:'Regole fondamentali'};
-        str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Liniendicke', es:'Grosor de línea', ru:'Толщина линий', it:'Grossezza guida'};
-        str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Liniendicke (‰ kurze Seite)', es:'Grosor de línea (‰ del borde más corto)', ru:'Толщина линий (‰ меньшей стороны): ', it:'Grossezza guida (‰ di taglio più corto): '};
+        str['cancel'] = {en:'Cancel', pl:'Anuluj', de:'Abbrechen', es:'Cancelar', ru:'??????', it:'cancellare'};
+        str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale', de:'Alle Goldenen Spiralen', es:'Todas las Espirales Doradas', ru:'??? ??????? ???????', it:'Tutte le spirali d\'oro'};
+        str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln', es:'Reglas Básicas', ru:'???????? ???????', it:'Regole fondamentali'};
+        str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Liniendicke', es:'Grosor de línea', ru:'??????? ?????', it:'Grossezza guida'};
+        str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Liniendicke (‰ kurze Seite)', es:'Grosor de línea (‰ del borde más corto)', ru:'??????? ????? (‰ ??????? ???????): ', it:'Grossezza guida (‰ di taglio piu corto): '};
         str['cropMaskAspectRatio'] = {en:'Crop mask aspect ratio', pl: 'Proporcje maski kadrowania'};
         str['sameAsPicture'] = {en:'As image (%1/%2)', pl: 'Jak obrazka (%1/%2)'};
         str['arSameAsImage'] = {en:'Aspect Ratio as image', pl: 'Proporcje jak ma obrazek'};
@@ -479,7 +479,8 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
                                         var e = add('checkbox', undefined, caption, {
                                                 name: cbName
                                         });
-                                        if (isCS5()) e.shortcutKey = '~'; // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
+                                        // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
+                                        if (isCS5()) e.shortcutKey = '~';
                                         e.value = !! cbElements[i].sel;
                                         cbElements[i].obj = e;
                                 }
@@ -564,7 +565,7 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
                                                 }
                                         }
                                 }
-                            
+
                         dlg.addEventListener('keydown', f, false); // Documentation doesn't mention that Window object implement keydown event. But it works, more or less... :)
                 } else if (isCS4()) {
                         addEventListener('keydown', function (e) {
@@ -872,34 +873,34 @@ function GoldenCrop(_doc) {
 };
 
 GoldenCrop.prototype.loadConfig = function () {
-		var paramsID = {golden:{value:true, desc:'goldenRule'},
-						roth:{value:true, desc:'ruleOfThirds'},
-						diagmethod:{value:true, desc:'diagonalMethod'},
-						gtrianup:{value:true, desc:'goldenTriangleUp'},
-						gtriandown:{value:false, desc:'goldenTriangleDown'},
-						gspiralBL:{value:false, desc:'goldenSpiralBL'},
-						gspiralTL:{value:false, desc:'goldenSpiralTL'},
-						gspiralTR:{value:false, desc:'goldenSpiralTR'},
-						gspiralBR:{value:false, desc:'goldenSpiralBR'},
-						lthick:{value:5, desc:'lineThickness'},
-						aratioAsImage: {value: true, desc:'arSameAsImage'},
-						aratioNumerator: {value: 0, desc:'arNumerator'},
-						aratioDenominator: {value: 0, desc:'arDenominator'}
-						/*{value:'', desc:''},*/
-						};
+        var paramsID = {golden:{value:true, desc:'goldenRule'},
+                        roth:{value:true, desc:'ruleOfThirds'},
+                        diagmethod:{value:true, desc:'diagonalMethod'},
+                        gtrianup:{value:true, desc:'goldenTriangleUp'},
+                        gtriandown:{value:false, desc:'goldenTriangleDown'},
+                        gspiralBL:{value:false, desc:'goldenSpiralBL'},
+                        gspiralTL:{value:false, desc:'goldenSpiralTL'},
+                        gspiralTR:{value:false, desc:'goldenSpiralTR'},
+                        gspiralBR:{value:false, desc:'goldenSpiralBR'},
+                        lthick:{value:5, desc:'lineThickness'},
+                        aratioAsImage: {value: true, desc:'arSameAsImage'},
+                        aratioNumerator: {value: 0, desc:'arNumerator'},
+                        aratioDenominator: {value: 0, desc:'arDenominator'}
+                        /*{value:'', desc:''},*/
+                        };
         this.conf = new configurator(paramsID, UUID);
         this.conf.loadSettings();
 
-		// history relict, to be integrated with config and dialog
-		this.guidelines = {golden: {create: this.conf.get('golden')},
-							 roth: {create: this.conf.get('roth')},
-					   diagmethod: {create: this.conf.get('diagmethod')},
-						 gtrianup: {create: this.conf.get('gtrianup')},
-					   gtriandown: {create: this.conf.get('gtriandown')},
-						gspiralBL: {create: this.conf.get('gspiralBL')},
-						gspiralTL: {create: this.conf.get('gspiralTL')},
-						gspiralTR: {create: this.conf.get('gspiralTR')},
-						gspiralBR: {create: this.conf.get('gspiralBR')}};
+        // history relict, to be integrated with config and dialog
+        this.guidelines = {golden: {create: this.conf.get('golden')},
+                           roth: {create: this.conf.get('roth')},
+                           diagmethod: {create: this.conf.get('diagmethod')},
+                           gtrianup: {create: this.conf.get('gtrianup')},
+                           gtriandown: {create: this.conf.get('gtriandown')},
+                           gspiralBL: {create: this.conf.get('gspiralBL')},
+                           gspiralTL: {create: this.conf.get('gspiralTL')},
+                           gspiralTR: {create: this.conf.get('gspiralTR')},
+                           gspiralBR: {create: this.conf.get('gspiralBR')}};
 
         this.ifApplyFX = true;
         this.ifSuspendHistory = isSC3plus();
@@ -915,13 +916,13 @@ GoldenCrop.prototype.loadConfig = function () {
  *
  * Returns: instance of ArtLayer (color fill) -- object representing fill layer with vector mask
  *                                               with strips
- * 
+ *
  * Adds a pair of vertical and horizontal strips (lines) using Solid Color fill layer and vector mask.
  *
  * Each of four lines is situated at position*100% from image borders. For example, suppose that image
  * dimentions are (width, height)=(800,600) and position=1/3 (which is ca. 33.33%). Horizontal lines will
  * be added is such position that their center would be on 600*(1/3)=200 and 600*(1-(1/3))=600*(2/3)=400
- * pixel accordingly. Vertical lines: 800*1/3=266.66 and 800*2/3=533.33 pixel (fractial pixel value is 
+ * pixel accordingly. Vertical lines: 800*1/3=266.66 and 800*2/3=533.33 pixel (fractial pixel value is
  * possible when using vectors).
  *
  * Line thickness is calculated as stripSize*100% of shorter image edge. For example, suppose that image
@@ -964,8 +965,8 @@ GoldenCrop.prototype.makeStrips = function (position, stripSizePrc, color) {
  *
  * Returns: instance of ArtLayer (color fill) -- object representing fill layer with vector mask
  *                                               with diagonal strips
- * 
- * Adds three strips (lines) using Solid Color fill layer and vector mask. First one is connecting 
+ *
+ * Adds three strips (lines) using Solid Color fill layer and vector mask. First one is connecting
  * oposite corners. Other two are connecting first strip to the other two corners. Lines 1,2 and 1,3
  * are perpendicular.
  *
@@ -1004,9 +1005,9 @@ GoldenCrop.prototype.makeGoldenTriangle = function (direction, stripSize, color)
                 paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(x, y, 0, h, stripSizePx)));
         }
 
-        /* 
-        Normalize -- make sure that whole path is contained by image frame (esp. corner problem)    
-        
+        /*
+        Normalize -- make sure that whole path is contained by image frame (esp. corner problem)
+
                / \
               /---\---- - part of diagonal line is outside of image frame
               \|   \
@@ -1197,7 +1198,7 @@ var id11 = cTID( "setd" );
  *   [in][*] maskOpacity    | integer from range [0,100] -- opacity of mask (hiding outside of selected display frame)
  *   [in][*] colors         | Array of instances of SolidColor -- colors of mask and strips (for each dividing rule)
  *   [in][*] stripsThickScale | Array of doubles -- the multiple of basic thickness (for each dividing rule)
- * 
+ *
  * basicStripSize -- default value: 0.01 (1%)
  * maskOpacity -- default value: 70
  * colors -- default value: mask color: #000
@@ -1205,7 +1206,7 @@ var id11 = cTID( "setd" );
  *                          one-third rule: #333
  *                          golden triangle rule (up): #F00
  *                          golden triangle rule (down): #00F
- * stripsThickScale -- default value: 
+ * stripsThickScale -- default value:
  *                          golden rule: 1
  *                          one-third rule: 1/2
  *                          golden triangle rule (all): 1/3
@@ -1222,11 +1223,11 @@ GoldenCrop.prototype.makeGrid = function (basicStripSize, maskOpacity, colors, s
         }
         if (!colors) {
                 colors = [Stdlib.createRGBColor(0, 0, 0),
-						  Stdlib.createRGBColor(0, 0, 0),
-						  Stdlib.createRGBColor(0x33, 0x33, 0x33),
-						  Stdlib.createRGBColor(0x11, 0x11, 0x11),
-						  Stdlib.createRGBColor(255, 0, 0), Stdlib.createRGBColor(0, 0, 255),
-						  Stdlib.createRGBColor(0, 255, 255), Stdlib.createRGBColor(255, 0, 255), Stdlib.createRGBColor(255, 255, 0), Stdlib.createRGBColor(128, 128, 255)];
+                          Stdlib.createRGBColor(0, 0, 0),
+                          Stdlib.createRGBColor(0x33, 0x33, 0x33),
+                          Stdlib.createRGBColor(0x11, 0x11, 0x11),
+                          Stdlib.createRGBColor(255, 0, 0), Stdlib.createRGBColor(0, 0, 255),
+                          Stdlib.createRGBColor(0, 255, 255), Stdlib.createRGBColor(255, 0, 255), Stdlib.createRGBColor(255, 255, 0), Stdlib.createRGBColor(128, 128, 255)];
         }
         if (!stripsThickScale) {
                 stripsThickScale = [1, 1, 1, 1 / 2, 1 / 2];
@@ -1495,13 +1496,13 @@ GoldenCrop.prototype.findMainGCGroup = function () {
         var isGCMG = function (layer) {
                 return layer.typename == 'LayerSet' && layer.name == mainGCGroupName;
         }
-            
+
         // We have the layer active or we are somwhere inside the main group
         do {
                 if (isGCMG(layer)) return layer;
                 layer = layer.parent;
         } while (layer.typename != 'Document')
-            
+
         // GC Main Group is at the top of the layer stack
         layer = this.doc.layers[0];
         if (isGCMG(layer)) {
@@ -1710,7 +1711,7 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
                             {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
                            ]
         };
-		
+
         var dlg = new dialogMenuMChoice(menuDesc);
         dlg.construct(true);
 
@@ -1807,11 +1808,11 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
                         dlg.enableQuickKeyboardShortcuts = true;
                 }
                 // END: Disable quick digit shortcuts while in textedit
-                // BEGIN: auto check 'other' on text changing        
+                // BEGIN: auto check 'other' on text changing
                 dlg.customControls.arGrp.otherGrp.arList.onChange = function () {
                         dlg.customControls.arGrp.otherGrp.otherARrb.notify();
                 }
-                // END: auto check 'other' on text changing   
+                // END: auto check 'other' on text changing
                 // BEGIN: auto check 'custom' on text changing
                 dlg.customControls.arGrp.customGrp.customARnumerator.onChanging = dlg.customControls.arGrp.customGrp.customARdenominator.onChanging = function () {
                         dlg.customControls.arGrp.customGrp.customARrb.notify();
@@ -1827,7 +1828,7 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
                                         }
                                 }
                     }
-                    
+
                 for (rbIndex in radioButtonGroup) {
                         radioButtonGroup[rbIndex].onClick = maintainSingleRBCheckedHandler;
                 }
@@ -1890,7 +1891,7 @@ GoldenCrop.prototype.isImageHorizontal = function () {
         return this.docW >= this.docH;
 }
 
-/*    
+/*
  * Logical heart of the script. Invoke each phase of script w/ or w/o suspending history.
  */
 GoldenCrop.prototype.go = function () {
@@ -2076,7 +2077,7 @@ MathEx.reduceFraction = function (a) {
 // Between ===START: stdlib.js=== and ===END: stdlib.js===, there is my
 // modified (stripped and extended) version o xbytor's stdlib from xtools.
 // ===START: stdlib.js===
-// 
+//
 // stdlib.js
 //   This file contains a collection of utility routines that I've
 //   written, borrowed, rewritten, and occasionally tested and
@@ -2091,40 +2092,40 @@ MathEx.reduceFraction = function (a) {
 // Contact: xbytor@gmail.com
 // Mod: Damian Sepczuk <damian.sepczuk@o2.pl>
 
-var psVersion; 
-try { 
-  var lvl = $.level; 
-  $.level = 0; 
-  psVersion = app.version; 
+var psVersion;
+try {
+  var lvl = $.level;
+  $.level = 0;
+  psVersion = app.version;
 
- } catch (e) { 
-  psVersion = version; 
+ } catch (e) {
+  psVersion = version;
 
- } finally { 
-   $.level = lvl; 
-   delete lvl; 
-} 
+ } finally {
+   $.level = lvl;
+   delete lvl;
+}
 
 isCS5plus = function()  { return isCS5() };
 isCS4plus = function()  { return isCS4() || isCS5plus() };
-isSC3plus = function()  { return isCS3() || isCS4plus() }; 
+isSC3plus = function()  { return isCS3() || isCS4plus() };
 isCS5 = function()  { return psVersion.match(/^12\./) != null; };
-isCS4 = function()  { return psVersion.match(/^11\./) != null; }; 
-isCS3 = function()  { return psVersion.match(/^10\./) != null; }; 
-isCS2 = function()  { return psVersion.match(/^9\./) != null; }; 
-isCS  = function()  { return psVersion.match(/^8\./) != null; }; 
-isPS7 = function()  { return psVersion.match(/^7\./) != null; }; 
+isCS4 = function()  { return psVersion.match(/^11\./) != null; };
+isCS3 = function()  { return psVersion.match(/^10\./) != null; };
+isCS2 = function()  { return psVersion.match(/^9\./) != null; };
+isCS  = function()  { return psVersion.match(/^8\./) != null; };
+isPS7 = function()  { return psVersion.match(/^7\./) != null; };
 
-if (isPS7()) {  // this does not work for eval-includes 
-  app = this; 
+if (isPS7()) {  // this does not work for eval-includes
+  app = this;
 }
 
-function cTID(s) { 
-  return cTID[s] || cTID[s] = app.charIDToTypeID(s); 
-}; 
+function cTID(s) {
+  return cTID[s] || cTID[s] = app.charIDToTypeID(s);
+};
 
-function sTID(s) { 
-  return sTID[s] || sTID[s] = app.stringIDToTypeID(s); 
+function sTID(s) {
+  return sTID[s] || sTID[s] = app.stringIDToTypeID(s);
 };
 
 Stdlib = function Stdlib() {};
@@ -2144,7 +2145,7 @@ Stdlib.createRGBColor = function(r, g, b) {
 };
 
 Stdlib.createSolidFillLayer = function(doc, color, name, opacity, layerColor, blendMode, clipToPrevious) {
-  if(doc instanceof SolidColor) { 
+  if(doc instanceof SolidColor) {
       color=doc; doc=app.activeDocument};
   if(!doc)doc=activeDocument;
   if (!color) {
@@ -2215,13 +2216,13 @@ Stdlib.addVectorMask = function( hide ) {
 
     var arMode = new ActionReference();
     arMode.putClass( cTID( "Path" ) );
-    
+
     var arKind = new ActionReference();
     arKind.putEnumerated( cTID( "Path" ), cTID( "Path" ), sTID( "vectorMask" ) );
-    
+
     var mode = cTID(hide?"HdAl":"RvlA");
-    desc.putReference( cTID( "null" ), arMode );    
-    desc.putReference( cTID( "At  " ), arKind );    
+    desc.putReference( cTID( "null" ), arMode );
+    desc.putReference( cTID( "At  " ), arKind );
     desc.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), mode);
 
     executeAction( cTID( "Mk  " ), desc, DialogModes.NO );
@@ -2275,7 +2276,7 @@ Stdlib.rectPath = function( mode, unit, top, left, bottom, right )
     var pathUnit = Stdlib.decodeUnit(unit);
 
     var desc = new ActionDescriptor();
-    
+
     var arStyle = new ActionReference();
         arStyle.putEnumerated( cTID( "Path" ), cTID( "Ordn" ), cTID( "Trgt" ) );
 
@@ -2284,7 +2285,7 @@ Stdlib.rectPath = function( mode, unit, top, left, bottom, right )
         adBounds.putUnitDouble( cTID( "Left" ), pathUnit, left );
         adBounds.putUnitDouble( cTID( "Btom" ), pathUnit, bottom );
         adBounds.putUnitDouble( cTID( "Rght" ), pathUnit, right );
-    
+
     desc.putReference( cTID( "null" ), arStyle );
     desc.putObject( cTID( "T   " ), cTID( "Rctn" ), adBounds );
 
@@ -2376,7 +2377,7 @@ Stdlib.userGoToFreeTransform = function(doc, layer) {
         } finally {
           $.level = lvl;
         }
-    
+
     return state;
     }
     return Stdlib.wrapLCLayer(doc, layer, _ftn)
@@ -2469,86 +2470,86 @@ Stdlib.wrapLCLayer = function(doc, layer, ftn) {
   return res;
 };
 
-// by Damian SzopeN Sepczuk <damian[d0t]sepczuk[a7]o2{do7}pl> 
-// [in] round (bool) -- whether returned values should be rounded to the nearest pixel, def: false 
-// [in] doc -- document containing layer with vector mask 
-// [in] layer -- layer with vector mask 
-// returns array [left, top, right, bottom, width, height] 
-Stdlib.getVectorMaskBounds_cornerPointsOnly = function(round, doc, layer, pointList) { 
-  round = !!round; 
-  function _ftn() { 
-    var ref = new ActionReference(); 
-    ref.putEnumerated( cTID('Path'), cTID('Path'), sTID('vectorMask') ); 
-    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt")); 
-    var vMaskDescr = executeActionGet(ref); 
-    var pathContents = vMaskDescr.getObjectValue(sTID('pathContents')); 
-    var pathList = pathContents.getList(sTID('pathComponents')); 
+// by Damian SzopeN Sepczuk <damian[d0t]sepczuk[a7]o2{do7}pl>
+// [in] round (bool) -- whether returned values should be rounded to the nearest pixel, def: false
+// [in] doc -- document containing layer with vector mask
+// [in] layer -- layer with vector mask
+// returns array [left, top, right, bottom, width, height]
+Stdlib.getVectorMaskBounds_cornerPointsOnly = function(round, doc, layer, pointList) {
+  round = !!round;
+  function _ftn() {
+    var ref = new ActionReference();
+    ref.putEnumerated( cTID('Path'), cTID('Path'), sTID('vectorMask') );
+    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
+    var vMaskDescr = executeActionGet(ref);
+    var pathContents = vMaskDescr.getObjectValue(sTID('pathContents'));
+    var pathList = pathContents.getList(sTID('pathComponents'));
 
-    // for each path in current layer 
-    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
-    var minXp, maxXp, minYp, maxYp; 
-    // using separate variables gives speed gain 
-    var _id1 = sTID("subpathListKey"), 
-        _id2 = sTID("points"), 
-        _id3 = sTID("anchor"), 
-        _id4 = sTID('horizontal'), 
+    // for each path in current layer
+    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    var minXp, maxXp, minYp, maxYp;
+    // using separate variables gives speed gain
+    var _id1 = sTID("subpathListKey"),
+        _id2 = sTID("points"),
+        _id3 = sTID("anchor"),
+        _id4 = sTID('horizontal'),
         _id5 = sTID('vertical');
      var pList = new Array();
     if (pointList) {
-         for ( var cPath=0; cPath<pathList.count; ++cPath ) 
-         { 
-            var curPath = pathList.getObjectValue(cPath).getList(_id1); 
-            var points = curPath.getObjectValue(0).getList(_id2); 
-            // for each point 
-            for ( var cPoint=0; cPoint < points.count; ++cPoint ) 
-            {    
-              var point = points.getObjectValue(cPoint).getObjectValue(_id3); 
-              var x = point.getUnitDoubleValue(_id4); 
+         for ( var cPath=0; cPath<pathList.count; ++cPath )
+         {
+            var curPath = pathList.getObjectValue(cPath).getList(_id1);
+            var points = curPath.getObjectValue(0).getList(_id2);
+            // for each point
+            for ( var cPoint=0; cPoint < points.count; ++cPoint )
+            {
+              var point = points.getObjectValue(cPoint).getObjectValue(_id3);
+              var x = point.getUnitDoubleValue(_id4);
               var y = point.getUnitDoubleValue(_id5);
               pList.push({x:x,y:y});
-              // it is faster than if/else block (benchmarked on PSCS4) 
+              // it is faster than if/else block (benchmarked on PSCS4)
               if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
               if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
               if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
               if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
-            } 
+            }
          }
      } else {
-         for ( var cPath=0; cPath<pathList.count; ++cPath ) 
-         { 
-            var curPath = pathList.getObjectValue(cPath).getList(_id1); 
-            var points = curPath.getObjectValue(0).getList(_id2); 
-            // for each point 
-            for ( var cPoint=0; cPoint < points.count; ++cPoint ) 
-            {    
-              var point = points.getObjectValue(cPoint).getObjectValue(_id3); 
-              var x = point.getUnitDoubleValue(_id4); 
-              var y = point.getUnitDoubleValue(_id5); 
-              // it is faster than if/else block (benchmarked on PSCS4) 
+         for ( var cPath=0; cPath<pathList.count; ++cPath )
+         {
+            var curPath = pathList.getObjectValue(cPath).getList(_id1);
+            var points = curPath.getObjectValue(0).getList(_id2);
+            // for each point
+            for ( var cPoint=0; cPoint < points.count; ++cPoint )
+            {
+              var point = points.getObjectValue(cPoint).getObjectValue(_id3);
+              var x = point.getUnitDoubleValue(_id4);
+              var y = point.getUnitDoubleValue(_id5);
+              // it is faster than if/else block (benchmarked on PSCS4)
               if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
               if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
               if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
               if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
-            } 
+            }
          }
     }
- 
+
     //          0      1     2      3     4            5           6      7       8       9       10
-    var res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp, pList]; 
-    if (round) 
-    { 
-      for ( i=0; i<6; ++i ) 
-      { 
-        res[i] = Math.round(res[i]); 
-      } 
-    } 
-    return res; 
-  } 
-  var bnds = Stdlib.wrapLCLayer(doc, layer, _ftn); 
-  return bnds; 
+    var res = [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp, pList];
+    if (round)
+    {
+      for ( i=0; i<6; ++i )
+      {
+        res[i] = Math.round(res[i]);
+      }
+    }
+    return res;
+  }
+  var bnds = Stdlib.wrapLCLayer(doc, layer, _ftn);
+  return bnds;
 }
 
-if ( isCS4() || isCS3() ) { 
+if ( isCS4() || isCS3() ) {
     // SzopeN's version -- do NOT make use of history (because it can be suspended!)
     Stdlib.hasSelection = function(doc) {
       var debugLevel = $.level; // save debug level
@@ -2562,18 +2563,18 @@ if ( isCS4() || isCS3() ) {
       $.level = debugLevel; // restore debug level
       return res;
     };
-} else { 
+} else {
   Stdlib.hasSelection = function(doc) {
     if ( !doc ) doc = app.activeDocument;
-    var res = false; 
-    var as = doc.activeHistoryState; 
-    doc.selection.deselect(); 
-    if (as != doc.activeHistoryState) { 
-      res = true; 
-      doc.activeHistoryState = as; 
-    } 
-    return res; 
-  }; 
+    var res = false;
+    var as = doc.activeHistoryState;
+    doc.selection.deselect();
+    if (as != doc.activeHistoryState) {
+      res = true;
+      doc.activeHistoryState = as;
+    }
+    return res;
+  };
 };
 
 Stdlib.hasBackground = function(doc) {
@@ -2608,7 +2609,7 @@ Stdlib.maskModesEnum = {noMask:false, revealAll:1, hideAll:2, revealSelection:3,
  * [in*] opacity: Integer from range [0,100] -- group opacity, def: 100
  * [in*] color: enum Stdlib.colorsEnum -- color of group (on layers panel), def: Stdlib.colorsEnum.none
  * [in*] blandMode: enum Stdlib.blendModesEnum -- bledning mode of the group, def: Stdlib.blendModesEnum.passThrough
- * Returns void 
+ * Returns void
  * Remark: It is faster than standard API at least in CS4.
  * Remark: Do not pass an argument or pass undefined to get default value
  * Example: Stdlib.createLayerGroup('my group', 75, Stdlib.colorsEnum.red, Stdlib.blendModesEnum.passThrough);
@@ -2618,13 +2619,13 @@ Stdlib.createLayerGroup = function(name, opacity, color, blendMode, userMask, ve
     // Make layer
     var idMk = cTID( "Mk  " );
         var desc54 = new ActionDescriptor();
-        
+
         var idnull = cTID( "null" );
             var ref49 = new ActionReference();
             var idlayerSection = sTID( "layerSection" );
             ref49.putClass( idlayerSection );
         desc54.putReference( idnull, ref49 );
-        
+
         var idUsng = cTID( "Usng" );
             var desc55 = new ActionDescriptor();
             if (name) {
@@ -2685,7 +2686,7 @@ Stdlib.createLayerGroup = function(name, opacity, color, blendMode, userMask, ve
                 var idPath = cTID( "Path" );
                 ref146.putEnumerated( idPath, idPath, sTID( "vectorMask" ) );
             desc287.putReference( idAt, ref146 );
-            
+
         switch ( vectorMask ) {
             case Stdlib.maskModesEnum.revealAll:
                 desc287.putEnumerated( cTID( "Usng" ), sTID( "vectorMaskEnabled" ), cTID( "RvlA" ) );
@@ -2766,24 +2767,24 @@ Stdlib.createLayerGroup = function(name, opacity, color, blendMode, userMask, ve
     return doc.activeLayer;
 }
 
-Stdlib.getVectorMaskAngle_cornerPointsOnly = function(round, doc, layer) { 
-  round = !!round; 
-  function _ftn() { 
-    var ref = new ActionReference(); 
-    ref.putEnumerated( cTID('Path'), cTID('Path'), sTID('vectorMask') ); 
-    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt")); 
-    var vMaskDescr = executeActionGet(ref); 
-    var pathContents = vMaskDescr.getObjectValue(sTID('pathContents')); 
-    var pathList = pathContents.getList(sTID('pathComponents')); 
+Stdlib.getVectorMaskAngle_cornerPointsOnly = function(round, doc, layer) {
+  round = !!round;
+  function _ftn() {
+    var ref = new ActionReference();
+    ref.putEnumerated( cTID('Path'), cTID('Path'), sTID('vectorMask') );
+    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
+    var vMaskDescr = executeActionGet(ref);
+    var pathContents = vMaskDescr.getObjectValue(sTID('pathContents'));
+    var pathList = pathContents.getList(sTID('pathComponents'));
 
-    // using separate variables gives speed gain 
-    var _id3 = sTID("anchor"), 
-        _id4 = sTID('horizontal'), 
-        _id5 = sTID('vertical'); 
-       
+    // using separate variables gives speed gain
+    var _id3 = sTID("anchor"),
+        _id4 = sTID('horizontal'),
+        _id5 = sTID('vertical');
+
     var cPath=0;
-    var curPath = pathList.getObjectValue(cPath).getList(sTID("subpathListKey")); 
-    var points = curPath.getObjectValue(0).getList(sTID("points")); 
+    var curPath = pathList.getObjectValue(cPath).getList(sTID("subpathListKey"));
+    var points = curPath.getObjectValue(0).getList(sTID("points"));
 
     var p1  = points.getObjectValue(0).getObjectValue(_id3),
          p1x = p1.getUnitDoubleValue(_id4),
@@ -2791,19 +2792,19 @@ Stdlib.getVectorMaskAngle_cornerPointsOnly = function(round, doc, layer) {
          p2  = points.getObjectValue(1).getObjectValue(_id3),
          p2x = p2.getUnitDoubleValue(_id4),
          p2y = p2.getUnitDoubleValue(_id5);
-         
+
      var v = [p2x-p1x, p2y-p1y];
      var v_len = Math.sqrt(v[0]*v[0]+v[1]*v[1]);
      var an = Math.acos(v[1]/v_len);
     var res = 90.0-an*180.0/Math.PI;
     if (p1x>p2x) res=-res;
-    if (!round) 
-    { 
-        res = Math.round(res*100)/100; 
-    } 
-    return res; 
-  } 
-  return Stdlib.wrapLCLayer(doc, layer, _ftn); 
+    if (!round)
+    {
+        res = Math.round(res*100)/100;
+    }
+    return res;
+  }
+  return Stdlib.wrapLCLayer(doc, layer, _ftn);
 }
 
 Stdlib.rotateCannvas = function( angle, doc ) {
@@ -2845,15 +2846,15 @@ Stdlib.linePathAPI = function(x1, y1, x2, y2, thickness) {
     //        72dpi: 1 path 'pixel' => 1 image pixel
     //       300pdi: 1 path 'pixel' => 300/72 image pixels
     var doc = app.activeDocument;
-    var DPIFix = 72/doc.resolution; 
+    var DPIFix = 72/doc.resolution;
     x1 *= DPIFix; y1 *= DPIFix; x2 *= DPIFix; y2 *= DPIFix; thickness *= DPIFix;
-    
+
     var halfSize = thickness/2;
     var v = [x2-x1, y2-y1];
     var v_len = Math.sqrt(v[0]*v[0]+v[1]*v[1]);
     var an = Math.acos(v[1]/v_len);
     if (x1>x2) an=-an;
-    
+
     v=[halfSize*Math.cos(an),halfSize*Math.sin(an)];
     // Create initial point
     var points = [Stdlib.createPathPoint([x1+v[0],y1-v[1]]),
@@ -2867,7 +2868,7 @@ Stdlib.createPathPoint = function(point, lHandle, rHandle) {
     var kind = (lHandle || rHandle)?PointKind.SMOOTHPOINT:PointKind.CORNERPOINT;
     if (!lHandle) lHandle = point;
     if (!rHandle) rHandle = point;
-    
+
     var o = new PathPointInfo();
     /*o.anchor = [new UnitValue(point[0],'px'),new UnitValue(point[1],'px')];
     o.leftDirection = [new UnitValue(lHandle[0],'px'),new UnitValue(lHandle[1],'px')];
