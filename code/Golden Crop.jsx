@@ -1,11 +1,11 @@
 ﻿#target photoshop
 #strict on
 /**
-* @@@BUILDINFO@@@ Golden Crop.jsx 0.93 Tue Aug 24 2010 20:15:04 GMT+0200
+* @@@BUILDINFO@@@ Golden Crop.jsx 0.93 Tue Jul 19 2011 06:16:58 GMT+0200
 */
 
 /*****************************************
- * Golden crop script, v0.92a beta
+ * Golden crop script, v0.93 beta
  *
  * Copyright 2009-2010, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
  * 
@@ -22,13 +22,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 /************************
  *     USER CONFIG      *
  ************************/
-
-
 var debug = true;
 
 // set to "en"   for English 
@@ -101,818 +97,814 @@ Thanks to:
 // END__HARVEST_EXCEPTION_ZSTRING
 */
 // Some global configuration
-
 $.localize = true;
-if ( lang != "auto" )
-    $.locale = lang;
-$.level = debug?1:0;
+if (lang != "auto") {
+        $.locale = lang;
+}
+$.level = debug ? 1 : 0;
 
 const szAppName = "Golden Crop",
       szVersion = "0.92a beta";
 const UUID = '2c910bcd-8e34-4779-a885-bb214df640a3';
 // ---------------------------------------------------------------------
+
 function localizator(secretNumber) {
-    if ( secretNumber != 314159 ) {
-        throw new Error('Do not construct localizator using new keyword. To get localizator objcet use localizator.getInstance() instead.');
-    }
-    this.use_locale = 'auto';
-    $.localize = true;
-    $.localization = true; // ?
-    this.initStrings();
+        if (secretNumber != 314159) {
+                throw new Error('Do not construct localizator using new keyword. To get localizator objcet use localizator.getInstance() instead.');
+        }
+        this.use_locale = 'auto';
+        $.localize = true;
+        $.localization = true; // ?
+        this.initStrings();
 };
 
 localizator.instance = null;
 
-localizator.getInstance = function() {
-    return localizator.instance || localizator.instance = new localizator(314159);
+localizator.getInstance = function () {
+        return localizator.instance || localizator.instance = new localizator(314159);
 }
 
-localizator.prototype.setLocale = function( locale ) {
-    $.locale = locale;
+localizator.prototype.setLocale = function (locale) {
+        $.locale = locale;
 }
 
 localizator.prototype.initStrings = function() {
-    var str = this.str = new Array();
+        var str = this.str = new Array();
 
-    // Entries below were generated using localizator.loadCVSsaveAsJSCodeFile function
-    str['chCropMethod'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'Вид кадрирования', it:'Scegli stile taglieria'};
-    str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'Выберите вид кадрирования', it:'Scegli stile taglieria'};
-    str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij płótno', de:'Arbeitsfläche aufteilen', es:'Recortar el lienzo', ru:'Обрезать холст', it:'Taglieria (Semplice taglieria)'};
-    str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskę kadrującą', de:'Erstelle Schnittmaske', es:'Hacer máscara de recorte', ru:'Создать маску', it:'Crea maschera taglieria'};
-    str['bgOnLayer'] = {en:'Background on layer', pl:'Tło na warstwie', de:'Hintergrund auf Ebene', es:'Fondo sobre capa', ru:'Фоновый слой', it:'Sfondo del livello'};
-    str['bgFill'] = {en:'Background fill', pl:'Wypełnienie tła', de:'Hintergrund füllen', es:'Relleno de fondo', ru:'Фоновая заливка', it:'Riempimento sfondo'};
-    str['-grid'] = {en:' - grid', pl:' - siatka', de:' - Rastern', es:'- grilla', ru:' - сетка', it:' - griglia'};
-    str['-resize'] = {en:' - resize', pl:' - przeskalowanie', de:' - Skalieren', es:' - re-escalar', ru:' - размер', it:' - cambia dimensioni'};
-    str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie', de:' - Einblenden', es:' - revelar', ru:' - показ', it:' - rivela'};
-    str['-crop'] = {en:' - crop', pl:' - przycinanie', de:' - Beschneiden', es:' - recortar', ru:' - обрезка', it:' - taglia'};
-    str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN', de:'Golden Crop by SzopeN', es:'Recorte Dorado por SzopeN', ru:'Golden Crop от SzopeN', it:'Taglieria d\'oro di SzopeN'};
-    str['cropMask'] = {en:'Crop mask', pl:'Maska kadrująca', de:'Schnittmaske', es:'Máscara de recorte', ru:'Маска кадрирвания', it:'Mascheria taglieria'};
-    str['divRules'] = {en:'Dividing rules', pl:'Reguły podziału', de:'Trennungsregeln', es:'Reglas de división', ru:'Правила разделения', it:'Regole della divisione'};
-    str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%', es:'Cinta al %1%%', ru:'Линии на %1%%', it:'Guida a %1%%'};
-    str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldener Dreieck oben', es:'Triángulo dorado hacia arriba', ru:'Золотой треугольник вверх', it:'Triangolo d\'oro all\'insù'};
-    str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldener Dreieck unten', es:'Triángulo dorado hacia abajo', ru:'Золотой треугольник вниз', it:'Triangolo d\'oro all\'ingiù'};
-    str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonale Methode', es:'Método Diagonal', ru:'Метод диагоналей', it:'Metodo Diagonale'};
-    str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.', es:'Abrir el documento en el cual quiere correr el script', ru:'Откройте файл, в котором вы хотели бы запустить скрипт.', it:'Apri il documento nel quale vuoi applicare lo script.'};
-    str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen', es:'Extensión del lienzo detectada', ru:'Обнаружено увеличение холста', it:'Estensione quadro  trovato.'};
-    str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?', es:'?Qué hacer con el lienzo?', ru:'Что следует предпринять?', it:'Cosa fare con il quatro?'};
-    str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz płótno', de:'Erweiterte Arbeitsfläche', es:'Extender el lienzo', ru:'Увеличить размеры', it:'Esteso quadro'};
-    str['dontExtCanv'] = {en:'Crop without extension', pl:'Przytnij bez rozszerzania', de:'Schnitt ohne Erweiterung', es:'Recortar sin extensón', ru:'Обрезать без увеличения', it:'Taglia senza estensione'};
-    str['retToCropping'] = {en:'Return to cropping', pl:'Wróć do kadrowania', de:'Zurück zum Schneiden', es:'Volver a recorte', ru:'Вернуться к кадрированию', it:'Torna alla taglieria'};
-    str['chCompMethod'] = {en:'Composition method', pl:'Metoda kompozycji', de:'Kompositionsmethode', es:'Método de composición', ru:'Метод построения композиции', it:'Metodo di composizione'};
-    str['chCompMethodQ'] = {en:'Choose composition guidelines', pl:'Wybierz metodę kompozycji', de:'Auswahl der Kompositionslinien', es:'Escoja guías de composición', ru:'Выберите тип направляющих линий', it:'Sciegli guide di composizione'};
-    str['goldenRule'] = {en:'Golden Rule', pl:'Złoty podział', de:'Goldene Regel', es:'Regla Dorada', ru:'Золотое сечение', it:'Regola d\'oro'};
-    str['ruleOfThirds'] = {en:'Rule of Thirds', pl:'Reguła trzech', de:'Drittel-Regel', es:'Regla de los Tercios', ru:'Правило третей', it:'Regola dei terzi'};
-    str['goldenSpiralBL'] = {en:'Golden Spiral bottom-left', pl:'Złota spirala lewo-dół', de:'Goldene Spirale unten links', es:'Espiral Dorada abajo-izquierda', ru:'Золотая спираль внизу-слева', it:'Spirale d\'oro in basso a sinistra'};
-    str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'Złota spirala lewo-góra', de:'Goldene Spirale oben links', es:'Espiral Dorada arriba-izquierda', ru:'Золотая спираль вверху-слева', it:'Spirale d\'oro in alto a sinistra'};
-    str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'Złota spirala prawo-góra', de:'Goldene Spirale oben rechts', es:'Espiral Dorada arriba-derecha', ru:'Золотая спираль вверху-справа', it:'Spirale d\'oro in alto a destra'};
-    str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'Złota spirala prawo-dół', de:'Goldene Spirale unten rechts', es:'Espiral Dorada abajo-derecha', ru:'Золотая спираль внизу-справа', it:'Spirale d\'oro in basso a destra'};
-    str['goldenSpiral'] = {en:'Golden Spiral', pl:'Złota spirala', de:'Goldene Spirale', es:'Espiral Dorada', ru:'Золотая спираль', it:'Spirale d\'oro'};
-    str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie', de:'Alles Auswählen', es:'Seleccione Todo', ru:'Выбрать все', it:'Seleziona Tutto'};
-    str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie', de:'Nichts Auswählen', es:'Deseleccione Todo', ru:'Убрать все', it:'Deselezionare Tutto'};
-    str['ok'] = {en:'OK', pl:'OK', de:'OK', es:'OK', ru:'OK', it:'OK'};
-    str['cancel'] = {en:'Cancel', pl:'Anuluj', de:'Abbrechen', es:'Cancelar', ru:'Отмена', it:'cancellare'};
-    str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale', de:'Alle Goldenen Spiralen', es:'Todas las Espirales Doradas', ru:'Все золотые спирали', it:'Tutte le spirali d\'oro'};
-    str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln', es:'Reglas Básicas', ru:'Основные правила', it:'Regole fondamentali'};
-    str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Liniendicke', es:'Grosor de línea', ru:'Толщина линий', it:'Grossezza guida'};
-    str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Liniendicke (‰ kurze Seite)', es:'Grosor de línea (‰ del borde más corto)', ru:'Толщина линий (‰ меньшей стороны): ', it:'Grossezza guida (‰ di taglio più corto): '};
-    str['cropMaskAspectRatio'] = {en:'Crop mask aspect ratio', pl: 'Proporcje maski kadrowania'};
-    str['sameAsPicture'] = {en:'As image (%1/%2)', pl: 'Jak obrazka (%1/%2)'};
-    str['arSameAsImage'] = {en:'Aspect Ratio as image', pl: 'Proporcje jak ma obrazek'};
-    str['arNumerator'] = {en:'Aspect Ratio: numerator', pl: 'Proporcje: licznik'};
-    str['arDenominator'] = {en:'Aspect Ratio: denominator', pl: 'Proporcje: mianownik'};
-    //str[''] = {en:'', pl: ''};
+        // Entries below were generated using localizator.loadCVSsaveAsJSCodeFile function
+        str['chCropMethod'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'Вид кадрирования', it:'Scegli stile taglieria'};
+        str['chCropMethodQ'] = {en:'Choose crop style', pl:'Wybierz styl przycinania', de:'Wähle Schnittstil', es:'Escoja tipo de recorte', ru:'Выберите вид кадрирования', it:'Scegli stile taglieria'};
+        str['cropCanvas'] = {en:'Crop canvas (simple crop)', pl:'Przytnij płótno', de:'Arbeitsfläche aufteilen', es:'Recortar el lienzo', ru:'Обрезать холст', it:'Taglieria (Semplice taglieria)'};
+        str['mkCropMask'] = {en:'Make crop mask', pl:'Stwórz maskę kadrującą', de:'Erstelle Schnittmaske', es:'Hacer máscara de recorte', ru:'Создать маску', it:'Crea maschera taglieria'};
+        str['bgOnLayer'] = {en:'Background on layer', pl:'Tło na warstwie', de:'Hintergrund auf Ebene', es:'Fondo sobre capa', ru:'Фоновый слой', it:'Sfondo del livello'};
+        str['bgFill'] = {en:'Background fill', pl:'Wypełnienie tła', de:'Hintergrund füllen', es:'Relleno de fondo', ru:'Фоновая заливка', it:'Riempimento sfondo'};
+        str['-grid'] = {en:' - grid', pl:' - siatka', de:' - Rastern', es:'- grilla', ru:' - сетка', it:' - griglia'};
+        str['-resize'] = {en:' - resize', pl:' - przeskalowanie', de:' - Skalieren', es:' - re-escalar', ru:' - размер', it:' - cambia dimensioni'};
+        str['-reveal'] = {en:' - reveal', pl:' - rozszerzanie', de:' - Einblenden', es:' - revelar', ru:' - показ', it:' - rivela'};
+        str['-crop'] = {en:' - crop', pl:' - przycinanie', de:' - Beschneiden', es:' - recortar', ru:' - обрезка', it:' - taglia'};
+        str['GCbySzN'] = {en:'Golden Crop by SzopeN', pl:'Golden Crop by SzopeN', de:'Golden Crop by SzopeN', es:'Recorte Dorado por SzopeN', ru:'Golden Crop от SzopeN', it:'Taglieria d\'oro di SzopeN'};
+        str['cropMask'] = {en:'Crop mask', pl:'Maska kadrująca', de:'Schnittmaske', es:'Máscara de recorte', ru:'Маска кадрирвания', it:'Mascheria taglieria'};
+        str['divRules'] = {en:'Dividing rules', pl:'Reguły podziału', de:'Trennungsregeln', es:'Reglas de división', ru:'Правила разделения', it:'Regole della divisione'};
+        str['stripAtPrc'] = {en:'Strip at %1%%', pl:'Paski na %1%%', de:'Linien auf %1%%', es:'Cinta al %1%%', ru:'Линии на %1%%', it:'Guida a %1%%'};
+        str['goldenTriangleUp'] = {en:'Golden triangle upwards', pl:'Złoty trójkąt w górę', de:'Goldener Dreieck oben', es:'Triángulo dorado hacia arriba', ru:'Золотой треугольник вверх', it:'Triangolo d\'oro all\'insù'};
+        str['goldenTriangleDown'] = {en:'Golden triangle downwards', pl:'Złoty trójkąt w dół', de:'Goldener Dreieck unten', es:'Triángulo dorado hacia abajo', ru:'Золотой треугольник вниз', it:'Triangolo d\'oro all\'ingiù'};
+        str['diagonalMethod'] = {en:'Diagonal method', pl:'Metoda przekątnych', de:'Diagonale Methode', es:'Método Diagonal', ru:'Метод диагоналей', it:'Metodo Diagonale'};
+        str['openB4Run'] = {en:'Open the document in which you want the script to run.', pl:'Otwórz dokument, w którym chcesz uruchomić ten skrypt.', de:'Öffne das Dokument, in dem das Script ablaufen soll.', es:'Abrir el documento en el cual quiere correr el script', ru:'Откройте файл, в котором вы хотели бы запустить скрипт.', it:'Apri il documento nel quale vuoi applicare lo script.'};
+        str['canvExtDet'] = {en:'Canvas extension detected.', pl:'Wykryto rozszerzenie płótna.', de:'Erweiterung der Arbeitsfläche zeigen', es:'Extensión del lienzo detectada', ru:'Обнаружено увеличение холста', it:'Estensione quadro  trovato.'};
+        str['canvExtDetQ'] = {en:'What to do with canvas?', pl:'Co mam zrobić z płótnem?', de:'Was mache ich mit der Arbeitsfläche?', es:'?Qué hacer con el lienzo?', ru:'Что следует предпринять?', it:'Cosa fare con il quatro?'};
+        str['extendCanvas'] = {en:'Extend canvas', pl:'Rozszerz płótno', de:'Erweiterte Arbeitsfläche', es:'Extender el lienzo', ru:'Увеличить размеры', it:'Esteso quadro'};
+        str['dontExtCanv'] = {en:'Crop without extension', pl:'Przytnij bez rozszerzania', de:'Schnitt ohne Erweiterung', es:'Recortar sin extensón', ru:'Обрезать без увеличения', it:'Taglia senza estensione'};
+        str['retToCropping'] = {en:'Return to cropping', pl:'Wróć do kadrowania', de:'Zurück zum Schneiden', es:'Volver a recorte', ru:'Вернуться к кадрированию', it:'Torna alla taglieria'};
+        str['chCompMethod'] = {en:'Composition method', pl:'Metoda kompozycji', de:'Kompositionsmethode', es:'Método de composición', ru:'Метод построения композиции', it:'Metodo di composizione'};
+        str['chCompMethodQ'] = {en:'Choose composition guidelines', pl:'Wybierz metodę kompozycji', de:'Auswahl der Kompositionslinien', es:'Escoja guías de composición', ru:'Выберите тип направляющих линий', it:'Sciegli guide di composizione'};
+        str['goldenRule'] = {en:'Golden Rule', pl:'Złoty podział', de:'Goldene Regel', es:'Regla Dorada', ru:'Золотое сечение', it:'Regola d\'oro'};
+        str['ruleOfThirds'] = {en:'Rule of Thirds', pl:'Reguła trzech', de:'Drittel-Regel', es:'Regla de los Tercios', ru:'Правило третей', it:'Regola dei terzi'};
+        str['goldenSpiralBL'] = {en:'Golden Spiral bottom-left', pl:'Złota spirala lewo-dół', de:'Goldene Spirale unten links', es:'Espiral Dorada abajo-izquierda', ru:'Золотая спираль внизу-слева', it:'Spirale d\'oro in basso a sinistra'};
+        str['goldenSpiralTL'] = {en:'Golden Spiral top-left', pl:'Złota spirala lewo-góra', de:'Goldene Spirale oben links', es:'Espiral Dorada arriba-izquierda', ru:'Золотая спираль вверху-слева', it:'Spirale d\'oro in alto a sinistra'};
+        str['goldenSpiralTR'] = {en:'Golden Spiral top-right', pl:'Złota spirala prawo-góra', de:'Goldene Spirale oben rechts', es:'Espiral Dorada arriba-derecha', ru:'Золотая спираль вверху-справа', it:'Spirale d\'oro in alto a destra'};
+        str['goldenSpiralBR'] = {en:'Golden Spiral bottom-right', pl:'Złota spirala prawo-dół', de:'Goldene Spirale unten rechts', es:'Espiral Dorada abajo-derecha', ru:'Золотая спираль внизу-справа', it:'Spirale d\'oro in basso a destra'};
+        str['goldenSpiral'] = {en:'Golden Spiral', pl:'Złota spirala', de:'Goldene Spirale', es:'Espiral Dorada', ru:'Золотая спираль', it:'Spirale d\'oro'};
+        str['selectAll'] = {en:'Select All', pl:'Zaznacz wszystkie', de:'Alles Auswählen', es:'Seleccione Todo', ru:'Выбрать все', it:'Seleziona Tutto'};
+        str['deselectAll'] = {en:'Deselect All', pl:'Odznacz wszystkie', de:'Nichts Auswählen', es:'Deseleccione Todo', ru:'Убрать все', it:'Deselezionare Tutto'};
+        str['ok'] = {en:'OK', pl:'OK', de:'OK', es:'OK', ru:'OK', it:'OK'};
+        str['cancel'] = {en:'Cancel', pl:'Anuluj', de:'Abbrechen', es:'Cancelar', ru:'Отмена', it:'cancellare'};
+        str['allGoldenSpirals'] = {en:'All Golden Spirals', pl:'Wszystkie Złote Spirale', de:'Alle Goldenen Spiralen', es:'Todas las Espirales Doradas', ru:'Все золотые спирали', it:'Tutte le spirali d\'oro'};
+        str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln', es:'Reglas Básicas', ru:'Основные правила', it:'Regole fondamentali'};
+        str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Liniendicke', es:'Grosor de línea', ru:'Толщина линий', it:'Grossezza guida'};
+        str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Liniendicke (‰ kurze Seite)', es:'Grosor de línea (‰ del borde más corto)', ru:'Толщина линий (‰ меньшей стороны): ', it:'Grossezza guida (‰ di taglio più corto): '};
+        str['cropMaskAspectRatio'] = {en:'Crop mask aspect ratio', pl: 'Proporcje maski kadrowania'};
+        str['sameAsPicture'] = {en:'As image (%1/%2)', pl: 'Jak obrazka (%1/%2)'};
+        str['arSameAsImage'] = {en:'Aspect Ratio as image', pl: 'Proporcje jak ma obrazek'};
+        str['arNumerator'] = {en:'Aspect Ratio: numerator', pl: 'Proporcje: licznik'};
+        str['arDenominator'] = {en:'Aspect Ratio: denominator', pl: 'Proporcje: mianownik'};
+        //str[''] = {en:'', pl: ''};
 }
 
 // Returns translations in CVS format
-localizator.prototype.getCSVStrings = function() {
-    var out = '';
-    var availLangs = new Array();
+localizator.prototype.getCSVStrings = function () {
+        var out = '';
+        var availLangs = new Array();
 
-    // get available languages
-    out += 'AvailLangs'
-    for ( var i in this.str ) {
-        for ( var j in this.str[i] ) {
-            if ( this.str[i][j] != '' && !availLangs[j] ) {
-                availLangs[j] = j;
-                out+=';'+j
-            }
+        // get available languages
+        out += 'AvailLangs'
+        for (var i in this.str) {
+                for (var j in this.str[i]) {
+                        if (this.str[i][j] != '' && !availLangs[j]) {
+                                availLangs[j] = j;
+                                out += ';' + j
+                        }
+                }
         }
-    }
-    out += "\n";
-    
-    // get all translations in the same order
-    for ( var i in this.str ) {
-        out += '"'+i+'"';
-        for ( var j in availLangs ) {
-            out += ';"'+(this.str[i][j]||'')+'"';
+        out += "\n";
+
+        // get all translations in the same order
+        for (var i in this.str) {
+                out += '"' + i + '"';
+                for (var j in availLangs) {
+                        out += ';"' + (this.str[i][j] || '') + '"';
+                }
+                out += "\n"
         }
-        out += "\n"
-    }
-    
-    return out;
+
+        return out;
 }
 
-localizator.prototype.saveAsCSVFile = function() {
-    var of = File.saveDialog('Save as CSV file','CSV:*.csv');
-    if (!of) return;
-    try {
-        of.open("w");
-        if (!of) throw new Error("Can't open file for writing: " + of );
-        of.write(this.getCSVStrings());
-    } finally {
-        of.close();
-    }
+localizator.prototype.saveAsCSVFile = function () {
+        var of = File.saveDialog('Save as CSV file', 'CSV:*.csv');
+        if (!of) return;
+        try {
+                of.open('w');
+                if (!of) throw new Error("Can't open file for writing: " + of);
+                of.write(this.getCSVStrings());
+        } finally {
+                of.close();
+        }
 }
 
 localizator.getInitSequenceFromCSVSFile = function () {
-    var input = File.openDialog("Select CSV file with translations", "CSV Comma Separated Values:*.csv,All files:*.*", false);
-    if ( !input ) {
-        return false;
-    }
-    if ( !input.open('r') ) {
-        throw new Error("Can't open file for reading!");
-    }
+        var input = File.openDialog("Select CSV file with translations", "CSV Comma Separated Values:*.csv,All files:*.*", false);
+        if (!input) {
+                return false;
+        }
+        if (!input.open('r')) {
+                throw new Error("Can't open file for reading!");
+        }
 
-    var availLangs = input.readln().replace(/"/g,'').split(';');
-    availLangs.shift();
-    var out = "\n    // Entries below were generated using localizator.loadCVSsaveAsJSCodeFile function\n";
-    var line = null;
-    while ( line = input.readln() ) {
-        var translations = new Array();
-        var inText = false;
-        var prevEndIdx = 0;
-        var currentLangIndex = 0;
-        for ( var i = 0; i<line.length; ++i )
-        {
-            var actChr = line[i];
-            if ( inText ) {
-                if ( actChr == '"' ) {
-                    var nextChr = line[i+1];
-                    if ( nextChr != '"' ) {
-                        if ( nextChr != ';' && nextChr ) {
-                            throw new Error("Malformed data!, line: " + line + " position: " + i);
+        var availLangs = input.readln().replace(/"/g, '').split(';');
+        availLangs.shift();
+        var out = "\n    // Entries below were generated using localizator.loadCVSsaveAsJSCodeFile function\n";
+        var line = null;
+        while (line = input.readln()) {
+                var translations = new Array();
+                var inText = false;
+                var prevEndIdx = 0;
+                var currentLangIndex = 0;
+                for (var i = 0; i < line.length; ++i) {
+                        var actChr = line[i];
+                        if (inText) {
+                                if (actChr == '"') {
+                                        var nextChr = line[i + 1];
+                                        if (nextChr != '"') {
+                                                if (nextChr != ';' && nextChr) {
+                                                        throw new Error("Malformed data!, line: " + line + " position: " + i);
+                                                } else {
+                                                        // end of cell detected
+                                                        translations.push(line.substring(prevEndIdx, i).replace(/""/g, '"'));
+                                                        ++i; // skip ';' char
+                                                        prevEndIdx = i + 1;
+                                                        inText = false;
+                                                }
+                                        } else {
+                                                // " char in quoted string
+                                                ++i;
+                                        }
+                                }
                         } else {
-                            // end of cell detected
-                            translations.push(line.substring(prevEndIdx, i).replace(/""/g,'"'));
-                            ++i; // skip ';' char
-                            prevEndIdx = i+1;
-                            inText = false;
+                                if (actChr == '"') {
+                                        if (i == prevEndIdx) {
+                                                // start of quoted string
+                                                prevEndIdx = i + 1;
+                                                inText = true;
+                                        } else {
+                                                // '"' char in the middle of non quoted text. It is an error, but do not throw
+                                        }
+                                } else if (actChr == ';') {
+                                        translations.push(line.substring(prevEndIdx, Math.max(i - 1, prevEndIdx)));
+                                        // end of cell detected
+                                        prevEndIdx = i + 1;
+                                }
                         }
-                    } else {
-                        // " char in quoted string
-                        ++i;
-                    }
                 }
-            } else {
-                if ( actChr == '"' ) {
-                    if ( i == prevEndIdx ) {
-                        // start of quoted string
-                        prevEndIdx = i+1;
-                        inText = true;
-                    } else {
-                        // '"' char in the middle of non quoted text. It is an error, but do not throw
-                    }
-                } else  if ( actChr == ';' ) {
-                    translations.push(line.substring(prevEndIdx, Math.max(i-1,prevEndIdx)));
-                    // end of cell detected
-                    prevEndIdx = i+1;
+                var engTranslFound = false;
+                var trId = translations.shift();
+                var numOfLangWritten = 0;
+                out += "    str['" + trId + "'] = {";
+                for (var i = 0; i < availLangs.length && translations.length; ++i) {
+                        var t = translations.shift();
+                        if (t.length != 0) {
+                                if (availLangs[i].search(/^en/) == 0) engTranslFound = true;
+                                out += (numOfLangWritten++ ? ', ' : '') + availLangs[i] + ":'" + t.replace(/\\/g, '\\\\').replace(/'/g, '\\\'') + "'";
+                        }
                 }
-            }
+                if (!engTranslFound) {
+                        throw new Error("No english translation found for: " + trId + ".\nEach string MUST have an english translation");
+                }
+                out += "};\n";
         }
-        var engTranslFound = false;
-        var trId = translations.shift();
-        var numOfLangWritten = 0;
-        out += "    str['" + trId + "'] = {";
-        for ( var i = 0; i < availLangs.length && translations.length; ++i )
-        {
-            var t = translations.shift();
-            if ( t.length != 0 ) {
-                if (availLangs[i].search(/^en/) == 0 ) engTranslFound = true;
-                out += (numOfLangWritten++?', ':'') + availLangs[i] + ":'" + t.replace(/\\/g,'\\\\').replace(/'/g,'\\\'') + "'";
-            }
-        }
-        if (!engTranslFound) {
-            throw new Error("No english translation found for: " + trId + ".\nEach string MUST have an english translation");
-        }
-        out += "};\n";
-    }
 
-    return out;
+        return out;
 }
 
-localizator.loadCVSsaveAsJSCodeFile = function() {
-    var tmp = localizator.getInitSequenceFromCSVSFile();
-    if ( tmp ) {
-        var of = File.saveDialog('Save as JSX file','JSX:*.jsx');
-        if (!of) return false;
-        try {
-            of.open("w");
-            if (!of) throw new Error("Can't open file for writing: " + of );
-            of.write(tmp);
-        } finally {
-            of.close();
+localizator.loadCVSsaveAsJSCodeFile = function () {
+        var tmp = localizator.getInitSequenceFromCSVSFile();
+        if (tmp) {
+                var of = File.saveDialog('Save as JSX file', 'JSX:*.jsx');
+                if (!of) return false;
+                try {
+                        of.open("w");
+                        if (!of) throw new Error("Can't open file for writing: " + of);
+                        of.write(tmp);
+                } finally {
+                        of.close();
+                }
         }
-    }
 }
 
 
-localizator.prototype.get = function( id, otherParameters ) {
-    arguments[0]=this.str[ id ];
-    return localize.apply({},arguments);
+localizator.prototype.get = function (id, otherParameters) {
+        arguments[0] = this.str[id];
+        return localize.apply({}, arguments);
 }
 // ---------------------------------------------------------------------
-function dialogMenu( menuDesc ) {
-    this.desc = menuDesc;
+
+function dialogMenu(menuDesc) {
+        this.desc = menuDesc;
 }
 
 dialogMenu.prototype.show = function () {
-    // helper function
-    function _repeatString( str, n ) {
-        var out = '';
-        while ( n-- > 0) {
-            out += str;
-        }
-        return out;
-    }
-
-    var menuDesc = this.desc;
-    var elements = menuDesc.elements;
-    var dlg = new Window('dialog', menuDesc.caption);
-    dlg.preferredSize.width = 155;
-    
-    with (dlg)
-    {
-       orientation = 'column';
-       alignChildren = 'fill';
-       
-       add('statictext', undefined, menuDesc.question);
-       var maxCaptionLen = -Infinity;
-       for ( var i = 0; i<elements.length; ++i ) {
-           var capLen = elements[i].text.length + elements[i].key.length + 3;
-           if ( capLen > maxCaptionLen ) maxCaptionLen = capLen;
+        // helper function
+        function _repeatString(str, n) {
+                var out = '';
+                while (n-- > 0) {
+                        out += str;
+                }
+                return out;
         }
 
-       for ( var i = 0; i<elements.length; ++i ) {
-            var key = elements[i].key.toLowerCase();
-            var btnName = (key == 'esc')?'cancel':((!!elements[i].def)?'ok':('op'+i));
-            var caption = '['+(key=='esc'?'':'&')+elements[i].key+'] ' + elements[i].text;
-            var capLen = caption.length + (key=='esc'?-1:0);
-            var e = add('button', undefined, caption + _repeatString(' ', (maxCaptionLen-capLen)*1.4), {name: btnName, justify: 'left'});
-            if ( key!='esc' && isCS5() ) e.shortcutKey = '~'; // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
-            if ( btnName=='ok' || !!elements[i].def ) {
-                defaultElement = e;
-            }
-            if (btnName=='cancel') {
-                cancelElement = e;
-            } else {
-               e.onClick = new Function('this.parent.close('+(10+i+1)+')');
-            }
-            elements[i].obj = e;
-       }
-       if ( isCS5() ) {
-           defaultElement.active = true; // def element isn't focused in CS5
-           var f = function (e) {
-               for ( var i = 0; i<elements.length; ++i )
-               {
-                   if ( e.keyName == elements[i].key.toUpperCase() ) {
-                       elements[i].obj.notify();
-                       break;
-                   }
-               }
-           }
-           dlg.addEventListener('keydown', f, false); // Documentation doesn't mention that Window object implement keydown event. But it works, more or less... :)
-       } else if ( isCS4() ) {
-           addEventListener('keydown', function (e) {
-               // Next funny thing about PS CS4
-               // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
-               // Most curious doing nothing (NOP) helps
-               if (e.keyName!='Escape' && e.keyName!='Enter' && e.keyName!='Return') {
-                   Stdlib.NOP();
-               }
-               for ( var i = 0; i<elements.length; ++i )
-               {
-                   if ( e.keyName == elements[i].key.toUpperCase() ) {
-                       elements[i].obj.notify();
-                       break;
-                   }
-               }
-           }, false);
+        var menuDesc = this.desc;
+        var elements = menuDesc.elements;
+        var dlg = new Window('dialog', menuDesc.caption);
+        dlg.preferredSize.width = 155;
+
+        with(dlg) {
+                orientation = 'column';
+                alignChildren = 'fill';
+
+                add('statictext', undefined, menuDesc.question);
+                var maxCaptionLen = -Infinity;
+                for (var i = 0; i < elements.length; ++i) {
+                        var capLen = elements[i].text.length + elements[i].key.length + 3;
+                        if (capLen > maxCaptionLen) maxCaptionLen = capLen;
+                }
+
+                for (var i = 0; i < elements.length; ++i) {
+                        var key = elements[i].key.toLowerCase();
+                        var btnName = (key == 'esc') ? 'cancel' : (( !! elements[i].def) ? 'ok' : ('op' + i));
+                        var caption = '[' + (key == 'esc' ? '' : '&') + elements[i].key + '] ' + elements[i].text;
+                        var capLen = caption.length + (key == 'esc' ? -1 : 0);
+                        var e = add('button', undefined, caption + _repeatString(' ', (maxCaptionLen - capLen) * 1.4), {
+                                name: btnName,
+                                justify: 'left'
+                        });
+
+                        // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
+                        if (key != 'esc' && isCS5()) e.shortcutKey = '~';
+
+                        if (btnName == 'ok' || !! elements[i].def) {
+                                defaultElement = e;
+                        }
+                        if (btnName == 'cancel') {
+                                cancelElement = e;
+                        } else {
+                                e.onClick = new Function('this.parent.close(' + (10 + i + 1) + ')');
+                        }
+                        elements[i].obj = e;
+                }
+                if (isCS5()) {
+                        defaultElement.active = true; // def element isn't focused in CS5
+                        var f = function (e) {
+                                        for (var i = 0; i < elements.length; ++i) {
+                                                if (e.keyName == elements[i].key.toUpperCase()) {
+                                                        elements[i].obj.notify();
+                                                        break;
+                                                }
+                                        }
+                                }
+
+                        // Documentation doesn't mention that Window object implement keydown event. But it works, more or less... :)
+                        dlg.addEventListener('keydown', f, false);
+                } else if (isCS4()) {
+                        addEventListener('keydown', function (e) {
+                                // Next funny thing about PS CS4
+                                // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
+                                // Most curious doing nothing (NOP) helps
+                                if (e.keyName != 'Escape' && e.keyName != 'Enter' && e.keyName != 'Return') {
+                                        Stdlib.NOP();
+                                }
+                                for (var i = 0; i < elements.length; ++i) {
+                                        if (e.keyName == elements[i].key.toUpperCase()) {
+                                                elements[i].obj.notify();
+                                                break;
+                                        }
+                                }
+                        }, false);
+                } else {
+                        var edShcut = add('edittext', undefined, '...', {name: 'edShcut'});
+                        edShcut.active = true;
+                        edShcut.onChanging = function () {
+                                if (edShcut.text == ' ') {
+                                        defaultElement.notify();
+                                        return;
+                                }
+                                var found = false;
+                                for (var i = 0; i < elements.length; ++i) {
+                                        // $.writeln(edShcut.text.toUpperCase() + ' = ' + elements[i].key.toUpperCase());
+                                        if (edShcut.text.toUpperCase() == elements[i].key.toUpperCase()) {
+                                                elements[i].obj.notify();
+                                                found = true;
+                                                break;
+                                        }
+                                }
+                                edShcut.text = 'Press a key';
+                                edShcut.active = false; // on CS3 makes the event to occur one again, with
+                                if (isCS2() || !found) {
+                                        edShcut.active = true; // edShcut.text == the single char last enetered (!)
+                                }
+                        }
+                }
+        }
+        dlg.center();
+        var result = dlg.show();
+        if (result < 10) {
+                return false;
         } else {
-           var edShcut = add('edittext', undefined, '...', {name: 'edShcut'});
-           edShcut.active = true;
-           edShcut.onChanging = function ()  {
-               if ( edShcut.text == ' ' ) {
-                   defaultElement.notify();
-                   return;
-               }
-               var found = false;
-                for ( var i = 0; i<elements.length; ++i )
-                {
-                    // $.writeln(edShcut.text.toUpperCase() + ' = ' + elements[i].key.toUpperCase());
-                    if ( edShcut.text.toUpperCase() == elements[i].key.toUpperCase() ) {
-                        elements[i].obj.notify();
-                        found = true;
-                        break;
-                    }
-                }
-                edShcut.text = 'Press a key';
-                edShcut.active = false; // on CS3 makes the event to occur one again, with
-
-                if (isCS2() || !found) {
-                    edShcut.active = true;  // edShcut.text == the single char last enetered (!)
-                }
-           }
+                return result - 11;
         }
-    }
-    dlg.center();
-    var result = dlg.show();
-    if ( result < 10 ) {
-        return false;
-    } else {
-        return result-11;
-    }
 }
 // ---------------------------------------------------------------------
 
-function dialogMenuMChoice( menuDesc ) {
-    this.desc = menuDesc;
-    this.enableQuickKeyboardShortcuts = true;
+function dialogMenuMChoice(menuDesc) {
+        this.desc = menuDesc;
+        this.enableQuickKeyboardShortcuts = true;
 }
 
 dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
-    // helper function
-    function _repeatString( str, n ) {
-        var out = '';
-        while ( n-- > 0) {
-            out += str;
-        }
-        return out;
-    }
+        // helper function
 
-    var menuDesc = this.desc;
-    
-    var cbElements = this.cbElements = menuDesc.cbElements;
-    var msElements = this.msElements = menuDesc.msElements;
-    
-    var dlg = this.dlg = new Window('dialog', menuDesc.caption);
-    dlg.preferredSize.width = 155;
-    var shortcutChar = '&';
-    with (dlg)
-    {
-       orientation = 'column';
-       alignChildren = 'fill';
-       add('statictext', undefined, menuDesc.question);
-       var g1 = add('group', undefined, {name: 'g1'});
-
-       with (g1) {
-           var g1_cb = add('group', undefined, undefined);
-           with (g1_cb) {
-               orientation = 'column';
-               alignChildren = 'fill';
-
-               for ( var i = 0; i<cbElements.length; ++i ) {
-                    var key = cbElements[i].key.toLowerCase();
-                    var cbName = 'op'+i;
-                    var caption = '['+shortcutChar+cbElements[i].key+'] ' + cbElements[i].text;
-                    var capLen = caption.length;
-                    var e = add('checkbox', undefined, caption, {name: cbName});
-                    if ( isCS5() ) e.shortcutKey = '~'; // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
-                    e.value = !!cbElements[i].sel;
-                    cbElements[i].obj = e;
-               }
-           }
-          var g1_ms = add('group', undefined, undefined);
-          with (g1_ms) {
-               orientation = 'column';
-               alignChildren = 'fill';
-
-               // Compute max caption length
-               var maxCaptionLen = -Infinity;
-               // msElements.push //[?] this was some strange leftover
-               for ( var i = 0; i<msElements.length; ++i ) {
-                   var capLen = msElements[i].text.length + msElements[i].key.length + 3;
-                   if ( capLen > maxCaptionLen ) maxCaptionLen = capLen;
+        function _repeatString(str, n) {
+                var out = '';
+                while (n-- > 0) {
+                        out += str;
                 }
+                return out;
+        }
 
-               for ( var i = 0; i<msElements.length; ++i ) {
-                    var key = msElements[i].key.toLowerCase();
-                    var btnName = 'op'+i;
-                    //var caption = '[&'+msElements[i].key+'] ' + msElements[i].text;
-                    var caption = msElements[i].text + ' ['+shortcutChar+msElements[i].key+']';
-                    var capLen = caption.length;
-                    //                                        \/ Try to align button's text to left (doesn't work with space, try some space-like chars)
-                    var e = add('button', undefined, caption /*+ _repeatString(' ', (maxCaptionLen-capLen)*1.4)*/, {name: btnName});
-                    if ( isCS5() ) e.shortcutKey = '~'; // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
-                    e.elements = msElements[i].elements;
-                    e.action = msElements[i].action;
-                    e.onClick = function() {
-                        switch ( this.action ) {
-                            case 'slctAll':
-                               for ( var i = 0; i<cbElements.length; ++i ) {
-                                  if(!cbElements[i].obj.value) cbElements[i].obj.notify();
-                               }
-                               break;
-                            case 'dslctAll':
-                               for ( var i = 0; i<cbElements.length; ++i ) {
-                                  if(cbElements[i].obj.value) cbElements[i].obj.notify();
-                               }
-                               break;
-                            default:
-                               if (this.elements) {
-                                   for ( var i = 0; i<this.elements.length; ++i ) {
-                                      cbElements[this.elements[i]].obj.notify();
-                                   }
-                               }
-                               break;
+        var menuDesc = this.desc;
+
+        var cbElements = this.cbElements = menuDesc.cbElements;
+        var msElements = this.msElements = menuDesc.msElements;
+
+        var dlg = this.dlg = new Window('dialog', menuDesc.caption);
+        dlg.preferredSize.width = 155;
+        var shortcutChar = '&';
+        with(dlg) {
+                orientation = 'column';
+                alignChildren = 'fill';
+                add('statictext', undefined, menuDesc.question);
+                var g1 = add('group', undefined, {
+                        name: 'g1'
+                });
+
+                with(g1) {
+                        var g1_cb = add('group', undefined, undefined);
+                        with(g1_cb) {
+                                orientation = 'column';
+                                alignChildren = 'fill';
+
+                                for (var i = 0; i < cbElements.length; ++i) {
+                                        var key = cbElements[i].key.toLowerCase();
+                                        var cbName = 'op' + i;
+                                        var caption = '[' + shortcutChar + cbElements[i].key + '] ' + cbElements[i].text;
+                                        var capLen = caption.length;
+                                        var e = add('checkbox', undefined, caption, {
+                                                name: cbName
+                                        });
+                                        if (isCS5()) e.shortcutKey = '~'; // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
+                                        e.value = !! cbElements[i].sel;
+                                        cbElements[i].obj = e;
+                                }
                         }
-                    }
-                    msElements[i].obj = e;
-               }
-          }
-       }
-       if (hasCustomControl) {
-           this.customControls = add('group', undefined, undefined, {name: 'customControls'});
-           this.customControls.alignment = 'fill';
-       }
-       var okBtn = add('button', undefined, this.desc.okTxt, {name: 'ok'});
-       var cancelBtn = add('button', undefined, this.desc.cancelTxt, {name: 'cancel'});
-       dlg.defaultElement = okBtn;
-       dlg.cancelElement = cancelBtn;
-       var allElements = cbElements.concat(msElements);
-       var self = this;
-       if ( isCS5() ) {
-           okBtn.active = true; // def element isn't focused in CS5
-           var f = function (e) {
-               if (!self.enableQuickKeyboardShortcuts) return;
-               
-               for ( var i = 0; i<allElements.length; ++i )
-               {
-                   if ( e.keyName == allElements[i].key.toUpperCase() ) {
-                       allElements[i].obj.notify();
-                       // allElements[i].obj.active = true; // [?] check default behaviour in other PS versions
-                       break;
-                   }
-               }
-           }
-           dlg.addEventListener('keydown', f, false); // Documentation doesn't mention that Window object implement keydown event. But it works, more or less... :)
-       } else if ( isCS4() ) {
-           addEventListener('keydown', function (e) {
-               if (!self.enableQuickKeyboardShortcuts) return;
-               // Next funny thing about PS CS4
-               // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
-               // Most curious doing nothing (NOP) helps
-               if (e.keyName!='Escape' && e.keyName!='Enter' && e.keyName!='Return') {
-                   Stdlib.NOP();
-               }
-               for ( var i = 0; i<allElements.length; ++i )
-               {
-                   if ( e.keyName == allElements[i].key.toUpperCase() ) {
-                       allElements[i].obj.notify();
-                       break;
-                   }
-               }
-           }, false);
-        } else {
-           var edShcut = add('edittext', undefined, '...', {name: 'edShcut'});
-           edShcut.active = true;
-           edShcut.onChanging = function ()  {
-               if ( edShcut.text == ' ' ) {
-                   defaultElement.notify();
-                   return;
-               }
-               var found = false;
-                for ( var i = 0; i<allElements.length; ++i )
-                {
-                    //$.writeln(edShcut.text.toUpperCase() + ' = ' + allElements[i].key.toUpperCase());
-                    if ( edShcut.text.toUpperCase() == allElements[i].key.toUpperCase() ) {
-                        allElements[i].obj.notify();
-                        found = true;
-                        break;
-                    }
-                }
-                edShcut.text = 'Press a key';
-                edShcut.active = false; // on CS3 makes the event to occur once again, with
+                        var g1_ms = add('group', undefined, undefined);
+                        with(g1_ms) {
+                                orientation = 'column';
+                                alignChildren = 'fill';
 
-                if (isCS2() || !found) {
-                    edShcut.active = true;  // edShcut.text == the single char last enetered (!)
+                                // Compute max caption length
+                                var maxCaptionLen = -Infinity;
+                                // msElements.push //[?] this was some strange leftover
+                                for (var i = 0; i < msElements.length; ++i) {
+                                        var capLen = msElements[i].text.length + msElements[i].key.length + 3;
+                                        if (capLen > maxCaptionLen) maxCaptionLen = capLen;
+                                }
+
+                                for (var i = 0; i < msElements.length; ++i) {
+                                        var key = msElements[i].key.toLowerCase();
+                                        var btnName = 'op' + i;
+                                        //var caption = '[&'+msElements[i].key+'] ' + msElements[i].text;
+                                        var caption = msElements[i].text + ' [' + shortcutChar + msElements[i].key + ']';
+                                        var capLen = caption.length;
+                                        //                                        \/ Try to align button's text to left (doesn't work with space, try some space-like chars)
+                                        var e = add('button', undefined, caption /*+ _repeatString(' ', (maxCaptionLen-capLen)*1.4)*/ , {
+                                                name: btnName
+                                        });
+                                        if (isCS5()) e.shortcutKey = '~'; // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
+                                        e.elements = msElements[i].elements;
+                                        e.action = msElements[i].action;
+                                        e.onClick = function () {
+                                                switch (this.action) {
+                                                case 'slctAll':
+                                                        for (var i = 0; i < cbElements.length; ++i) {
+                                                                if (!cbElements[i].obj.value) cbElements[i].obj.notify();
+                                                        }
+                                                        break;
+                                                case 'dslctAll':
+                                                        for (var i = 0; i < cbElements.length; ++i) {
+                                                                if (cbElements[i].obj.value) cbElements[i].obj.notify();
+                                                        }
+                                                        break;
+                                                default:
+                                                        if (this.elements) {
+                                                                for (var i = 0; i < this.elements.length; ++i) {
+                                                                        cbElements[this.elements[i]].obj.notify();
+                                                                }
+                                                        }
+                                                        break;
+                                                }
+                                        }
+                                        msElements[i].obj = e;
+                                }
+                        }
                 }
-           }
+                if (hasCustomControl) {
+                        this.customControls = add('group', undefined, undefined, {
+                                name: 'customControls'
+                        });
+                        this.customControls.alignment = 'fill';
+                }
+                var okBtn = add('button', undefined, this.desc.okTxt, {
+                        name: 'ok'
+                });
+                var cancelBtn = add('button', undefined, this.desc.cancelTxt, {
+                        name: 'cancel'
+                });
+                dlg.defaultElement = okBtn;
+                dlg.cancelElement = cancelBtn;
+                var allElements = cbElements.concat(msElements);
+                var self = this;
+                if (isCS5()) {
+                        okBtn.active = true; // def element isn't focused in CS5
+                        var f = function (e) {
+                                        if (!self.enableQuickKeyboardShortcuts) return;
+
+                                        for (var i = 0; i < allElements.length; ++i) {
+                                                if (e.keyName == allElements[i].key.toUpperCase()) {
+                                                        allElements[i].obj.notify();
+                                                        // allElements[i].obj.active = true; // [?] check default behaviour in other PS versions
+                                                        break;
+                                                }
+                                        }
+                                }
+                            
+                        dlg.addEventListener('keydown', f, false); // Documentation doesn't mention that Window object implement keydown event. But it works, more or less... :)
+                } else if (isCS4()) {
+                        addEventListener('keydown', function (e) {
+                                if (!self.enableQuickKeyboardShortcuts) return;
+                                // Next funny thing about PS CS4
+                                // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
+                                // Most curious doing nothing (NOP) helps
+                                if (e.keyName != 'Escape' && e.keyName != 'Enter' && e.keyName != 'Return') {
+                                        Stdlib.NOP();
+                                }
+                                for (var i = 0; i < allElements.length; ++i) {
+                                        if (e.keyName == allElements[i].key.toUpperCase()) {
+                                                allElements[i].obj.notify();
+                                                break;
+                                        }
+                                }
+                        }, false);
+                } else {
+                        var edShcut = add('edittext', undefined, '...', {
+                                name: 'edShcut'
+                        });
+                        edShcut.active = true;
+                        edShcut.onChanging = function () {
+                                if (edShcut.text == ' ') {
+                                        defaultElement.notify();
+                                        return;
+                                }
+                                var found = false;
+                                for (var i = 0; i < allElements.length; ++i) {
+                                        //$.writeln(edShcut.text.toUpperCase() + ' = ' + allElements[i].key.toUpperCase());
+                                        if (edShcut.text.toUpperCase() == allElements[i].key.toUpperCase()) {
+                                                allElements[i].obj.notify();
+                                                found = true;
+                                                break;
+                                        }
+                                }
+                                edShcut.text = 'Press a key';
+                                edShcut.active = false; // on CS3 makes the event to occur once again, with
+                                if (isCS2() || !found) {
+                                        edShcut.active = true; // edShcut.text == the single char last enetered (!)
+                                }
+                        }
+                }
         }
-    }
 }
 
 dialogMenuMChoice.prototype.show = function () {
-    var dlg = this.dlg;
-    var cbElements = this.cbElements;
-    dlg.center();
-    var result = dlg.show();
-    if ( result != 1 ) {
-        return false;
-    } else {
-        result = [];
-        for ( var i = 0; i<cbElements.length; ++i ) {
-            result[i] = cbElements[i].obj.value;
+        var dlg = this.dlg;
+        var cbElements = this.cbElements;
+        dlg.center();
+        var result = dlg.show();
+        if (result != 1) {
+                return false;
+        } else {
+                result = [];
+                for (var i = 0; i < cbElements.length; ++i) {
+                        result[i] = cbElements[i].obj.value;
+                }
+                return result;
         }
-        return result;
-    }
 }
 // ---------------------------------------------------------------------
-function SimpleADUnserializer( ad )
-{
-    var obj = new Object();
-    
-    for ( var i=0; i<ad.count; ++i)
-    {
-        var key = ad.getKey(i);
-         var fieldName = app.typeIDToStringID(key);
-        switch ( ad.getType(key) )
-        {
-            case DescValueType.BOOLEANTYPE:
-                obj[ fieldName ] = ad.getBoolean( key );
-                break;
-            case DescValueType.STRINGTYPE:
-                obj[ fieldName ] = ad.getString( key );
-                break;
-            case DescValueType.DOUBLETYPE:
-                obj[ fieldName ] = ad.getString( key );
-                break;
-            case DescValueType.RAWTYPE: // array
-                obj[ fieldName ] = eval(ad.getData( key ));
-                break;
-            case DescValueType.OBJECTTYPE:
-                obj[ fieldName ] = SimpleADUnserializer(ad.getObject( key ));
-                break;
-            case DescValueType.UNITDOUBLE:
-            case DescValueType.INTEGERTYPE: // supported via double
-            case DescValueType.ALIASTYPE:
-            case DescValueType.CLASSTYPE:
-            case DescValueType.ENUMERATEDTYPE:
-            case DescValueType.LISTTYPE:
-            case DescValueType.REFERENCETYPE:
-                // unsupported types
-                break;
-        }
-    }
+function SimpleADUnserializer(ad) {
+        var obj = new Object();
 
-    return obj;
+        for (var i = 0; i < ad.count; ++i) {
+                var key = ad.getKey(i);
+                var fieldName = app.typeIDToStringID(key);
+                switch (ad.getType(key)) {
+                        case DescValueType.BOOLEANTYPE:
+                                obj[fieldName] = ad.getBoolean(key);
+                                break;
+                        case DescValueType.STRINGTYPE:
+                                obj[fieldName] = ad.getString(key);
+                                break;
+                        case DescValueType.DOUBLETYPE:
+                                obj[fieldName] = ad.getString(key);
+                                break;
+                        case DescValueType.RAWTYPE:
+                                // array
+                                obj[fieldName] = eval(ad.getData(key));
+                                break;
+                        case DescValueType.OBJECTTYPE:
+                                obj[fieldName] = SimpleADUnserializer(ad.getObject(key));
+                                break;
+                        case DescValueType.UNITDOUBLE:
+                        case DescValueType.INTEGERTYPE:
+                                // supported via double
+                        case DescValueType.ALIASTYPE:
+                        case DescValueType.CLASSTYPE:
+                        case DescValueType.ENUMERATEDTYPE:
+                        case DescValueType.LISTTYPE:
+                        case DescValueType.REFERENCETYPE:
+                                // unsupported types
+                                break;
+                        }
+        }
+
+        return obj;
 }
 
-
-function SimpleADSerializer( obj )
-{
-    isArray = function ( obj )
-    {
-        return obj.constructor.toString().indexOf('Array') != -1;
-    }
-    var ad = new ActionDescriptor();
-
-    for ( var field in obj )
-    {
-        var ID = app.stringIDToTypeID(field);
-        var val = obj[field];
-        //var typeID = STTID(field.toString()); // represents field name
-        switch (typeof val)
-        {
-            case "function":
-                // we store only data
-                break;
-            case "undefined":
-                ad.putData( ID, 'undefined');
-                break;
-            case "boolean":
-                ad.putBoolean( ID,  val);
-                break;
-            case "number":
-                ad.putDouble( ID,  val);
-                break;
-            case "string":
-                ad.putString( ID,  val);
-                break;
-            case "object":
-                if ( val == null )
-                {
-                    ad.putData( ID, 'null');
-                }
-                else if ( isArray( val ) )
-                {
-                    ad.putData( ID, SimpleJSONSerializer(val));
-                }
-                else
-                {
-                    ad.putObject( ID,  SimpleADSerializer(val));
-                }
-                break;
+function SimpleADSerializer(obj) {
+        isArray = function (obj) {
+                return obj.constructor.toString().indexOf('Array') != -1;
         }
-    }
-    return ad;
+        var ad = new ActionDescriptor();
+
+        for (var field in obj) {
+                var ID = app.stringIDToTypeID(field);
+                var val = obj[field];
+                //var typeID = STTID(field.toString()); // represents field name
+                switch (typeof val) {
+                        case "function":
+                                // we store only data
+                                break;
+                        case "undefined":
+                                ad.putData(ID, 'undefined');
+                                break;
+                        case "boolean":
+                                ad.putBoolean(ID, val);
+                                break;
+                        case "number":
+                                ad.putDouble(ID, val);
+                                break;
+                        case "string":
+                                ad.putString(ID, val);
+                                break;
+                        case "object":
+                                if (val == null) {
+                                        ad.putData(ID, 'null');
+                                } else if (isArray(val)) {
+                                        ad.putData(ID, SimpleJSONSerializer(val));
+                                } else {
+                                        ad.putObject(ID, SimpleADSerializer(val));
+                                }
+                                break;
+                }
+        }
+        return ad;
 }
 
-function SimpleJSONSerializer( obj )
-{
-    isArray = function ( obj )
-    {
-        return obj.constructor.toString().indexOf('Array') != -1;
-    }
+function SimpleJSONSerializer(obj) {
+        isArray = function (obj) {
+                return obj.constructor.toString().indexOf('Array') != -1;
+        }
 
-    var ret="";
-    switch (typeof obj)
-    {
-        case "function":
-            break;
-        case "boolean":
-        case "number":
-            ret += obj;
-            break;
-        case "string":
-            ret += '"'+obj.replace ('"', '\\"')+'"';
-            break;
-        case "undefined":
-            ret += 'undefined'
-            break;
-        case "object":
-            if ( obj == null )
-            {
-                ret += 'null'
-            }
-            else if (isArray(obj))
-            {
-                ret += '[';
-                ret += SimpleJSONSerializer(obj[0]);
-                for ( var i=1; i<obj.length; ++i )
-                {
-                    ret += ', ' + SimpleJSONSerializer(obj[i]);
-                }
-                ret += ']';
-            }
-            else
-            {
-                ret += '{';
-                var isFirst = true;
-                for ( var b in obj )
-                {
-                    if ( isFirst == true ) isFirst = false else ret += ', ';
-                    ret += '"'+b+'": ' + SimpleJSONSerializer(obj[b]);
-                }
-                ret += '}';
-            }
-            break;
-        default:
-            break;
-    }
-    return ret;
+        var ret = "";
+        switch (typeof obj) {
+                case "function":
+                        break;
+                case "boolean":
+                case "number":
+                        ret += obj;
+                        break;
+                case "string":
+                        ret += '"' + obj.replace('"', '\\"') + '"';
+                        break;
+                case "undefined":
+                        ret += 'undefined'
+                        break;
+                case "object":
+                        if (obj == null) {
+                                ret += 'null'
+                        } else if (isArray(obj)) {
+                                ret += '[';
+                                ret += SimpleJSONSerializer(obj[0]);
+                                for (var i = 1; i < obj.length; ++i) {
+                                        ret += ', ' + SimpleJSONSerializer(obj[i]);
+                                }
+                                ret += ']';
+                        } else {
+                                ret += '{';
+                                var isFirst = true;
+                                for (var b in obj) {
+                                        if (isFirst == true) isFirst = false
+                                        else ret += ', ';
+                                        ret += '"' + b + '": ' + SimpleJSONSerializer(obj[b]);
+                                }
+                                ret += '}';
+                        }
+                        break;
+                default:
+                        break;
+        }
+        return ret;
 }
 
 // Configurator
-configurator = function(paramsDesc, uuid) {
-    this._init(paramsDesc);
-    this.uuid = uuid;
-    this.readFromPlayback = false;
-    this.defaultsUsed     = true;
-    this.isDisplayDialog  = DialogModes.ALL;
+configurator = function (paramsDesc, uuid) {
+        this._init(paramsDesc);
+        this.uuid = uuid;
+        this.readFromPlayback = false;
+        this.defaultsUsed = true;
+        this.isDisplayDialog = DialogModes.ALL;
 }
 
-configurator.prototype.isRunFromAction = function() {
-    return this.readFromPlayback;
+configurator.prototype.isRunFromAction = function () {
+        return this.readFromPlayback;
 }
 
-configurator.prototype.get = function(id) {
-    if (typeof this.params[id] == 'undefined') return/*throw new Error('No such property: ' + id)*/;
-    return this.params[id].value;
+configurator.prototype.get = function (id) {
+        if (typeof this.params[id] == 'undefined') return /*throw new Error('No such property: ' + id)*/
+        ;
+        return this.params[id].value;
 }
 
-configurator.prototype.set = function(id, val) {
-    if (typeof this.params[id] == 'undefined') return/*throw new Error('No such property: ' + id)*/;
-    var tmp = this.params[id].value;
-    this.params[id].value = val;
-    return tmp;
+configurator.prototype.set = function (id, val) {
+        if (typeof this.params[id] == 'undefined') return /*throw new Error('No such property: ' + id)*/
+        ;
+        var tmp = this.params[id].value;
+        this.params[id].value = val;
+        return tmp;
 }
 
-configurator.prototype.isDisplayNormalDialog = function() {
-    return this.isDisplayDialog==DialogModes.ALL;
+configurator.prototype.isDisplayNormalDialog = function () {
+        return this.isDisplayDialog == DialogModes.ALL;
 }
 
-configurator.prototype.isDisplayErrorDialog = function() {
-    return this.isDisplayDialog!=DialogModes.NO;
+configurator.prototype.isDisplayErrorDialog = function () {
+        return this.isDisplayDialog != DialogModes.NO;
 }
 
-configurator.prototype.loadSettings = function() {
-    var lvl = $.level;
-    $.level = 0;
-    try {
-        // try to get global options
-        var ad = app.getCustomOptions(this.uuid);        
-        this._fromActionDescriptor(ad);
-        this.defaultsUsed = false;
-    }
-    catch(e) {
-        // no config, display dialog to get some
-        this.defaultsUsed    = true;
-    } finally {
-        $.level = lvl;
-    }
-
-    // try to get options from action state
-    if ( app.playbackParameters.count > 0 ){
-        this._fromActionDescriptor(app.playbackParameters);
-        this.readFromPlayback = true;
-        this.defaultsUsed     = false;
-        this.isDisplayDialog  = app.playbackDisplayDialogs;
-    }
-
-}
-configurator.prototype.setMessage = function(msg) {
-    this.msg = msg;
-}
-configurator.prototype.saveSettings = function() {
-    var ad = this._toActionDescriptor();
-    ad.putString( app.charIDToTypeID( 'Msge' ),  this.msg);
-    app.playbackParameters = ad;
-    if ( !this.readFromPlayback && isSC3plus() ) {
-        app.putCustomOptions (this.uuid, ad, true);
-    }
-}
-
-configurator.prototype._init = function(paramsDesc) {
-    this.params = paramsDesc;
-}
-
-configurator.prototype._toActionDescriptor = function() {
-    var nv = {};
-    for ( var o in this.params) {
-        nv[o]=this.get(o);
-    }
-    return SimpleADSerializer(nv);
-}
-
-configurator.prototype._fromActionDescriptor = function( ad ) {
-    var nv = SimpleADUnserializer(ad);
-    for ( var o in nv) {
-        if (o != 'Msge' && o != 'message') { // CS3 and CS2 fix
-            this.set(o, nv[o]);
+configurator.prototype.loadSettings = function () {
+        var lvl = $.level;
+        $.level = 0;
+        try {
+                // try to get global options
+                var ad = app.getCustomOptions(this.uuid);
+                this._fromActionDescriptor(ad);
+                this.defaultsUsed = false;
+        } catch (e) {
+                // no config, display dialog to get some
+                this.defaultsUsed = true;
+        } finally {
+                $.level = lvl;
         }
-    }
+
+        // try to get options from action state
+        if (app.playbackParameters.count > 0) {
+                this._fromActionDescriptor(app.playbackParameters);
+                this.readFromPlayback = true;
+                this.defaultsUsed = false;
+                this.isDisplayDialog = app.playbackDisplayDialogs;
+        }
+
+}
+configurator.prototype.setMessage = function (msg) {
+        this.msg = msg;
+}
+configurator.prototype.saveSettings = function () {
+        var ad = this._toActionDescriptor();
+        ad.putString(app.charIDToTypeID('Msge'), this.msg);
+        app.playbackParameters = ad;
+        if (!this.readFromPlayback && isSC3plus()) {
+                app.putCustomOptions(this.uuid, ad, true);
+        }
 }
 
-configurator.prototype._debug_undefine_all_values = function() {
-    for ( var o in this.params) {
-        this.set(o, undefined);
-    }
+configurator.prototype._init = function (paramsDesc) {
+        this.params = paramsDesc;
 }
 
-configurator.prototype.purgeSavedGlobals = function() {
-    app.eraseCustomOptions(this.uuid);
+configurator.prototype._toActionDescriptor = function () {
+        var nv = {};
+        for (var o in this.params) {
+                nv[o] = this.get(o);
+        }
+        return SimpleADSerializer(nv);
 }
 
-configurator.prototype.debugPrint = function() {
-    for ( var o in this.params) {
-        $.writeln( o +' = "' + this.params[o].value + '" (' + typeof this.params[o].value + ')');
-    }
+configurator.prototype._fromActionDescriptor = function (ad) {
+        var nv = SimpleADUnserializer(ad);
+        for (var o in nv) {
+                if (o != 'Msge' && o != 'message') { // CS3 and CS2 fix
+                        this.set(o, nv[o]);
+                }
+        }
+}
 
-    $.writeln('readFromPlayback: ' + this.readFromPlayback);
-    $.writeln('defaultsUsed: ' + this.defaultsUsed);
+configurator.prototype._debug_undefine_all_values = function () {
+        for (var o in this.params) {
+                this.set(o, undefined);
+        }
+}
+
+configurator.prototype.purgeSavedGlobals = function () {
+        app.eraseCustomOptions(this.uuid);
+}
+
+configurator.prototype.debugPrint = function () {
+        for (var o in this.params) {
+                $.writeln(o + ' = "' + this.params[o].value + '" (' + typeof this.params[o].value + ')');
+        }
+
+        $.writeln('readFromPlayback: ' + this.readFromPlayback);
+        $.writeln('defaultsUsed: ' + this.defaultsUsed);
 }
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
-function GoldenCrop( _doc ) {
-    this.doc = _doc;
-    Stdlib.saveLayer = false;
-    Stdlib.saveDoc = false;
+function GoldenCrop(_doc) {
+        this.doc = _doc;
+        Stdlib.saveLayer = false;
+        Stdlib.saveDoc = false;
 };
 
-GoldenCrop.prototype.loadConfig = function() {
-    var paramsID = {golden:{value:true, desc:'goldenRule'},
-                    roth:{value:true, desc:'ruleOfThirds'},
-                    diagmethod:{value:true, desc:'diagonalMethod'},
-                    gtrianup:{value:true, desc:'goldenTriangleUp'},
-                    gtriandown:{value:false, desc:'goldenTriangleDown'},
-                    gspiralBL:{value:false, desc:'goldenSpiralBL'},
-                    gspiralTL:{value:false, desc:'goldenSpiralTL'},
-                    gspiralTR:{value:false, desc:'goldenSpiralTR'},
-                    gspiralBR:{value:false, desc:'goldenSpiralBR'},
-                    lthick:{value:5, desc:'lineThickness'},
-                    aratioAsImage: {value: true, desc:'arSameAsImage'},
-                    aratioNumerator: {value: 0, desc:'arNumerator'},
-                    aratioDenominator: {value: 0, desc:'arDenominator'}
-                    /*{value:'', desc:''},*/
-                    };
-    this.conf = new configurator(paramsID, UUID);
-    this.conf.loadSettings();
+GoldenCrop.prototype.loadConfig = function () {
+		var paramsID = {golden:{value:true, desc:'goldenRule'},
+						roth:{value:true, desc:'ruleOfThirds'},
+						diagmethod:{value:true, desc:'diagonalMethod'},
+						gtrianup:{value:true, desc:'goldenTriangleUp'},
+						gtriandown:{value:false, desc:'goldenTriangleDown'},
+						gspiralBL:{value:false, desc:'goldenSpiralBL'},
+						gspiralTL:{value:false, desc:'goldenSpiralTL'},
+						gspiralTR:{value:false, desc:'goldenSpiralTR'},
+						gspiralBR:{value:false, desc:'goldenSpiralBR'},
+						lthick:{value:5, desc:'lineThickness'},
+						aratioAsImage: {value: true, desc:'arSameAsImage'},
+						aratioNumerator: {value: 0, desc:'arNumerator'},
+						aratioDenominator: {value: 0, desc:'arDenominator'}
+						/*{value:'', desc:''},*/
+						};
+        this.conf = new configurator(paramsID, UUID);
+        this.conf.loadSettings();
 
-    this.guidelines = {golden: {create: this.conf.get('golden')}, // history relict, to be integrated with config and dialog
-                         roth: {create: this.conf.get('roth')},
-                   diagmethod: {create: this.conf.get('diagmethod')},
-                     gtrianup: {create: this.conf.get('gtrianup')},
-                   gtriandown: {create: this.conf.get('gtriandown')},
-                    gspiralBL: {create: this.conf.get('gspiralBL')},
-                    gspiralTL: {create: this.conf.get('gspiralTL')},
-                    gspiralTR: {create: this.conf.get('gspiralTR')},
-                    gspiralBR: {create: this.conf.get('gspiralBR')}};
-                    
-    this.ifApplyFX = true;
-    this.ifSuspendHistory = isSC3plus();
-    this.loc = localizator.getInstance();
-    this.conf.setMessage(this.loc.get('GCbySzN'));
+		// history relict, to be integrated with config and dialog
+		this.guidelines = {golden: {create: this.conf.get('golden')},
+							 roth: {create: this.conf.get('roth')},
+					   diagmethod: {create: this.conf.get('diagmethod')},
+						 gtrianup: {create: this.conf.get('gtrianup')},
+					   gtriandown: {create: this.conf.get('gtriandown')},
+						gspiralBL: {create: this.conf.get('gspiralBL')},
+						gspiralTL: {create: this.conf.get('gspiralTL')},
+						gspiralTR: {create: this.conf.get('gspiralTR')},
+						gspiralBR: {create: this.conf.get('gspiralBR')}};
+
+        this.ifApplyFX = true;
+        this.ifSuspendHistory = isSC3plus();
+        this.loc = localizator.getInstance();
+        this.conf.setMessage(this.loc.get('GCbySzN'));
 }
 
 /*
@@ -937,28 +929,28 @@ GoldenCrop.prototype.loadConfig = function() {
  * and vertical lines thickness is min(800,600)*0.012=600*0.012=7.2px. Nothe that strip WILL be at least 1px
  * thick, even if computed thickness is lower than 1px.
  */
-GoldenCrop.prototype.makeStrips = function( position, stripSizePrc, color ) {
-    const oneMinusPosition = 1 - position;
-    const cropMaskWidth  = this.cropMaskW,
-             cropMaskHeight = this.cropMaskH;
-    const stripSize = Math.max(1,Math.min(cropMaskWidth, cropMaskHeight) * stripSizePrc);
-    var paths = [];
-    // add horizontal strips
-    var tmp = cropMaskHeight*position;
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,cropMaskWidth,tmp,stripSize)));
-    tmp = cropMaskHeight*oneMinusPosition;
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,cropMaskWidth,tmp,stripSize)));
+GoldenCrop.prototype.makeStrips = function (position, stripSizePrc, color) {
+        const oneMinusPosition = 1 - position;
+        const cropMaskWidth = this.cropMaskW,
+              cropMaskHeight = this.cropMaskH;
+        const stripSize = Math.max(1, Math.min(cropMaskWidth, cropMaskHeight) * stripSizePrc);
+        var paths = [];
+        // add horizontal strips
+        var tmp = cropMaskHeight * position;
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, tmp, cropMaskWidth, tmp, stripSize)));
+        tmp = cropMaskHeight * oneMinusPosition;
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, tmp, cropMaskWidth, tmp, stripSize)));
 
-    // add vertical strips
-    tmp = cropMaskWidth*position;
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,cropMaskHeight,stripSize)));
-    tmp = cropMaskWidth*oneMinusPosition;
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,cropMaskHeight,stripSize)));
-    var GSPath = this.doc.pathItems.add('', paths);    
-    var StripLayer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('stripAtPrc', Math.round(position*100)) );    
-    GSPath.remove();
-    
-    return StripLayer;
+        // add vertical strips
+        tmp = cropMaskWidth * position;
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp, 0, tmp, cropMaskHeight, stripSize)));
+        tmp = cropMaskWidth * oneMinusPosition;
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp, 0, tmp, cropMaskHeight, stripSize)));
+        var GSPath = this.doc.pathItems.add('', paths);
+        var StripLayer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('stripAtPrc', Math.round(position * 100)));
+        GSPath.remove();
+
+        return StripLayer;
 }
 
 
@@ -982,36 +974,37 @@ GoldenCrop.prototype.makeStrips = function( position, stripSizePrc, color ) {
  * and vertical lines thickness is min(800,600)*0.012=600*0.012=7.2px. Nothe that strip WILL be at least 1px
  * thick, even if computed thickness is lower than 1px.
  */
-GoldenCrop.prototype.makeGoldenTriangle = function( direction, stripSize, color ) {
-    const docWidth  = this.cropMaskW,
-             docHeight = this.cropMaskH;
-    const stripSizePx = Math.max(1,Math.min(docWidth, docHeight) * stripSize);
+GoldenCrop.prototype.makeGoldenTriangle = function (direction, stripSize, color) {
+        const docWidth = this.cropMaskW,
+              docHeight = this.cropMaskH;
+        const stripSizePx = Math.max(1, Math.min(docWidth, docHeight) * stripSize);
 
-    var w = docWidth,
-        h = docHeight;
-    var paths = [];
-    if (direction) {
-        // left-2-right
-        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, h, w, 0, stripSizePx)));
-        var x = h/((w/h)+(h/w)),
-            y = (w/h)*x;
-        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, 0, x, y, stripSizePx)));
-            x = (w*(w/h))/((w/h)+(h/w)),
-            y = (-h/w)*x + h;
-        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(x, y, w, h, stripSizePx)));
-    } else {
-        // right-2-left
-        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, 0, w, h, stripSizePx)));
-        var x = (h/((w/h)+(h/w))),
-            y = (w/h)*x;
-            x=w-x;
-        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(w, 0, x, y, stripSizePx)));
-            x = (w*(w/h))/((w/h)+(h/w)),
-            y = (-h/w)*x + h;
-            x=w-x;
-        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(x, y, 0, h, stripSizePx)));
-    }
-    /* 
+        var w = docWidth,
+            h = docHeight;
+        var paths = [];
+        if (direction) {
+                // left-2-right
+                paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, h, w, 0, stripSizePx)));
+                var x = h / ((w / h) + (h / w)),
+                    y = (w / h) * x;
+                paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, 0, x, y, stripSizePx)));
+                x = (w * (w / h)) / ((w / h) + (h / w));
+                y = (-h / w) * x + h;
+                paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(x, y, w, h, stripSizePx)));
+        } else {
+                // right-2-left
+                paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, 0, w, h, stripSizePx)));
+                var x = (h / ((w / h) + (h / w))),
+                    y = (w / h) * x;
+                x = w - x;
+                paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(w, 0, x, y, stripSizePx)));
+                x = (w * (w / h)) / ((w / h) + (h / w));
+                y = (-h / w) * x + h;
+                x = w - x;
+                paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(x, y, 0, h, stripSizePx)));
+        }
+
+        /* 
         Normalize -- make sure that whole path is contained by image frame (esp. corner problem)    
         
                / \
@@ -1019,146 +1012,152 @@ GoldenCrop.prototype.makeGoldenTriangle = function( direction, stripSize, color 
               \|   \
                \    \
                |\
-    */
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,docHeight/2,docWidth,docHeight/2,docHeight), true, ShapeOperation.SHAPEINTERSECT));    
-    var GSPath = this.doc.pathItems.add('', paths);
-    var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get( direction?'goldenTriangleUp':'goldenTriangleDown') );
-    GSPath.remove();
+        */
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, docHeight / 2, docWidth, docHeight / 2, docHeight), true, ShapeOperation.SHAPEINTERSECT));
+        var GSPath = this.doc.pathItems.add('', paths);
+        var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get(direction ? 'goldenTriangleUp' : 'goldenTriangleDown'));
+        GSPath.remove();
 
-    return layer;
+        return layer;
 }
 
-GoldenCrop.prototype.makeDiagonalMethod = function( stripSizePrc, color ) {
-    var paths = [];
-    const docWidth  = this.cropMaskW,
-          docHeight = this.cropMaskH;
-    const stripSizePx = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);;
-    var minWH = Math.min(docWidth,docHeight);
+GoldenCrop.prototype.makeDiagonalMethod = function (stripSizePrc, color) {
+        var paths = [];
+        const docWidth = this.cropMaskW,
+                 docHeight = this.cropMaskH;
+        const stripSizePx = Math.max(1, Math.min(docWidth, docHeight) * stripSizePrc);
+        var minWH = Math.min(docWidth, docHeight);
 
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,0,minWH,minWH,stripSizePx)));
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(docWidth-minWH,docHeight-minWH,docWidth,docHeight,stripSizePx)));
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,minWH,minWH,0,stripSizePx)));
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(docWidth-minWH,docHeight,docWidth,docHeight-minWH,stripSizePx)));
-    
-    // normalize, see: makeGoldenTriangle
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,docHeight/2,docWidth,docHeight/2,docHeight), true, ShapeOperation.SHAPEINTERSECT));
-    
-    var GSPath = this.doc.pathItems.add('', paths);
-    var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('diagonalMethod') );
-    GSPath.remove();
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, 0, minWH, minWH, stripSizePx)));
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(docWidth - minWH, docHeight - minWH, docWidth, docHeight, stripSizePx)));
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, minWH, minWH, 0, stripSizePx)));
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(docWidth - minWH, docHeight, docWidth, docHeight - minWH, stripSizePx)));
 
-    return layer;
+        // normalize, see: makeGoldenTriangle
+        paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0, docHeight / 2, docWidth, docHeight / 2, docHeight), true, ShapeOperation.SHAPEINTERSECT));
+
+        var GSPath = this.doc.pathItems.add('', paths);
+        var layer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('diagonalMethod'));
+        GSPath.remove();
+
+        return layer;
 }
 
-GoldenCrop.prototype.createGoldenSpiralPath = function(numOfTurns, offset, w, h, startX, startY) {
-    // Default values
-    if (!w) w = this.cropMaskW;
-    if (!h) h = this.cropMaskH;
-    if (!startX) startX = 0;
-    if (!startY) startY = h;
-    if (!offset) offset = 0;
-    if (!numOfTurns) numOfTurns = (offset>0)?Infinity:5;
-    
-    // Frequently used constants
-    const           k = (4*(Math.sqrt(2)-1))/3; // kappa, used to draw bezier ellipse section
-    const         phi = 2/(1+Math.sqrt(5));     // phi, inverse of golden ratio
-    const        phi2 = phi*phi;                // phi square
-    const oneMinusPhi = 1-phi;                  // 1-phi
-    
-    // <=CS4; patth points coordinates must be given in current DIP (!), for example
-    //        72dpi: 1 path 'pixel' => 1 image pixel
-    //       300pdi: 1 path 'pixel' => 300/72 image pixels
-    var DPIFix = 72/this.doc.resolution; 
-    offset *= DPIFix; w *= DPIFix; h *= DPIFix; startX *= DPIFix; startY *= DPIFix;
-    
-    // Create initial point
-    var points = [Stdlib.createPathPoint([startX+offset,startY])];
-    var i=0;
-    for (; i<numOfTurns; ++i)
-    {
-        var startPoint = points[points.length-1];
-        // coordinates of starting point w/o offset
-        var x = startPoint.anchor[0]-offset,
-            y = startPoint.anchor[1];
-        // coordinates of current segment points
-        var pA = [x+offset,y];
-        var pB = [x+phi*w, y-h+offset];
-        var pC = [x+w-offset, y-oneMinusPhi*h];
-        var pD = [x+(oneMinusPhi+phi2)*w, y-offset];
-        var pE = [x+phi*w+offset, y-oneMinusPhi*phi*h];
-        // compute distances
-        var dAB = [pB[0]-pA[0],pA[1]-pB[1]];
-        var dBC = [pC[0]-pB[0],pC[1]-pB[1]];
-        var dCD = [pC[0]-pD[0],pD[1]-pC[1]];
-        var dDE = [pD[0]-pE[0],pD[1]-pE[1]];
-        
-        // minimal offsets in both directions whith which the curve could be drawn
-        if ( Math.min(dDE[0], dDE[1]) < 0 ) {
-            
-            if ( dAB[0] < 0 ) pA[0] = startPoint.anchor[0] -= offset - (offset+dAB[0])*0.7;
-            if ( dBC[1] < 0 ) pB[1] -=offset - (offset+dBC[1])*0.7;
-            if ( dCD[0] < 0 ) pC[0] +=offset - (offset+dCD[0])*0.7;
-            if ( dDE[1] < 0 ) pD[1] +=offset - (offset+dDE[1])*0.7;
-            if ( dDE[0] < 0 ) pE[0] -=offset - (offset+dDE[0])*0.7;
+GoldenCrop.prototype.createGoldenSpiralPath = function (numOfTurns, offset, w, h, startX, startY) {
+        // Default values
+        if (!w) w = this.cropMaskW;
+        if (!h) h = this.cropMaskH;
+        if (!startX) startX = 0;
+        if (!startY) startY = h;
+        if (!offset) offset = 0;
+        if (!numOfTurns) numOfTurns = (offset > 0) ? Infinity : 5;
 
-            // recompute distances
-            dAB = [pB[0]-pA[0],pA[1]-pB[1]];
-            dBC = [pC[0]-pB[0],pC[1]-pB[1]];
-            dCD = [pC[0]-pD[0],pD[1]-pC[1]];
-            dDE = [pD[0]-pE[0],pD[1]-pE[1]];
-            numOfTurns=0;
+        // Frequently used constants
+        const k = (4 * (Math.sqrt(2) - 1)) / 3; // kappa, used to draw bezier ellipse section
+        const phi = 2 / (1 + Math.sqrt(5)); // phi, inverse of golden ratio
+        const phi2 = phi * phi; // phi square
+        const oneMinusPhi = 1 - phi; // 1-phi
+        // <=CS4; patth points coordinates must be given in current DIP (!), for example
+        //        72dpi: 1 path 'pixel' => 1 image pixel
+        //       300pdi: 1 path 'pixel' => 300/72 image pixels
+        var DPIFix = 72 / this.doc.resolution;
+        offset *= DPIFix;
+        w *= DPIFix;
+        h *= DPIFix;
+        startX *= DPIFix;
+        startY *= DPIFix;
+
+        // Create initial point
+        var points = [Stdlib.createPathPoint([startX + offset, startY])];
+        var i = 0;
+        for (; i < numOfTurns; ++i) {
+                var startPoint = points[points.length - 1];
+                // coordinates of starting point w/o offset
+                var x = startPoint.anchor[0] - offset,
+                    y = startPoint.anchor[1];
+                // coordinates of current segment points
+                var pA = [x + offset, y];
+                var pB = [x + phi * w, y - h + offset];
+                var pC = [x + w - offset, y - oneMinusPhi * h];
+                var pD = [x + (oneMinusPhi + phi2) * w, y - offset];
+                var pE = [x + phi * w + offset, y - oneMinusPhi * phi * h];
+                // compute distances
+                var dAB = [pB[0] - pA[0], pA[1] - pB[1]];
+                var dBC = [pC[0] - pB[0], pC[1] - pB[1]];
+                var dCD = [pC[0] - pD[0], pD[1] - pC[1]];
+                var dDE = [pD[0] - pE[0], pD[1] - pE[1]];
+
+                // minimal offsets in both directions whith which the curve could be drawn
+                if (Math.min(dDE[0], dDE[1]) < 0) {
+
+                        if (dAB[0] < 0) pA[0] = startPoint.anchor[0] -= offset - (offset + dAB[0]) * 0.7;
+                        if (dBC[1] < 0) pB[1] -= offset - (offset + dBC[1]) * 0.7;
+                        if (dCD[0] < 0) pC[0] += offset - (offset + dCD[0]) * 0.7;
+                        if (dDE[1] < 0) pD[1] += offset - (offset + dDE[1]) * 0.7;
+                        if (dDE[0] < 0) pE[0] -= offset - (offset + dDE[0]) * 0.7;
+
+                        // recompute distances
+                        dAB = [pB[0] - pA[0], pA[1] - pB[1]];
+                        dBC = [pC[0] - pB[0], pC[1] - pB[1]];
+                        dCD = [pC[0] - pD[0], pD[1] - pC[1]];
+                        dDE = [pD[0] - pE[0], pD[1] - pE[1]];
+                        numOfTurns = 0;
+                }
+
+                // correct first point's handle
+                startPoint.leftDirection = [pA[0], y - k * dAB[1]];
+                startPoint.rightDirection[0] = pA[0];
+
+                // add points with handles
+                points.push(Stdlib.createPathPoint(pB, [pB[0] + k * dBC[0], pB[1]], [pB[0] - k * dAB[0], pB[1]]));
+                points.push(Stdlib.createPathPoint(pC, [pC[0], pC[1] + k * dCD[1]], [pC[0], pC[1] - k * dBC[1]]));
+                points.push(Stdlib.createPathPoint(pD, [pD[0] - k * dDE[0], pD[1]], [pD[0] + k * dCD[0], pD[1]]));
+                points.push(Stdlib.createPathPoint(pE, undefined, [pE[0], pE[1] + k * dDE[1]]));
+
+                w = dDE[0] + offset; // width of NEXT segment
+                h = pE[1] - pC[1]; // height of NEXT segment
         }
-    
-        // correct first point's handle
-        startPoint.leftDirection = [pA[0], y-k*dAB[1]];
-        startPoint.rightDirection[0] = pA[0];
-        
-        // add points with handles
-        points.push(Stdlib.createPathPoint(pB,[pB[0]+k*dBC[0],pB[1]],[pB[0]-k*dAB[0],pB[1]]));
-        points.push(Stdlib.createPathPoint(pC,[pC[0],pC[1]+k*dCD[1]],[pC[0],pC[1]-k*dBC[1]]));
-        points.push(Stdlib.createPathPoint(pD,[pD[0]-k*dDE[0],pD[1]],[pD[0]+k*dCD[0],pD[1]]));
-        points.push(Stdlib.createPathPoint(pE,undefined,[pE[0],pE[1]+k*dDE[1]]));
-        
-        w = dDE[0]+offset;   // width of NEXT segment
-        h = pE[1]-pC[1];  // height of NEXT segment
-    }
-    return {points:points, cTurns:i};
+
+        return {
+                points: points,
+                cTurns: i
+        };
 }
 
-GoldenCrop.prototype.makeGoldenSpiral = function( orientation, stripSizePrc, color ) {
-    const docWidth  = this.cropMaskW,
-          docHeight = this.cropMaskH;
-    const stripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);
-    
-    var offsetPath = this.createGoldenSpiralPath(false, stripSize);
-    var normalPath = this.createGoldenSpiralPath(offsetPath.cTurns);
-    
-    var fillPath = offsetPath.points;
-    for (var i=0; i<normalPath.points.length; ++i) {
-        var tmp = normalPath.points[i].leftDirection
-        normalPath.points[i].leftDirection = normalPath.points[i].rightDirection;
-        normalPath.points[i].rightDirection = tmp;
-    }
-    fillPath = fillPath.concat(normalPath.points.reverse());
-    var spi = new SubPathInfo();
-    spi.closed = true;
-    spi.operation = ShapeOperation.SHAPEADD;
-    spi.entireSubPath = fillPath;
+GoldenCrop.prototype.makeGoldenSpiral = function (orientation, stripSizePrc, color) {
+        const docWidth = this.cropMaskW,
+              docHeight = this.cropMaskH;
+        const stripSize = Math.max(1, Math.min(docWidth, docHeight) * stripSizePrc);
 
-    var GSPath = this.doc.pathItems.add('', [spi]);
-    switch (orientation) {
-        case 1:
-            Stdlib.flipPath(0,1);
-            break;
-        case 2:
-            Stdlib.flipPath(1,1);
-            break;
-        case 3:
-            Stdlib.flipPath(1,0);
-            break;
-    }
-    var SpiralLayer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('goldenSpiral') );
-    GSPath.remove();
+        var offsetPath = this.createGoldenSpiralPath(false, stripSize);
+        var normalPath = this.createGoldenSpiralPath(offsetPath.cTurns);
+
+        var fillPath = offsetPath.points;
+        for (var i = 0; i < normalPath.points.length; ++i) {
+                var tmp = normalPath.points[i].leftDirection
+                normalPath.points[i].leftDirection = normalPath.points[i].rightDirection;
+                normalPath.points[i].rightDirection = tmp;
+        }
+        fillPath = fillPath.concat(normalPath.points.reverse());
+        var spi = new SubPathInfo();
+        spi.closed = true;
+        spi.operation = ShapeOperation.SHAPEADD;
+        spi.entireSubPath = fillPath;
+
+        var GSPath = this.doc.pathItems.add('', [spi]);
+        switch (orientation) {
+                case 1:
+                        Stdlib.flipPath(0, 1);
+                        break;
+                case 2:
+                        Stdlib.flipPath(1, 1);
+                        break;
+                case 3:
+                        Stdlib.flipPath(1, 0);
+                        break;
+        }
+        var SpiralLayer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('goldenSpiral'));
+        GSPath.remove();
 }
 
 /*
@@ -1168,26 +1167,26 @@ GoldenCrop.prototype.makeGoldenSpiral = function( orientation, stripSizePrc, col
  */
 GoldenCrop.prototype.applyStripFX = function() {
 var id11 = cTID( "setd" );
-    var desc5 = new ActionDescriptor();
-    var id12 = cTID( "null" );
-        var ref3 = new ActionReference();
-        ref3.putProperty( cTID( "Prpr" ),  cTID( "Lefx" ));
-        ref3.putEnumerated( cTID( "Lyr " ), cTID( "Ordn" ), cTID( "Trgt" ) );
-    desc5.putReference( id12, ref3 );
-    var id18 = cTID( "T   " );
-        var desc6 = new ActionDescriptor();
-        var idFrFX = cTID( "FrFX" );
-            var desc33 = new ActionDescriptor();
-            desc33.putEnumerated( cTID( "Styl" ), cTID( "FStl" ), cTID( "OutF" ) );
-            desc33.putUnitDouble( cTID( "Sz  " ), cTID( "#Pxl" ), this.strokeWidth );
-                var desc34 = new ActionDescriptor();
-                desc34.putDouble( cTID( "Rd  " ), 255.000000 );
-                desc34.putDouble( cTID( "Grn " ), 255.000000 );
-                desc34.putDouble( cTID( "Bl  " ), 255.000000 );
-            desc33.putObject( cTID( "Clr " ), cTID( "RGBC" ), desc34 );
-        desc6.putObject( idFrFX, cTID( "FrFX" ), desc33 );
-    desc5.putObject( id18, cTID( "Lefx" ), desc6 );
-executeAction( id11, desc5, DialogModes.NO );
+            var desc5 = new ActionDescriptor();
+            var id12 = cTID( "null" );
+                var ref3 = new ActionReference();
+                ref3.putProperty( cTID( "Prpr" ),  cTID( "Lefx" ));
+                ref3.putEnumerated( cTID( "Lyr " ), cTID( "Ordn" ), cTID( "Trgt" ) );
+            desc5.putReference( id12, ref3 );
+            var id18 = cTID( "T   " );
+                var desc6 = new ActionDescriptor();
+                var idFrFX = cTID( "FrFX" );
+                    var desc33 = new ActionDescriptor();
+                    desc33.putEnumerated( cTID( "Styl" ), cTID( "FStl" ), cTID( "OutF" ) );
+                    desc33.putUnitDouble( cTID( "Sz  " ), cTID( "#Pxl" ), this.strokeWidth );
+                        var desc34 = new ActionDescriptor();
+                        desc34.putDouble( cTID( "Rd  " ), 255.000000 );
+                        desc34.putDouble( cTID( "Grn " ), 255.000000 );
+                        desc34.putDouble( cTID( "Bl  " ), 255.000000 );
+                    desc33.putObject( cTID( "Clr " ), cTID( "RGBC" ), desc34 );
+                desc6.putObject( idFrFX, cTID( "FrFX" ), desc33 );
+            desc5.putObject( id18, cTID( "Lefx" ), desc6 );
+        executeAction( id11, desc5, DialogModes.NO );
 }
 
 
@@ -1214,187 +1213,185 @@ executeAction( id11, desc5, DialogModes.NO );
  * Returns: void
  * TODO: move parameters to user config
  */
-GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, stripsThickScale) {
-    if (!basicStripSize) {
-        basicStripSize = Math.round(this.conf.get('lthick'))/1000;
-    }
-    if (!maskOpacity) {
-        maskOpacity = 70;
-    }
-    if (!colors) {
-        colors = [Stdlib.createRGBColor(0,0,0),
-                 Stdlib.createRGBColor(0,0,0),
-                 Stdlib.createRGBColor(0x33,0x33,0x33),
-                 Stdlib.createRGBColor(0x11,0x11,0x11),
-                 Stdlib.createRGBColor(255,0,0), Stdlib.createRGBColor(0,0,255),
-                  Stdlib.createRGBColor(0,255,255), Stdlib.createRGBColor(255,0,255),Stdlib.createRGBColor(255,255,0), Stdlib.createRGBColor(128,128,255)];
-    }
-    if (!stripsThickScale) {
-        stripsThickScale = [1, 1, 1, 1/2, 1/2];
-    }
-    const docWidth  = this.docW,
-          docHeight = this.docH;
-    const stripSizePx = Math.max(1,Math.min(docWidth, docHeight) * basicStripSize);
-    this.strokeWidth = Math.max(1,(stripSizePx)/16);
-    
-    this.gCrop = Stdlib.createLayerGroup(this.loc.get('GCbySzN'));
-    Stdlib.moveToFront();
-    
-    // Add crop-mask
-    this.cropMask = Stdlib.createSolidFillLayer(undefined, colors[0], this.loc.get('cropMask'), maskOpacity);
-    Stdlib.removeLayerMask();
-    Stdlib.addVectorMask(true);
-    Stdlib.rectPath(ShapeOperation.SHAPESUBTRACT, Units.PIXELS, 0, 0, this.cropMaskH, this.cropMaskW);
-    
-    // Add dividing rules
-    var anyGuidelines = false;
-    for ( gline in this.guidelines ) {
-        anyGuidelines |= this.guidelines[gline].create;
-    }
-    if (anyGuidelines) {
-        this.gCropDivRules = Stdlib.createLayerGroup(this.loc.get('divRules'), 75);
-        
-        // ----- Golden rule
-        if (this.guidelines.golden.create) {
-            const phi = (Math.sqrt(5)-1)/2; // Inv Golden number, ca. 0.6180339887498948482045868343656
-            this.guidelines.golden.layer = this.makeStrips(phi, basicStripSize*stripsThickScale[0], colors[1]);
-            if (this.ifApplyFX) this.applyStripFX();
+GoldenCrop.prototype.makeGrid = function (basicStripSize, maskOpacity, colors, stripsThickScale) {
+        if (!basicStripSize) {
+                basicStripSize = Math.round(this.conf.get('lthick')) / 1000;
         }
-        
-        // ----- One-third rule
-        if (this.guidelines.roth.create) {
-            const third = 1.0/3;
-            this.guidelines.roth.layer = this.makeStrips(third, basicStripSize*stripsThickScale[1], colors[2]);
-            if (this.ifApplyFX) this.applyStripFX();
+        if (!maskOpacity) {
+                maskOpacity = 70;
         }
-    
-        // ----- Diagonal method
-        if (this.guidelines.diagmethod.create) {
-            this.guidelines.diagmethod.layer = this.makeDiagonalMethod(basicStripSize*stripsThickScale[2], colors[3]);
-            if (this.ifApplyFX) this.applyStripFX();
+        if (!colors) {
+                colors = [Stdlib.createRGBColor(0, 0, 0),
+						  Stdlib.createRGBColor(0, 0, 0),
+						  Stdlib.createRGBColor(0x33, 0x33, 0x33),
+						  Stdlib.createRGBColor(0x11, 0x11, 0x11),
+						  Stdlib.createRGBColor(255, 0, 0), Stdlib.createRGBColor(0, 0, 255),
+						  Stdlib.createRGBColor(0, 255, 255), Stdlib.createRGBColor(255, 0, 255), Stdlib.createRGBColor(255, 255, 0), Stdlib.createRGBColor(128, 128, 255)];
         }
-        
-        // ----- Golden triangle rule (up)
-        if (this.guidelines.gtrianup.create) {
-            this.guidelines.gtrianup.layer = this.makeGoldenTriangle(true, basicStripSize*stripsThickScale[3], colors[4]);
-            if (this.ifApplyFX) this.applyStripFX();
+        if (!stripsThickScale) {
+                stripsThickScale = [1, 1, 1, 1 / 2, 1 / 2];
         }
-    
-        // ----- Golden triangle rule (down)
-        if (this.guidelines.gtriandown.create) {
-            this.guidelines.gtriandown.layer = this.makeGoldenTriangle(false, basicStripSize*stripsThickScale[3], colors[5]);
-            if (this.ifApplyFX) this.applyStripFX();
-        }
+        const docWidth = this.docW,
+              docHeight = this.docH;
+        const stripSizePx = Math.max(1, Math.min(docWidth, docHeight) * basicStripSize);
+        this.strokeWidth = Math.max(1, (stripSizePx) / 16);
 
-        // ----- Golden spiral (starts at bottom-left)
-        if (this.guidelines.gspiralBL.create) {
-            this.guidelines.gspiralBL.layer = this.makeGoldenSpiral(0, basicStripSize*stripsThickScale[4], colors[6]);
-            if (this.ifApplyFX) this.applyStripFX();
+        this.gCrop = Stdlib.createLayerGroup(this.loc.get('GCbySzN'));
+        Stdlib.moveToFront();
+
+        // Add crop-mask
+        this.cropMask = Stdlib.createSolidFillLayer(undefined, colors[0], this.loc.get('cropMask'), maskOpacity);
+        Stdlib.removeLayerMask();
+        Stdlib.addVectorMask(true);
+        Stdlib.rectPath(ShapeOperation.SHAPESUBTRACT, Units.PIXELS, 0, 0, this.cropMaskH, this.cropMaskW);
+
+        // Add dividing rules
+        var anyGuidelines = false;
+        for (gline in this.guidelines) {
+                anyGuidelines |= this.guidelines[gline].create;
         }
-    
-        // ----- Golden spiral (starts at bottom-left)
-        if (this.guidelines.gspiralTL.create) {
-            this.guidelines.gspiralTL.layer = this.makeGoldenSpiral(1, basicStripSize*stripsThickScale[4], colors[7]);
-            if (this.ifApplyFX) this.applyStripFX();
+        if (anyGuidelines) {
+                this.gCropDivRules = Stdlib.createLayerGroup(this.loc.get('divRules'), 75);
+
+                // ----- Golden rule
+                if (this.guidelines.golden.create) {
+                        const phi = (Math.sqrt(5) - 1) / 2; // Inv Golden number, ca. 0.6180339887498948482045868343656
+                        this.guidelines.golden.layer = this.makeStrips(phi, basicStripSize * stripsThickScale[0], colors[1]);
+                        if (this.ifApplyFX) this.applyStripFX();
+                }
+
+                // ----- One-third rule
+                if (this.guidelines.roth.create) {
+                        const third = 1.0 / 3;
+                        this.guidelines.roth.layer = this.makeStrips(third, basicStripSize * stripsThickScale[1], colors[2]);
+                        if (this.ifApplyFX) this.applyStripFX();
+                }
+
+                // ----- Diagonal method
+                if (this.guidelines.diagmethod.create) {
+                        this.guidelines.diagmethod.layer = this.makeDiagonalMethod(basicStripSize * stripsThickScale[2], colors[3]);
+                        if (this.ifApplyFX) this.applyStripFX();
+                }
+
+                // ----- Golden triangle rule (up)
+                if (this.guidelines.gtrianup.create) {
+                        this.guidelines.gtrianup.layer = this.makeGoldenTriangle(true, basicStripSize * stripsThickScale[3], colors[4]);
+                        if (this.ifApplyFX) this.applyStripFX();
+                }
+
+                // ----- Golden triangle rule (down)
+                if (this.guidelines.gtriandown.create) {
+                        this.guidelines.gtriandown.layer = this.makeGoldenTriangle(false, basicStripSize * stripsThickScale[3], colors[5]);
+                        if (this.ifApplyFX) this.applyStripFX();
+                }
+
+                // ----- Golden spiral (starts at bottom-left)
+                if (this.guidelines.gspiralBL.create) {
+                        this.guidelines.gspiralBL.layer = this.makeGoldenSpiral(0, basicStripSize * stripsThickScale[4], colors[6]);
+                        if (this.ifApplyFX) this.applyStripFX();
+                }
+
+                // ----- Golden spiral (starts at bottom-left)
+                if (this.guidelines.gspiralTL.create) {
+                        this.guidelines.gspiralTL.layer = this.makeGoldenSpiral(1, basicStripSize * stripsThickScale[4], colors[7]);
+                        if (this.ifApplyFX) this.applyStripFX();
+                }
+
+                // ----- Golden spiral (starts at bottom-left)
+                if (this.guidelines.gspiralTR.create) {
+                        this.guidelines.gspiralTR.layer = this.makeGoldenSpiral(2, basicStripSize * stripsThickScale[4], colors[8]);
+                        if (this.ifApplyFX) this.applyStripFX();
+                }
+
+                // ----- Golden spiral (starts at bottom-left)
+                if (this.guidelines.gspiralBR.create) {
+                        this.guidelines.gspiralBR.layer = this.makeGoldenSpiral(3, basicStripSize * stripsThickScale[4], colors[9]);
+                        if (this.ifApplyFX) this.applyStripFX();
+                }
+        } else {
+                this.addBogusLayer();
         }
-            
-        // ----- Golden spiral (starts at bottom-left)
-        if (this.guidelines.gspiralTR.create) {
-            this.guidelines.gspiralTR.layer = this.makeGoldenSpiral(2, basicStripSize*stripsThickScale[4], colors[8]);
-            if (this.ifApplyFX) this.applyStripFX();
-        }
-            
-        // ----- Golden spiral (starts at bottom-left)
-        if (this.guidelines.gspiralBR.create) {
-            this.guidelines.gspiralBR.layer = this.makeGoldenSpiral(3, basicStripSize*stripsThickScale[4], colors[9]);
-            if (this.ifApplyFX) this.applyStripFX();
-        }
-    } else {
-        this.addBogusLayer();
-    }
 }
 
-GoldenCrop.prototype.addBogusLayer = function() {
-    this.bogusLayer = this.makeStrips(.5, 1, Stdlib.createRGBColor(0, 0, 0));
-    this.doc.activeLayer.opacity=0;
-}
-/*
- * Activate user-interactive free transform mode and check results.
- * *** BLOCKING FUNCTION ***
- * Returns: void
- * If the user accepted the transformation -- ask user to choose crop method
- * If the user cancelled the transformation -- do not crop but keep all created layers
- */
-GoldenCrop.prototype.freeTransform = function() {
-    throw new Error('deprecated');
+GoldenCrop.prototype.addBogusLayer = function () {
+        this.bogusLayer = this.makeStrips(.5, 1, Stdlib.createRGBColor(0, 0, 0));
+        this.doc.activeLayer.opacity = 0;
 }
 
 /*
  * Crops canvas and deletes all Golden Crop layers
  */
-GoldenCrop.prototype.simpleCrop = function() {
-    // TODO get selection bounds from this.croppingBounds
-    var b = this.cropBounds;
-    Stdlib.selectRect(b[1],b[0],b[3],b[2]);
-    executeAction( cTID( "Crop" ), new ActionDescriptor(), DialogModes.NO );
-    this.doc.selection.deselect();
-    this.gCrop.remove();
+GoldenCrop.prototype.simpleCrop = function () {
+        // TODO get selection bounds from this.croppingBounds
+        var b = this.cropBounds;
+        Stdlib.selectRect(b[1], b[0], b[3], b[2]);
+        executeAction(cTID("Crop"), new ActionDescriptor(), DialogModes.NO);
+        this.doc.selection.deselect();
+        this.gCrop.remove();
 }
 
 /*
  * Make cropping mask non-transparent and make active and hide Dividing Rules group
  */
-GoldenCrop.prototype.maskOutCrop = function() {
-    this.cropMask.opacity = 100;
-    if (this.gCropDivRules) {
-        this.doc.activeLayer = this.gCropDivRules;
-        this.doc.activeLayer.visible = false
-    }
-    this.doc.activeLayer = this.gCrop;
+GoldenCrop.prototype.maskOutCrop = function () {
+        this.cropMask.opacity = 100;
+        if (this.gCropDivRules) {
+                this.doc.activeLayer = this.gCropDivRules;
+                this.doc.activeLayer.visible = false
+        }
+        this.doc.activeLayer = this.gCrop;
 }
 
 /*
  * Display user-interactive menu allowing to choose cropping method.
  * Cropping methods are member functions of GoldenCrop object instance
  */
-GoldenCrop.prototype.chooseCropMethod = function() {
-    var menuDesc = {caption:this.loc.get('chCropMethod'),
-                question:this.loc.get('chCropMethodQ'),
-                elements:[{key:'1', text:this.loc.get('cropCanvas'), def:true},
-                          {key:'2', text:this.loc.get('mkCropMask')},
-                          {key:'Esc', text:this.loc.get('cancel')}
-                         ]
-               };
-    
-    var dlg = new dialogMenu(menuDesc);
-    var result = dlg.show();
-    switch ( result ) {
+GoldenCrop.prototype.chooseCropMethod = function () {
+        var menuDesc = {
+                caption: this.loc.get('chCropMethod'),
+                question: this.loc.get('chCropMethodQ'),
+                elements: [{
+                        key: '1',
+                        text: this.loc.get('cropCanvas'),
+                        def: true
+                }, {
+                        key: '2',
+                        text: this.loc.get('mkCropMask')
+                }, {
+                        key: 'Esc',
+                        text: this.loc.get('cancel')
+                }]
+        };
+
+        var dlg = new dialogMenu(menuDesc);
+        var result = dlg.show();
+        switch (result) {
         case 0:
-            return 'SIMPLE';
+                return 'SIMPLE';
         case 1:
-            return 'MASK';
+                return 'MASK';
         case false:
         default:
-            return 0;
-    }
+                return 0;
+        }
 }
 
 /*
  * Convert background to normal layer and place solid fill layer below it.
  * Color of the solid fill layer is determined by current foreground color
  */
-GoldenCrop.prototype.doPopBackground = function() {
-    if ( this.backgroundPopped || !Stdlib.hasBackground( this.doc ) ) return;
-    this.backgroundPopped = true;
-     
-    if ( Stdlib.hasBackground(this.doc) ) {
-        this.bgLayer = this.doc.backgroundLayer;
-        this.bgLayer.isBackgroundLayer = false;
-        this.bgLayer.name = this.loc.get('bgOnLayer');
-    }
-    this.backgroundFill = Stdlib.createSolidFillLayer(undefined, app.foregroundColor, this.loc.get('bgFill'));
-    Stdlib.removeLayerMask();
-    this.backgroundFill.move(this.bgLayer||this.doc.layers[this.doc.layers.length-1], ElementPlacement.PLACEAFTER);
+GoldenCrop.prototype.doPopBackground = function () {
+        if (this.backgroundPopped || !Stdlib.hasBackground(this.doc)) return;
+        this.backgroundPopped = true;
+
+        if (Stdlib.hasBackground(this.doc)) {
+                this.bgLayer = this.doc.backgroundLayer;
+                this.bgLayer.isBackgroundLayer = false;
+                this.bgLayer.name = this.loc.get('bgOnLayer');
+        }
+        this.backgroundFill = Stdlib.createSolidFillLayer(undefined, app.foregroundColor, this.loc.get('bgFill'));
+        Stdlib.removeLayerMask();
+        this.backgroundFill.move(this.bgLayer || this.doc.layers[this.doc.layers.length - 1], ElementPlacement.PLACEAFTER);
 }
 
 /*
@@ -1402,51 +1399,49 @@ GoldenCrop.prototype.doPopBackground = function() {
  * Convert background to normal layer and place solid fill layer below it.
  * Color of the solid fill layer is determined by current foreground color
  */
-GoldenCrop.prototype.doRevealPopBackround = function() {
-    var docW = this.docW,
-        docH = this.docH;
-    var cb = this.cropBounds;
-    
-    var addTop    = Math.max(-cb[1],0),
-        addLeft   = Math.max(-cb[0],0),
-        addBottom = Math.max(cb[3]-docH,0),
-        addRight  = Math.max(cb[2]-docW,0);
-        
-    if (this.popBackground) {
-        this.doPopBackground();
-    }
-    
-    this.doc.resizeCanvas(new UnitValue(docW+addLeft,"px"),new UnitValue(docH+addTop,"px"),AnchorPosition.BOTTOMRIGHT);
-    this.doc.resizeCanvas(new UnitValue(docW+addLeft+addRight,"px"),new UnitValue(docH+addTop+addBottom,"px"),AnchorPosition.TOPLEFT);
+GoldenCrop.prototype.doRevealPopBackround = function () {
+        var docW = this.docW,
+            docH = this.docH;
+        var cb = this.cropBounds;
 
-    // if there is no cropping hide whole Golden Crop group
-    if ( !this.cropMethod ) {
-        this.doc.activeLayer = this.gCrop;
-        this.doc.activeLayer.visible = false;
-        // this.cropMask.remove();
-    }
+        var addTop = Math.max(-cb[1], 0),
+            addLeft = Math.max(-cb[0], 0),
+            addBottom = Math.max(cb[3] - docH, 0),
+            addRight = Math.max(cb[2] - docW, 0);
+
+        if (this.popBackground) {
+                this.doPopBackground();
+        }
+
+        this.doc.resizeCanvas(new UnitValue(docW + addLeft, "px"), new UnitValue(docH + addTop, "px"), AnchorPosition.BOTTOMRIGHT);
+        this.doc.resizeCanvas(new UnitValue(docW + addLeft + addRight, "px"), new UnitValue(docH + addTop + addBottom, "px"), AnchorPosition.TOPLEFT);
+
+        // if there is no cropping hide whole Golden Crop group
+        if (!this.cropMethod) {
+                this.doc.activeLayer = this.gCrop;
+                this.doc.activeLayer.visible = false;
+                // this.cropMask.remove();
+        }
 }
 
-GoldenCrop.prototype.doRotateCanvas = function() {
-    if ( this.popBackground ) {
-        this.doPopBackground();
-    }
-    var angle = this.rotateCanvasA;
-    if ( angle > 45 ) {
-        angle-=90;
-    } else if (angle < -45 ) {
-        angle+=90;
-    }
-    Stdlib.rotateCannvas(angle);
-    // update cropping bounds and document dimentions
-    this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.cropMask);         
-    this.docW = parseInt(this.doc.width.as("px")),
-    this.docH = parseInt(this.doc.height.as("px"));
-    // $.writeln('################# after rotate');
-    // $.writeln('docW:' +this.docW);
-    // $.writeln('docH:' +this.docH);
+GoldenCrop.prototype.doRotateCanvas = function () {
+        if (this.popBackground) {
+                this.doPopBackground();
+        }
+        var angle = this.rotateCanvasA;
+        if (angle > 45) {
+                angle -= 90;
+        } else if (angle < -45) {
+                angle += 90;
+        }
+        Stdlib.rotateCannvas(angle);
+        // update cropping bounds and document dimentions
+        this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.cropMask);
+        this.docW = parseInt(this.doc.width.as("px")), this.docH = parseInt(this.doc.height.as("px"));
+        // $.writeln('################# after rotate');
+        // $.writeln('docW:' +this.docW);
+        // $.writeln('docH:' +this.docH);
 }
-
 
 
 /*
@@ -1454,599 +1449,628 @@ GoldenCrop.prototype.doRotateCanvas = function() {
  * Check if there is also cropping and set this.onlyReveal accordingly.
  * Revealing methods are member functions of GoldenCrop object instance.
  */
-GoldenCrop.prototype.chooseRevealAction = function() {
-    // choose whether extend canvas before cropping
-    var menuDesc = {caption:this.loc.get('canvExtDet'), //Canvas extension detected.
-        question:this.loc.get('canvExtDetQ'), //What to do with canvas?
-        elements:[{key:'A', text:this.loc.get('extendCanvas'), def:true}, // Extend canvas
-                  {key:'Z', text:this.loc.get('dontExtCanv')}, // Crop without extension
-                  {key:'Esc', text:this.loc.get('retToCropping')} // Return to cropping
-                 ]
-       };
+GoldenCrop.prototype.chooseRevealAction = function () {
+        // choose whether extend canvas before cropping
+        var menuDesc = {
+                caption: this.loc.get('canvExtDet'),
+                //Canvas extension detected.
+                question: this.loc.get('canvExtDetQ'),
+                //What to do with canvas?
+                elements: [{
+                        key: 'A',
+                        text: this.loc.get('extendCanvas'),
+                        def: true
+                }, // Extend canvas
+                {
+                        key: 'Z',
+                        text: this.loc.get('dontExtCanv')
+                }, // Crop without extension
+                {
+                        key: 'Esc',
+                        text: this.loc.get('retToCropping')
+                } // Return to cropping
+                ]
+        };
 
-    var dlg = new dialogMenu(menuDesc);
-    var result = dlg.show();
-    switch (result) {
-        case 0:
-            return('EXTCANVAS')
-            break;
-        case 1:
-            return false; // Don't ctop
-            break;
-        case false:
-        default:
-            return 0; // Return to cropping
-            break;
-    }
+        var dlg = new dialogMenu(menuDesc);
+        var result = dlg.show();
+        switch (result) {
+                case 0:
+                        return ('EXTCANVAS')
+                        break;
+                case 1:
+                        return false; // Don't ctop
+                        break;
+                case false:
+                default:
+                        return 0; // Return to cropping
+                        break;
+        }
 }
 
 GoldenCrop.prototype.findMainGCGroup = function () {
-    var mainGCGroupName = this.loc.get('GCbySzN');
-    var layer = this.doc.activeLayer
+        var mainGCGroupName = this.loc.get('GCbySzN');
+        var layer = this.doc.activeLayer
 
-    var isGCMG = function( layer ) {
-            return layer.typename == 'LayerSet' && layer.name == mainGCGroupName;
+        var isGCMG = function (layer) {
+                return layer.typename == 'LayerSet' && layer.name == mainGCGroupName;
         }
-    // We have the layer active or we are somwhere inside the main group
-    do {
-        if ( isGCMG( layer ) )
-            return layer;
-        layer = layer.parent;
-    } while ( layer.typename != 'Document' )
-    
-    // GC Main Group is at the top of the layer stack
-    layer = this.doc.layers[0];
-    if ( isGCMG(layer) ) {
-        return layer;
-    }
-    
-    // there's no Golden Crop
-    return false;
+            
+        // We have the layer active or we are somwhere inside the main group
+        do {
+                if (isGCMG(layer)) return layer;
+                layer = layer.parent;
+        } while (layer.typename != 'Document')
+            
+        // GC Main Group is at the top of the layer stack
+        layer = this.doc.layers[0];
+        if (isGCMG(layer)) {
+                return layer;
+        }
+
+        // there's no Golden Crop
+        return false;
 }
 
-GoldenCrop.prototype.findCropMaskAndDivRules = function ( mainGCGroup ) {
-    var toFind=2;
-    var layers = {cropMask: undefined, divRules: undefined};
-    var szCropMask = this.loc.get('cropMask'),
-        szDivRules = this.loc.get('divRules');
-    for ( var i = mainGCGroup.layers.length-1; i>=0 && toFind; --i ) {
-        var layer = mainGCGroup.layers[i];
-        if ( layer.kind == LayerKind.SOLIDFILL && layer.name == szCropMask) {
-            layers.cropMask = layer;
-            --toFind;
-        } else if ( layer.typename == 'LayerSet' && layer.name == szDivRules) {
-            layers.divRules = layer;
-            --toFind;
+GoldenCrop.prototype.findCropMaskAndDivRules = function (mainGCGroup) {
+        var toFind = 2;
+        var layers = {
+                cropMask: undefined,
+                divRules: undefined
+        };
+        var szCropMask = this.loc.get('cropMask'),
+            szDivRules = this.loc.get('divRules');
+        for (var i = mainGCGroup.layers.length - 1; i >= 0 && toFind; --i) {
+                var layer = mainGCGroup.layers[i];
+                if (layer.kind == LayerKind.SOLIDFILL && layer.name == szCropMask) {
+                        layers.cropMask = layer;
+                        --toFind;
+                } else if (layer.typename == 'LayerSet' && layer.name == szDivRules) {
+                        layers.divRules = layer;
+                        --toFind;
+                }
         }
-    }
-    return layers.cropMask?layers:false;
+        return layers.cropMask ? layers : false;
 }
 
 GoldenCrop.prototype.restoreUserGCGroupSettings = function () {
-    if (this.skipGridCreation) {
-       this.cropMask.opacity = this.userSettings.cropMask[1];
-       this.cropMask.visible = this.userSettings.cropMask[0];
-       if ( this.gCropDivRules ) {
-           this.gCropDivRules.opacity = this.userSettings.divRUles[1];
-           this.gCropDivRules.visible = this.userSettings.divRUles[0];
-       }
-       this.gCrop.opacity = this.userSettings.gCrop[1];
-       this.gCrop.visible = this.userSettings.gCrop[0];
-    }
+        if (this.skipGridCreation) {
+                this.cropMask.opacity = this.userSettings.cropMask[1];
+                this.cropMask.visible = this.userSettings.cropMask[0];
+                if (this.gCropDivRules) {
+                        this.gCropDivRules.opacity = this.userSettings.divRUles[1];
+                        this.gCropDivRules.visible = this.userSettings.divRUles[0];
+                }
+                this.gCrop.opacity = this.userSettings.gCrop[1];
+                this.gCrop.visible = this.userSettings.gCrop[0];
+        }
 }
 
 GoldenCrop.prototype.interactiveCrop = function () {
-    var docW = this.docW;
-    var docH = this.docH;
+        var docW = this.docW;
+        var docH = this.docH;
 
-    do {
-        if ( this.goIntoInteractiveMode ) {
-            this.cropAccepted = Stdlib.userGoToFreeTransform(this.doc, this.gCrop);
-        } else {
-            this.cropAccepted = true;
-            this.doc.activeLayer = this.cropMask;
-        }
-    
-        if ( !this.cropAccepted ) break;
-        
-        this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.cropMask);
-        var cb = this.cropBounds;
-
-        // Detect angle
-        var threshold = 0.0001;
-        var angle = Stdlib.getVectorMaskAngle_cornerPointsOnly(false, this.doc, this.cropMask);
-        this.rotateCanvasA = ( Math.abs(angle)%90 > threshold )?-angle:false;
-        if ( this.rotateCanvasA ) {
-            this.popBackground = true; // default, could be changed in the following code
-            var anRad = ((this.rotateCanvasA)*Math.PI)/180;
-            var sinAb = Math.sin(Math.abs(anRad)), cosAb = Math.cos(Math.abs(anRad)),
-                sinAn =Math.sin(anRad), cosAn = Math.cos(anRad);
-            var mid = {x:(cb[0]+cb[2])/2,y:(cb[1]+cb[3])/2};
-            //var dist = Math.sqrt(mid.x*mid.x+mid.y*mid.y);
-            var cbRot = cb.clone();
-            var newDocW = Math.ceil(docW * cosAb + docH * sinAb),
-                newDocH = Math.ceil(docW * sinAb + docH * cosAb);
-            var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity; 
-            var minXp, maxXp, minYp, maxYp; 
-            // translate to 0,0, rotate, and translate back
-            for (var i=6; i<10; ++i) {
-                var x = cbRot[i].x - mid.x,
-                    y = cbRot[i].y - mid.y;
-                var xrot = x * cosAn - y * sinAn,
-                    yrot = x * sinAn + y * cosAn;
-                x = cbRot[i].x = xrot+mid.x+(newDocW-docW)/2;
-                y = cbRot[i].y = yrot+mid.y+(newDocH-docH)/2;
-                if ( x < minX ) { minX = x; minXp = {x:x,y:y} }
-                if ( x > maxX ) { maxX = x; maxXp = {x:x,y:y} }
-                if ( y < minY ) { minY = y; minYp = {x:x,y:y} }
-                if ( y > maxY ) { maxY = y; maxYp = {x:x,y:y} }
-            }
-            this.afterRotate = {cb: [minX, minY, maxX, maxY, maxX-minX, maxY-minY, minXp, maxXp, minYp, maxYp, cbRot],
-                               docW: newDocW,
-                               docH: newDocH};
-            // $.writeln('~~~~~~~~~~~~~');
-            // $.writeln('afterRotate:' +this.afterRotate);
-            //debugger;
-        }
-        
-        // Detect cropping mode
-        if ( cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
-            // cropping only inside picture frame
-            if ( this.cropMethod === false )
-                this.cropMethod = this.chooseCropMethod();
-            if ( this.rotateCanvasA && this.cropMethod == 'SIMPLE' ) {
-                // cancel background pop even when there is a rotation
-                this.popBackground = false;
-            }
-        } else {
-            if ( this.rotateCanvasA ) {
-                cb = this.afterRotate.cb; // simulate rotation for further computing
-                docW = this.afterRotate.docW; docH = this.afterRotate.docH;
-            }
-            if ( cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH ) { // no image crop
-                this.cropMethod = false;
-                this.revealMethod = 'EXTCANVAS';
-                this.popBackground = true;
-            } else {
-               if ( this.rotateCanvasA && cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
-                   // rotation uncovers needed canvas, i.e. no further extension after roattion is needed
-                   this.revealMethod = 'false';
-               } else {
-                  if ( this.cropMethod === false )
-                    this.revealMethod = this.chooseRevealAction();
-               }
-                if ( !(this.revealMethod === 0) ) {
-                    if ( this.revealMethod == 'EXTCANVAS' ) {
-                        this.popBackground = true;
-                    }
-                    this.cropMethod = this.chooseCropMethod();
+        do {
+                if (this.goIntoInteractiveMode) {
+                        this.cropAccepted = Stdlib.userGoToFreeTransform(this.doc, this.gCrop);
+                } else {
+                        this.cropAccepted = true;
+                        this.doc.activeLayer = this.cropMask;
                 }
-            }
 
-        }
-    } while ( this.revealMethod === 0 || this.cropMethod === 0)
+                if (!this.cropAccepted) break;
+
+                this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.cropMask);
+                var cb = this.cropBounds;
+
+                // Detect angle
+                var threshold = 0.0001;
+                var angle = Stdlib.getVectorMaskAngle_cornerPointsOnly(false, this.doc, this.cropMask);
+                this.rotateCanvasA = (Math.abs(angle) % 90 > threshold) ? -angle : false;
+                if (this.rotateCanvasA) {
+                        this.popBackground = true; // default, could be changed in the following code
+                        var anRad = ((this.rotateCanvasA) * Math.PI) / 180;
+                        var sinAb = Math.sin(Math.abs(anRad)),
+                            cosAb = Math.cos(Math.abs(anRad)),
+                            sinAn = Math.sin(anRad),
+                            cosAn = Math.cos(anRad);
+                        var mid = {
+                                x: (cb[0] + cb[2]) / 2,
+                                y: (cb[1] + cb[3]) / 2
+                        };
+                        //var dist = Math.sqrt(mid.x*mid.x+mid.y*mid.y);
+                        var cbRot = cb.clone();
+                        var newDocW = Math.ceil(docW * cosAb + docH * sinAb),
+                            newDocH = Math.ceil(docW * sinAb + docH * cosAb);
+                        var minX = Infinity,
+                            maxX = -Infinity,
+                            minY = Infinity,
+                            maxY = -Infinity;
+                        var minXp, maxXp, minYp, maxYp;
+                        // translate to 0,0, rotate, and translate back
+                        for (var i = 6; i < 10; ++i) {
+                                var x = cbRot[i].x - mid.x,
+                                    y = cbRot[i].y - mid.y;
+                                var xrot = x * cosAn - y * sinAn,
+                                    yrot = x * sinAn + y * cosAn;
+                                x = cbRot[i].x = xrot + mid.x + (newDocW - docW) / 2;
+                                y = cbRot[i].y = yrot + mid.y + (newDocH - docH) / 2;
+                                if ( x < minX ) {minX = x; minXp = {x:x,y:y}}
+                                if ( x > maxX ) {maxX = x; maxXp = {x:x,y:y}}
+                                if ( y < minY ) {minY = y; minYp = {x:x,y:y}}
+                                if ( y > maxY ) {maxY = y; maxYp = {x:x,y:y}}
+                        }
+                        this.afterRotate = {
+                                cb: [minX, minY, maxX, maxY, maxX - minX, maxY - minY, minXp, maxXp, minYp, maxYp, cbRot],
+                                docW: newDocW,
+                                docH: newDocH
+                        };
+                        // $.writeln('~~~~~~~~~~~~~');
+                        // $.writeln('afterRotate:' +this.afterRotate);
+                        //debugger;
+                }
+
+                // Detect cropping mode
+                if (cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH) {
+                        // cropping only inside picture frame
+                        if (this.cropMethod === false) this.cropMethod = this.chooseCropMethod();
+                        if (this.rotateCanvasA && this.cropMethod == 'SIMPLE') {
+                                // cancel background pop even when there is a rotation
+                                this.popBackground = false;
+                        }
+                } else {
+                        if (this.rotateCanvasA) {
+                                cb = this.afterRotate.cb; // simulate rotation for further computing
+                                docW = this.afterRotate.docW;
+                                docH = this.afterRotate.docH;
+                        }
+                        if (cb[0] < 0 && cb[1] < 0 && cb[2] > docW && cb[3] > docH) { // no image crop
+                                this.cropMethod = false;
+                                this.revealMethod = 'EXTCANVAS';
+                                this.popBackground = true;
+                        } else {
+                                if (this.rotateCanvasA && cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH) {
+                                        // rotation uncovers needed canvas, i.e. no further extension after roattion is needed
+                                        this.revealMethod = 'false';
+                                } else {
+                                        if (this.cropMethod === false) this.revealMethod = this.chooseRevealAction();
+                                }
+                                if (!(this.revealMethod === 0)) {
+                                        if (this.revealMethod == 'EXTCANVAS') {
+                                                this.popBackground = true;
+                                        }
+                                        this.cropMethod = this.chooseCropMethod();
+                                }
+                        }
+
+                }
+        } while (this.revealMethod === 0 || this.cropMethod === 0)
 };
 
-GoldenCrop.prototype.findCropToResume = function() {
-   // old version !this.conf.isRunFromAction()
-   // select last (bottom) layer to force adding new GC group (i.e. don't search for existing ones)
-   if (this.doc.activeLayer != this.doc.layers[this.doc.layers.length-1]) {
-       // search for GC group
-       var gcg = this.findMainGCGroup();
-       if ( gcg ) {
-           var gcSub = this.findCropMaskAndDivRules( gcg );
-           if (gcSub) {
-               // Found :) Do not create new -- use existing
-               this.skipGridCreation = true;
-               this.gCrop            = gcg;
-               this.cropMask         = gcSub.cropMask;
-               this.gCropDivRules    = gcSub.divRules;
-               
-               this.userSettings = {gCrop: [this.gCrop.visible, Math.min(this.gCrop.opacity,100)],
-                                    cropMask: [this.cropMask.visible, Math.min(this.cropMask.opacity,100)]}
-               if (this.gCropDivRules) this.userSettings.divRUles = [this.gCropDivRules.visible, Math.min(this.gCropDivRules.opacity,100)];
-               this.gCrop.opacity   = 100;
-               this.gCrop.visible = true;
+GoldenCrop.prototype.findCropToResume = function () {
+        // old version !this.conf.isRunFromAction()
+        // select last (bottom) layer to force adding new GC group (i.e. don't search for existing ones)
+        if (this.doc.activeLayer != this.doc.layers[this.doc.layers.length - 1]) {
+                // search for GC group
+                var gcg = this.findMainGCGroup();
+                if (gcg) {
+                        var gcSub = this.findCropMaskAndDivRules(gcg);
+                        if (gcSub) {
+                                // Found :) Do not create new -- use existing
+                                this.skipGridCreation = true;
+                                this.gCrop = gcg;
+                                this.cropMask = gcSub.cropMask;
+                                this.gCropDivRules = gcSub.divRules;
 
-               this.cropMask.opacity = 70;
-               this.cropMask.visible = true;
+                                this.userSettings = {
+                                        gCrop: [this.gCrop.visible, Math.min(this.gCrop.opacity, 100)],
+                                        cropMask: [this.cropMask.visible, Math.min(this.cropMask.opacity, 100)]
+                                }
+                                if (this.gCropDivRules) this.userSettings.divRUles = [this.gCropDivRules.visible, Math.min(this.gCropDivRules.opacity, 100)];
+                                this.gCrop.opacity = 100;
+                                this.gCrop.visible = true;
 
-               if ( this.gCropDivRules && this.gCropDivRules.layers.length) {
-                   this.gCropDivRules.visible = true;
-                   this.gCropDivRules.opacity = 75;
-               } else {
-                   // TODO: add bogus layer AND transform it to match active crop mask as needed
-                   // this.addBogusLayer();
-               }
-               
-               this.doc.activeLayer = this.gCrop;
-           }
-       }
-   }
+                                this.cropMask.opacity = 70;
+                                this.cropMask.visible = true;
+
+                                if (this.gCropDivRules && this.gCropDivRules.layers.length) {
+                                        this.gCropDivRules.visible = true;
+                                        this.gCropDivRules.opacity = 75;
+                                } else {
+                                        // TODO: add bogus layer AND transform it to match active crop mask as needed
+                                        // this.addBogusLayer();
+                                }
+
+                                this.doc.activeLayer = this.gCrop;
+                        }
+                }
+        }
 }
 
 GoldenCrop.prototype.showGuidelinesDialog = function () {
-    // Use generic multi option dialog creator to construct basic dialog (some controlls could be added afterwards)
-    var menuDesc = {caption:this.loc.get('chCompMethod'),
-                   question:this.loc.get('chCompMethodQ'),
-                   okTxt:this.loc.get('ok'),
-                   cancelTxt:this.loc.get('cancel'),
-                   cbElements:[{key:'1', text:this.loc.get('goldenRule'), sel: this.conf.get('golden')},
-                               {key:'2', text:this.loc.get('ruleOfThirds'), sel: this.conf.get('roth')},
-                               {key:'3', text:this.loc.get('diagonalMethod'), sel: this.conf.get('diagmethod')},
-                               {key:'4', text:this.loc.get('goldenTriangleUp'), sel: this.conf.get('gtrianup')},
-                               {key:'5', text:this.loc.get('goldenTriangleDown'), sel: this.conf.get('gtriandown')},
-                               {key:'6', text:this.loc.get('goldenSpiralBL'), sel: this.conf.get('gspiralBL')},
-                               {key:'7', text:this.loc.get('goldenSpiralTL'), sel: this.conf.get('gspiralTL')},
-                               {key:'8', text:this.loc.get('goldenSpiralTR'), sel: this.conf.get('gspiralTR')},
-                               {key:'9', text:this.loc.get('goldenSpiralBR'), sel: this.conf.get('gspiralBR')}
-                              ],
-                   msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2]},
-                               {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[5,6,7,8]},
-                               {key:'a', text:this.loc.get('selectAll'), action: 'slctAll'},
-                               {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
-                              ]
-                  };
-    var dlg = new dialogMenuMChoice(menuDesc);
-    dlg.construct(true);
-    
-    // Add custom controls to the dialog -- remember to read this values after closing the dialog box
-    dlg.customControls.orientation    = 'column';
-    dlg.customControls.alignChildren = 'fill';
-    
-    // ---> add thickness slider
-    if (true) { /* code isolation + easy on/off */
-        dlg.customControls.add('group', undefined, {name: 'thkGrp'});
-            dlg.customControls.thkGrp.orientation = 'row';
-            dlg.customControls.thkGrp.add('statictext', undefined, this.loc.get('lineThicknessProm'));
-            dlg.customControls.thkGrp.tSlider = dlg.customControls.thkGrp.add('slider', undefined, this.conf.get('lthick'), 1, 30, {name: 'tSlider'});
+        // Use generic multi option dialog creator to construct basic dialog (some controlls could be added afterwards)
+        var menuDesc = {
+                caption: this.loc.get('chCompMethod'),
+                question: this.loc.get('chCompMethodQ'),
+                okTxt: this.loc.get('ok'),
+                cancelTxt: this.loc.get('cancel'),
+                cbElements:[{key:'1', text:this.loc.get('goldenRule'), sel: this.conf.get('golden')},
+                            {key:'2', text:this.loc.get('ruleOfThirds'), sel: this.conf.get('roth')},
+                            {key:'3', text:this.loc.get('diagonalMethod'), sel: this.conf.get('diagmethod')},
+                            {key:'4', text:this.loc.get('goldenTriangleUp'), sel: this.conf.get('gtrianup')},
+                            {key:'5', text:this.loc.get('goldenTriangleDown'), sel: this.conf.get('gtriandown')},
+                            {key:'6', text:this.loc.get('goldenSpiralBL'), sel: this.conf.get('gspiralBL')},
+                            {key:'7', text:this.loc.get('goldenSpiralTL'), sel: this.conf.get('gspiralTL')},
+                            {key:'8', text:this.loc.get('goldenSpiralTR'), sel: this.conf.get('gspiralTR')},
+                            {key:'9', text:this.loc.get('goldenSpiralBR'), sel: this.conf.get('gspiralBR')}
+                            ],
+                msElements:[{key:'q', text:this.loc.get('basicRules'), elements:[0,1,2]},
+                            {key:'w', text:this.loc.get('allGoldenSpirals'), elements:[5,6,7,8]},
+                            {key:'a', text:this.loc.get('selectAll'), action: 'slctAll'},
+                            {key:'d', text:this.loc.get('deselectAll'), action: 'dslctAll'}
+                           ]
+        };
+		
+        var dlg = new dialogMenuMChoice(menuDesc);
+        dlg.construct(true);
+
+        // Add custom controls to the dialog -- remember to read this values after closing the dialog box
+        dlg.customControls.orientation = 'column';
+        dlg.customControls.alignChildren = 'fill';
+
+        // ---> add thickness slider
+        if (true) { /* code isolation + easy on/off */
+                dlg.customControls.add('group', undefined, {name: 'thkGrp'});
+                dlg.customControls.thkGrp.orientation = 'row';
+                dlg.customControls.thkGrp.add('statictext', undefined, this.loc.get('lineThicknessProm'));
+                dlg.customControls.thkGrp.tSlider = dlg.customControls.thkGrp.add('slider', undefined, this.conf.get('lthick'), 1, 30, {name: 'tSlider'});
                 dlg.customControls.thkGrp.tSlider.jumpdelta = 10;
                 dlg.customControls.thkGrp.tSlider.jump = 1;
-                dlg.customControls.thkGrp.tSlider.onChanging = function() {dlg.customControls.thkGrp.tValTxt.text = Math.round(dlg.customControls.thkGrp.tSlider.value);}
-                dlg.customControls.thkGrp.tSlider.onChange = function() {dlg.customControls.thkGrp.tSlider.value = Math.round(dlg.customControls.thkGrp.tSlider.value);}
-            dlg.customControls.thkGrp.tValTxt = dlg.customControls.thkGrp.add('statictext', undefined, {name: 'tValTxt'});
-            dlg.customControls.thkGrp.tValTxt.preferredSize = [20, -1];
-            dlg.customControls.thkGrp.tSlider.onChanging();
-    };
-
-     // ---> add custom aspect ratio
-    var quickAccessAspectRatios = [[2,3, '2/3: 4x6, 10x15, 20x30, 25x38, 30x45, 1.50, VistaVision'],
-                                                [5,7, '5/7: 5x7 (pro), 9x13, 13x18, 15x21, 18x25'],
-                                                [11,14, '11/14: 10x8, 11x14, 20x25'],
-                                                [1,1, '1/1: square middle format camera'],
-                                                ];
-    var supportedAspectRatios = [[3,4, '3/4: 30x40, videographic'],
-                                              [6,7, '6/7: 6x8 middle format camera'],
-                                              [9,16, '16/9: videographic, HD'],
-                                              [10,16, '16/10: 1.60 computer widescreen'],
-                                              [16,22, '16/22: video academy 1.37:1 aspect ratio'],
-                                              [100,143, '/: 1.43 IMAX format'],
-                                              [9,14, '9/14: 1.55... commercials format'],
-                                              [3,5, '15/9 = 5/3: Paramount Pictures ratio'],
-                                              [37,200, '1.85 US and UK widescreen theatrical, Universal Pictures'],
-                                              [1,2, '2/1: 2.00 SuperScope, Univisium, Red One' ],
-                                              [5,11, '5/11: 2.20 70 mm standard (Todd-AO)'],
-                                              [239,1000, '2.39 Bollywood']
-                                              ];
-     // scan above tables and choose proportion that falls within EPSILON from actual proportions
-     // for example image of size 746x497 has 0,666219839142:1 proportion which is very close to 2/3
-     //  | 2/3 - 0,666219839142... | = 0,00044682752... < EPSILON = 0,001
-    var currentProportions = (function (self){ 
-         var EPSILON = 0.001;
-         var doubleProportion = Math.min(self.docW, self.docH) / Math.max(self.docW, self.docH);
-         var allProp = [].concat( quickAccessAspectRatios ).concat( supportedAspectRatios );
-         for ( i in allProp ) {
-             if ( Math.abs(doubleProportion - (allProp[i][0]/allProp[i][1])) < EPSILON ) {
-                    return [allProp[i][0], allProp[i][1]];
-             }
-         }
-         return false;
-     })(this) || MathEx.reduceFraction([this.docW, this.docH]);
-     
-    
-    var radioButtonGroup = [];
-    if (true) {
-        dlg.customControls.add('panel', undefined, this.loc.get('cropMaskAspectRatio'), {name: 'arGrp'});
-        dlg.customControls.arGrp.orientation = 'column';
-        dlg.customControls.arGrp.alignChildren = 'left';
-        radioButtonGroup.push(dlg.customControls.arGrp.add('radiobutton', undefined, this.loc.get('sameAsPicture', currentProportions[0], currentProportions[1]), {name: 'arSameAsPicture'}));
-        
-        for (ar in quickAccessAspectRatios) {
-            radioButtonGroup.push(dlg.customControls.arGrp.add('radiobutton', undefined, quickAccessAspectRatios[ar][2]));
-        }
-        dlg.customControls.arGrp.otherGrp = dlg.customControls.arGrp.add('group', undefined, {name: 'otherGrp'});
-        radioButtonGroup.push(dlg.customControls.arGrp.otherGrp.add('radiobutton', undefined, 'Other', {name: 'otherARrb'}));
-        dlg.customControls.arGrp.otherGrp.arList = dlg.customControls.arGrp.otherGrp.add('dropdownlist', undefined, {name: 'arList'});
-        for (ar in supportedAspectRatios) {
-           dlg.customControls.arGrp.otherGrp.arList.add('item', supportedAspectRatios[ar][2]);
-        }
-        dlg.customControls.arGrp.otherGrp.arList.children[0].selected = true;
-    
-        dlg.customControls.arGrp.customGrp = dlg.customControls.arGrp.add('group', undefined, {name: 'customGrp'});
-        radioButtonGroup.push(dlg.customControls.arGrp.customGrp.add('radiobutton', undefined, 'Custom:', {name: 'customARrb'}));
-        dlg.customControls.arGrp.customGrp.add('edittext', undefined, '1', {name: 'customARnumerator'}).preferredSize = [40,-1];
-        dlg.customControls.arGrp.customGrp.add('statictext', undefined, '/');
-        dlg.customControls.arGrp.customGrp.add('edittext', undefined, '1', {name: 'customARdenominator'}).preferredSize = [40,-1];;
-
-        // BEGIN: Disable quick digit shortcuts while in textedit
-        dlg.customControls.arGrp.customGrp.customARnumerator.onActivate =
-        dlg.customControls.arGrp.customGrp.customARdenominator.onActivate = function() {
-            dlg.enableQuickKeyboardShortcuts = false;
-        }
-    //debugger;
-        dlg.dlg.ok.onActivate =
-        dlg.customControls.arGrp.customGrp.customARnumerator.onDeactivate =
-        dlg.customControls.arGrp.customGrp.customARdenominator.onDaactivate = function() {
-            dlg.enableQuickKeyboardShortcuts = true;
-            //alert('deact!');
-        }
-        // END: Disable quick digit shortcuts while in textedit
-         
-        // BEGIN: auto check 'other' on text changing        
-        dlg.customControls.arGrp.otherGrp.arList.onChange = function() {
-            dlg.customControls.arGrp.otherGrp.otherARrb.notify();
-        }
-        // END: auto check 'other' on text changing   
-        
-        // BEGIN: auto check 'custom' on text changing
-        dlg.customControls.arGrp.customGrp.customARnumerator.onChanging = 
-        dlg.customControls.arGrp.customGrp.customARdenominator.onChanging = function() {
-            dlg.customControls.arGrp.customGrp.customARrb.notify();
-        }
-        // END: auto check 'custom' on text changing
-        
-        // BEGIN: merge radiobuttons groups logic
-        radioButtonGroup[0].notify();
-        var maintainSingleRBCheckedHandler = function() {
-            if (!this.value) return; // event feedback safty
-            
-            for (rbIndex in radioButtonGroup) {
-                if (radioButtonGroup[rbIndex] != this) {
-                    radioButtonGroup[rbIndex].value = false; // should not fire the Click event
+                dlg.customControls.thkGrp.tSlider.onChanging = function () {
+                        dlg.customControls.thkGrp.tValTxt.text = Math.round(dlg.customControls.thkGrp.tSlider.value);
                 }
-            }
+                dlg.customControls.thkGrp.tSlider.onChange = function () {
+                        dlg.customControls.thkGrp.tSlider.value = Math.round(dlg.customControls.thkGrp.tSlider.value);
+                }
+                dlg.customControls.thkGrp.tValTxt = dlg.customControls.thkGrp.add('statictext', undefined, {name: 'tValTxt'});
+                dlg.customControls.thkGrp.tValTxt.preferredSize = [20, -1];
+                dlg.customControls.thkGrp.tSlider.onChanging();
+        };
+
+        // ---> add custom aspect ratio
+        var quickAccessAspectRatios = [[2, 3, '2/3: 4x6, 10x15, 20x30, 25x38, 30x45, 1.50, VistaVision'],
+                                       [5, 7, '5/7: 5x7 (pro), 9x13, 13x18, 15x21, 18x25'],
+                                       [11, 14, '11/14: 10x8, 11x14, 20x25'],
+                                       [1, 1, '1/1: square middle format camera'],
+                                      ];
+        var supportedAspectRatios = [[3, 4, '3/4: 30x40, videographic'],
+                                     [6, 7, '6/7: 6x8 middle format camera'],
+                                     [9, 16, '16/9: videographic, HD'],
+                                     [10, 16, '16/10: 1.60 computer widescreen'],
+                                     [16, 22, '16/22: video academy 1.37:1 aspect ratio'],
+                                     [100, 143, '/: 1.43 IMAX format'],
+                                     [9, 14, '9/14: 1.55... commercials format'],
+                                     [3, 5, '15/9 = 5/3: Paramount Pictures ratio'],
+                                     [37, 200, '1.85 US and UK widescreen theatrical, Universal Pictures'],
+                                     [1, 2, '2/1: 2.00 SuperScope, Univisium, Red One'],
+                                     [5, 11, '5/11: 2.20 70 mm standard (Todd-AO)'],
+                                     [239, 1000, '2.39 Bollywood']
+                                    ];
+        // scan above tables and choose proportion that falls within EPSILON from actual proportions
+        // for example image of size 746x497 has 0,666219839142:1 proportion which is very close to 2/3
+        //  | 2/3 - 0,666219839142... | = 0,00044682752... < EPSILON = 0,001
+        var currentProportions = (function (self) {
+                var EPSILON = 0.001;
+                var doubleProportion = Math.min(self.docW, self.docH) / Math.max(self.docW, self.docH);
+                var allProp = [].concat(quickAccessAspectRatios).concat(supportedAspectRatios);
+                for (i in allProp) {
+                        if (Math.abs(doubleProportion - (allProp[i][0] / allProp[i][1])) < EPSILON) {
+                                return [allProp[i][0], allProp[i][1]];
+                        }
+                }
+                return false;
+        })(this) || MathEx.reduceFraction([this.docW, this.docH]);
+
+
+        var radioButtonGroup = [];
+        if (true) {
+                dlg.customControls.add('panel', undefined, this.loc.get('cropMaskAspectRatio'), {name: 'arGrp'});
+                dlg.customControls.arGrp.orientation = 'column';
+                dlg.customControls.arGrp.alignChildren = 'left';
+                radioButtonGroup.push(dlg.customControls.arGrp.add('radiobutton', undefined, this.loc.get('sameAsPicture', currentProportions[0], currentProportions[1]), {
+                        name: 'arSameAsPicture'
+                }));
+
+                for (ar in quickAccessAspectRatios) {
+                        radioButtonGroup.push(dlg.customControls.arGrp.add('radiobutton', undefined, quickAccessAspectRatios[ar][2]));
+                }
+                dlg.customControls.arGrp.otherGrp = dlg.customControls.arGrp.add('group', undefined, {name: 'otherGrp'});
+                radioButtonGroup.push(dlg.customControls.arGrp.otherGrp.add('radiobutton', undefined, 'Other', {name: 'otherARrb'}));
+                dlg.customControls.arGrp.otherGrp.arList = dlg.customControls.arGrp.otherGrp.add('dropdownlist', undefined, {name: 'arList'});
+                for (ar in supportedAspectRatios) {
+                        dlg.customControls.arGrp.otherGrp.arList.add('item', supportedAspectRatios[ar][2]);
+                }
+                dlg.customControls.arGrp.otherGrp.arList.children[0].selected = true;
+
+                dlg.customControls.arGrp.customGrp = dlg.customControls.arGrp.add('group', undefined, {name: 'customGrp'});
+                radioButtonGroup.push(dlg.customControls.arGrp.customGrp.add('radiobutton', undefined, 'Custom:', {name: 'customARrb'}));
+                dlg.customControls.arGrp.customGrp.add('edittext', undefined, '1', {name: 'customARnumerator'}).preferredSize = [40, -1];
+                dlg.customControls.arGrp.customGrp.add('statictext', undefined, '/');
+                dlg.customControls.arGrp.customGrp.add('edittext', undefined, '1', {name: 'customARdenominator'}).preferredSize = [40, -1];;
+
+                // BEGIN: Disable quick digit shortcuts while in textedit
+                dlg.customControls.arGrp.customGrp.customARnumerator.onActivate = dlg.customControls.arGrp.customGrp.customARdenominator.onActivate = function () {
+                        dlg.enableQuickKeyboardShortcuts = false;
+                }
+                //debugger;
+                dlg.dlg.ok.onActivate = dlg.customControls.arGrp.customGrp.customARnumerator.onDeactivate = dlg.customControls.arGrp.customGrp.customARdenominator.onDaactivate = function () {
+                        dlg.enableQuickKeyboardShortcuts = true;
+                }
+                // END: Disable quick digit shortcuts while in textedit
+                // BEGIN: auto check 'other' on text changing        
+                dlg.customControls.arGrp.otherGrp.arList.onChange = function () {
+                        dlg.customControls.arGrp.otherGrp.otherARrb.notify();
+                }
+                // END: auto check 'other' on text changing   
+                // BEGIN: auto check 'custom' on text changing
+                dlg.customControls.arGrp.customGrp.customARnumerator.onChanging = dlg.customControls.arGrp.customGrp.customARdenominator.onChanging = function () {
+                        dlg.customControls.arGrp.customGrp.customARrb.notify();
+                }
+                // END: auto check 'custom' on text changing
+                // BEGIN: merge radiobuttons groups logic
+                radioButtonGroup[0].notify();
+                var maintainSingleRBCheckedHandler = function () {
+                                if (!this.value) return; // event feedback safty
+                                for (rbIndex in radioButtonGroup) {
+                                        if (radioButtonGroup[rbIndex] != this) {
+                                                radioButtonGroup[rbIndex].value = false; // should not fire the Click event
+                                        }
+                                }
+                    }
+                    
+                for (rbIndex in radioButtonGroup) {
+                        radioButtonGroup[rbIndex].onClick = maintainSingleRBCheckedHandler;
+                }
+                // END: merge radiobuttons groups logic
         }
-        for (rbIndex in radioButtonGroup) {
-            radioButtonGroup[rbIndex].onClick = maintainSingleRBCheckedHandler;
+
+        // Show dialog and store parameters if dialog was accepted
+        var res = dlg.show();
+        if (!res) return false;
+
+        this.conf.set('golden', res[0]);
+        this.conf.set('roth', res[1]);
+        this.conf.set('diagmethod', res[2]);
+        this.conf.set('gtrianup', res[3]);
+        this.conf.set('gtriandown', res[4]);
+        this.conf.set('gspiralBL', res[5]);
+        this.conf.set('gspiralTL', res[6]);
+        this.conf.set('gspiralTR', res[7]);
+        this.conf.set('gspiralBR', res[8]);
+
+        // Read values of custom controls
+        this.conf.set('lthick', Math.round(dlg.customControls.thkGrp.tSlider.value));
+
+        // Which aspect ratio has been selected?
+        // 0 -- current ratio
+        // 1, 2, ..., length of quickAccessAspectRatios
+        // quickAccessAspectRatios.length + 1 => other, check list
+        // quickAccessAspectRatios.length +2 => custom -- read values from user input
+        var aspectRatio = [0, 0];
+        var quickAccessAspectRatios_length = quickAccessAspectRatios.length;
+        var iAspectRatioOption = (function () {
+                for (i in radioButtonGroup) if (radioButtonGroup[i].value) return i;
+        })();
+        if (iAspectRatioOption == 0) {
+                aspectRatio = [currentProportions[0], currentProportions[1]];
+        } else if (iAspectRatioOption <= quickAccessAspectRatios_length) {
+                aspectRatio = [quickAccessAspectRatios[iAspectRatioOption - 1][0],
+                               quickAccessAspectRatios[iAspectRatioOption - 1][1]];
+        } else if (iAspectRatioOption == quickAccessAspectRatios_length + 1) {
+                var iOtherAspectRatio = dlg.customControls.arGrp.otherGrp.arList.selection.index;
+                aspectRatio = [supportedAspectRatios[iOtherAspectRatio][0],
+                               supportedAspectRatios[iOtherAspectRatio][1]];
+        } else {
+                aspectRatio = [parseInt(dlg.customControls.arGrp.customGrp.customARnumerator.text) || 1,
+                               parseInt(dlg.customControls.arGrp.customGrp.customARdenominator.text) || 1];
         }
-        // END: merge radiobuttons groups logic
-    }
-    
-    // Show dialog and store parameters if dialog was accepted
-    var res = dlg.show();
-    if (!res) return false;
-    
-    this.conf.set('golden', res[0]);
-    this.conf.set('roth', res[1]);
-    this.conf.set('diagmethod', res[2]);
-    this.conf.set('gtrianup', res[3]);
-    this.conf.set('gtriandown', res[4]);
-    this.conf.set('gspiralBL', res[5]);
-    this.conf.set('gspiralTL', res[6]);
-    this.conf.set('gspiralTR', res[7]);
-    this.conf.set('gspiralBR', res[8]);
-    
-    // Read values of custom controls
-    this.conf.set('lthick', Math.round(dlg.customControls.thkGrp.tSlider.value));
-    
-    // Which aspect ratio has been selected?
-    // 0 -- current ratio
-    // 1, 2, ..., length of quickAccessAspectRatios
-    // quickAccessAspectRatios.length + 1 => other, check list
-    // quickAccessAspectRatios.length +2 => custom -- read values from user input
-    var aspectRatio = [0,0];
-    var quickAccessAspectRatios_length = quickAccessAspectRatios.length;
-    var iAspectRatioOption = (function(){for(i in radioButtonGroup) if (radioButtonGroup[i].value) return i;})();
-    if (iAspectRatioOption == 0) {
-        aspectRatio = [currentProportions[0], currentProportions[1]];
-    } else if (iAspectRatioOption <= quickAccessAspectRatios_length ) {
-        aspectRatio = [quickAccessAspectRatios[iAspectRatioOption-1][0],
-                             quickAccessAspectRatios[iAspectRatioOption-1][1]];
-    } else if (iAspectRatioOption == quickAccessAspectRatios_length+1 ) {
-        var iOtherAspectRatio = dlg.customControls.arGrp.otherGrp.arList.selection.index;
-        aspectRatio = [supportedAspectRatios[iOtherAspectRatio][0],
-                             supportedAspectRatios[iOtherAspectRatio][1]];
-    } else {
-        aspectRatio = [parseInt(dlg.customControls.arGrp.customGrp.customARnumerator.text) || 1,
-                             parseInt(dlg.customControls.arGrp.customGrp.customARdenominator.text) || 1];
-    }
-    aspectRatio = MathEx.reduceFraction(aspectRatio);
-    
-    this.conf.set('aratioAsImage', iAspectRatioOption == 0);
-    this.conf.set('aratioNumerator', aspectRatio[0]); // TODO: Check if config values could be asigned arrays [x, y]
-    this.conf.set('aratioDenominator', aspectRatio[1]); // and stored as appropriate ActionDescriptor
-    
-    alert(aspectRatio);
-    // Save parameters; crop could be canceled, but the line remains, so save lines settings now
-    this.conf.saveSettings();
-    return true;
+        aspectRatio = MathEx.reduceFraction(aspectRatio);
+
+        this.conf.set('aratioAsImage', iAspectRatioOption == 0);
+        this.conf.set('aratioNumerator', aspectRatio[0]); // TODO: Check if config values could be asigned arrays [x, y]
+        this.conf.set('aratioDenominator', aspectRatio[1]); // and stored as appropriate ActionDescriptor
+
+        // Save parameters; crop could be canceled, but the line remains, so save lines settings now
+        this.conf.saveSettings();
+        return true;
 }
 
-GoldenCrop.prototype.isImageHorizontal = function() {
-    /* Square is also considered horizontal */
-    return this.docW>=this.docH;
+GoldenCrop.prototype.isImageHorizontal = function () {
+        /* Square is also considered horizontal */
+        return this.docW >= this.docH;
 }
 
 /*    
  * Logical heart of the script. Invoke each phase of script w/ or w/o suspending history.
  */
-GoldenCrop.prototype.go = function() {
-   var docW = this.docW = this.cropMaskW = parseInt(this.doc.width.as("px"));
-   var docH = this.docH = this.cropMaskH = parseInt(this.doc.height.as("px"));
+GoldenCrop.prototype.go = function () {
+        var docW = this.docW = this.cropMaskW = parseInt(this.doc.width.as("px"));
+        var docH = this.docH = this.cropMaskH = parseInt(this.doc.height.as("px"));
 
-    // New action mechanizm
-    // !== false   - indicates some method
-    // x !== y <=> !(x === y) -- only the second form gives right value in CS2 and (CS3, CS4)
-    // false       - indicates no action
-    this.cropAccepted  = false;
-    this.cropMethod    = false;
-    this.revealMethod  = false;
-    this.popBackground = false;
-    this.rotateCanvasA = false;
-    this.goIntoInteractiveMode = true;
-    // ---!!!
-
-   this.findCropToResume();
-   if (!this.skipGridCreation) {
-       if (this.conf.isDisplayNormalDialog()) {
-           if(!this.showGuidelinesDialog()) {
-               return false;
-           }
-        }
-
-        // BEGIN: custom crop mask aspect ratio
-        if ( !this.conf.get('aratioAsImage') ) { // if "image proportions" is checked -- do nothing
-            var ar = this.conf.get('aratioNumerator')/this.conf.get('aratioDenominator');
-            var newH, newW;
-            if(this.isImageHorizontal()) {
-                newH = ar*docW;
-                newW = docW;
-                if (newH > docH) {
-                    newW *= (docH/newH);
-                    newH = docH;
+        // New action mechanizm
+        // !== false   - indicates some method
+        // x !== y <=> !(x === y) -- only the second form gives right value in CS2 and (CS3, CS4)
+        // false       - indicates no action
+        this.cropAccepted = false;
+        this.cropMethod = false;
+        this.revealMethod = false;
+        this.popBackground = false;
+        this.rotateCanvasA = false;
+        this.goIntoInteractiveMode = true;
+        // ---!!!
+        this.findCropToResume();
+        if (!this.skipGridCreation) {
+                if (this.conf.isDisplayNormalDialog()) {
+                        if (!this.showGuidelinesDialog()) {
+                                return false;
+                        }
                 }
-                this.cropMaskW = newW;
-                this.cropMaskH = newH;
-            } else {
-                var newW = ar*docH;
-                var newH = docH;
-                if (newW > docW) {
-                    newH *= (docW/newW);
-                    newW = docW;
+
+                // BEGIN: custom crop mask aspect ratio
+                if (!this.conf.get('aratioAsImage')) { // if "image proportions" is checked -- do nothing
+                        var ar = this.conf.get('aratioNumerator') / this.conf.get('aratioDenominator');
+                        var newH, newW;
+                        if (this.isImageHorizontal()) {
+                                newH = ar * docW;
+                                newW = docW;
+                                if (newH > docH) {
+                                        newW *= (docH / newH);
+                                        newH = docH;
+                                }
+                                this.cropMaskW = newW;
+                                this.cropMaskH = newH;
+                        } else {
+                                var newW = ar * docH;
+                                var newH = docH;
+                                if (newW > docW) {
+                                        newH *= (docW / newW);
+                                        newW = docW;
+                                }
+                        }
+                        this.cropMaskW = newW;
+                        this.cropMaskH = newH;
                 }
-            }
-            this.cropMaskW = newW;
-            this.cropMaskH = newH;
-        }
-        // END: custom crop mask aspect ratio
-        
-        // TODO: When continuing this could be not consistent with actual state!
-        // ^[\t ]+([^:]+)(...........) / this.guidelines.\1.create =
-        this.guidelines.golden.create = this.conf.get('golden'); // history relict, to be integrated with config and dialog
-        this.guidelines.roth.create = this.conf.get('roth');
-        this.guidelines.diagmethod.create = this.conf.get('diagmethod');
-        this.guidelines.gtrianup.create = this.conf.get('gtrianup');
-        this.guidelines.gtriandown.create = this.conf.get('gtriandown');
-        this.guidelines.gspiralBL.create = this.conf.get('gspiralBL');
-        this.guidelines.gspiralTL.create = this.conf.get('gspiralTL');
-        this.guidelines.gspiralTR.create = this.conf.get('gspiralTR');
-        this.guidelines.gspiralBR.create = this.conf.get('gspiralBR');
+                // END: custom crop mask aspect ratio
+
+                // TODO: When continuing this could be not consistent with actual state!
+                // ^[\t ]+([^:]+)(...........) / this.guidelines.\1.create =
+                this.guidelines.golden.create = this.conf.get('golden'); // history relict, to be integrated with config and dialog
+                this.guidelines.roth.create = this.conf.get('roth');
+                this.guidelines.diagmethod.create = this.conf.get('diagmethod');
+                this.guidelines.gtrianup.create = this.conf.get('gtrianup');
+                this.guidelines.gtriandown.create = this.conf.get('gtriandown');
+                this.guidelines.gspiralBL.create = this.conf.get('gspiralBL');
+                this.guidelines.gspiralTL.create = this.conf.get('gspiralTL');
+                this.guidelines.gspiralTR.create = this.conf.get('gspiralTR');
+                this.guidelines.gspiralBR.create = this.conf.get('gspiralBR');
 
 
-        if ( this.ifSuspendHistory ) {
-            this.doc.suspendHistory(szAppName + this.loc.get('-grid'), 'this.makeGrid()');
-            Stdlib.NOP();
+                if (this.ifSuspendHistory) {
+                        this.doc.suspendHistory(szAppName + this.loc.get('-grid'), 'this.makeGrid()');
+                        Stdlib.NOP();
+                } else {
+                        this.makeGrid();
+                }
         } else {
-            this.makeGrid();
+                // Test for having 'Ctrl'+'Shift' keys pressed - it YES, do simple crop
+                if (ScriptUI.environment.keyboardState.shiftKey && ScriptUI.environment.keyboardState.ctrlKey) {
+                        this.cropMethod = 'SIMPLE';
+                        this.revealMethod = 'EXTCANVAS';
+                        this.goIntoInteractiveMode = false;
+                }
         }
-    } else {
-        // Test for having 'Ctrl'+'Shift' keys pressed - it YES, do simple crop
-        if (ScriptUI.environment.keyboardState.shiftKey &&
-            ScriptUI.environment.keyboardState.ctrlKey) {
-            this.cropMethod = 'SIMPLE';
-            this.revealMethod = 'EXTCANVAS';
-            this.goIntoInteractiveMode = false;
-        }
-    }
 
-    var cropFunctions  = {SIMPLE:'simpleCrop()', MASK:'maskOutCrop()'};
-    var revealVuncions = {EXTCANVAS:'doRevealPopBackround()'};
+        var cropFunctions = {
+                SIMPLE: 'simpleCrop()',
+                MASK: 'maskOutCrop()'
+        };
+        var revealVuncions = {
+                EXTCANVAS: 'doRevealPopBackround()'
+        };
 
-    if ( this.ifSuspendHistory ) {
-        this.doc.suspendHistory(szAppName + this.loc.get('-resize'), 'this.interactiveCrop()');
-        Stdlib.NOP();
-    } else {
-        this.interactiveCrop();
-    }
-
-    // TODO: Remove bogusLayer if it could be created AND transformed if needed ('resume crop' function)
-    // if (this.bogusLayer) this.bogusLayer.remove();
-    
-    // $.writeln( '==========' );
-    // $.writeln( 'cropAccepted: ' + this.cropAccepted );
-    // $.writeln( 'cropMethod: ' + this.cropMethod );
-    // $.writeln( 'revealMethod: ' + this.revealMethod );
-    // $.writeln( 'popBackground: ' + this.popBackground );
-    // $.writeln( 'rotateCanvasA: ' + this.rotateCanvasA );
-    
-    if ( this.cropAccepted ) {
-        
-        if ( !(this.rotateCanvasA === false) ) {
-            if ( this.ifSuspendHistory ) {
-                this.doc.suspendHistory(szAppName + this.loc.get('-rotate'), 'this.doRotateCanvas()');
+        if (this.ifSuspendHistory) {
+                this.doc.suspendHistory(szAppName + this.loc.get('-resize'), 'this.interactiveCrop()');
                 Stdlib.NOP();
-            } else {
-                this.doRotateCanvas();
-            }
+        } else {
+                this.interactiveCrop();
         }
 
-        if ( this.revealMethod ) {
-            var revealingFunction = revealVuncions[this.revealMethod];
-            if ( this.ifSuspendHistory ) {
-                this.doc.suspendHistory(szAppName + this.loc.get('-reveal'), 'this.'+revealingFunction);
-                Stdlib.NOP();
-            } else {
-                eval('this.'+revealingFunction);
-            }
-        }
-        this.doc.activeLayer = this.gCrop;
-        if ( this.cropMethod ) {
-            var cropFunction = cropFunctions[this.cropMethod];
-            if ( this.ifSuspendHistory ) {
-                this.doc.suspendHistory(szAppName + this.loc.get('-crop'), 'this.'+cropFunction);
-                Stdlib.NOP();
-            } else {
-                eval('this.'+cropFunction);
-            }
-        }
-        // save parameters once again (for shure)
-        this.conf.saveSettings();
-    } else {
-        // remove resize entry from history -- it does nothing
-        executeAction( cTID( "undo" ), undefined, DialogModes.NO );
-        // restore user-tuned parameters
-        if (this.skipGridCreation) {
-            this.restoreUserGCGroupSettings();
-        }
-        this.doc.activeLayer = this.gCrop;
-    }
+        // TODO: Remove bogusLayer if it could be created AND transformed if needed ('resume crop' function)
+        // if (this.bogusLayer) this.bogusLayer.remove();
+        // $.writeln( '==========' );
+        // $.writeln( 'cropAccepted: ' + this.cropAccepted );
+        // $.writeln( 'cropMethod: ' + this.cropMethod );
+        // $.writeln( 'revealMethod: ' + this.revealMethod );
+        // $.writeln( 'popBackground: ' + this.popBackground );
+        // $.writeln( 'rotateCanvasA: ' + this.rotateCanvasA );
+        if (this.cropAccepted) {
 
-    // TODO: is there a need to restore user parameters everytime? I think No (or only when [2] Crop mask was selected)
-    //       it is neccesary only if the user canceled 'free transform' mode
-    // this.restoreUserGCGroupSettings();
+                if (!(this.rotateCanvasA === false)) {
+                        if (this.ifSuspendHistory) {
+                                this.doc.suspendHistory(szAppName + this.loc.get('-rotate'), 'this.doRotateCanvas()');
+                                Stdlib.NOP();
+                        } else {
+                                this.doRotateCanvas();
+                        }
+                }
+
+                if (this.revealMethod) {
+                        var revealingFunction = revealVuncions[this.revealMethod];
+                        if (this.ifSuspendHistory) {
+                                this.doc.suspendHistory(szAppName + this.loc.get('-reveal'), 'this.' + revealingFunction);
+                                Stdlib.NOP();
+                        } else {
+                                eval('this.' + revealingFunction);
+                        }
+                }
+                this.doc.activeLayer = this.gCrop;
+                if (this.cropMethod) {
+                        var cropFunction = cropFunctions[this.cropMethod];
+                        if (this.ifSuspendHistory) {
+                                this.doc.suspendHistory(szAppName + this.loc.get('-crop'), 'this.' + cropFunction);
+                                Stdlib.NOP();
+                        } else {
+                                eval('this.' + cropFunction);
+                        }
+                }
+                // save parameters once again (for shure)
+                this.conf.saveSettings();
+        } else {
+                // remove resize entry from history -- it does nothing
+                executeAction(cTID("undo"), undefined, DialogModes.NO);
+                // restore user-tuned parameters
+                if (this.skipGridCreation) {
+                        this.restoreUserGCGroupSettings();
+                }
+                this.doc.activeLayer = this.gCrop;
+        }
+
+        // TODO: is there a need to restore user parameters everytime? I think No (or only when [2] Crop mask was selected)
+        //       it is neccesary only if the user canceled 'free transform' mode
+        // this.restoreUserGCGroupSettings();
 }
 
 function main() {
-    var gc = new GoldenCrop( app.activeDocument );
-    // TODO: below
-    gc.loadConfig('here comes some fancy config');
-    gc.go();
+        var gc = new GoldenCrop(app.activeDocument);
+        // TODO: below
+        gc.loadConfig('here comes some fancy config');
+        gc.go();
 }
 
 // ---------------------------------------------------------------------
 function MathEx() {};
 
-MathEx.GCD = function(a, b) {
-    /* Computes and returns GCD(a, b). a, b has to be integers! */
-    var checkInteger = function( num ) {
-            if (num == parseInt(num)) return Math.abs(num);
-            throw new TypeError( num + "is not an Integer! Can't calculate GCD.");
-    };
-    a=checkInteger(a);
-    b=checkInteger(b);
-    
-    while (b != 0) {
-        var tmp = a;
-        a = b;
-        b = tmp%a;
-    }
-    return a;
+MathEx.GCD = function (a, b) {
+        /* Computes and returns GCD(a, b). a, b has to be integers! */
+        var checkInteger = function (num) {
+                if (num == parseInt(num)) return Math.abs(num);
+                throw new TypeError(num + "is not an Integer! Can't calculate GCD.");
+        };
+        a = checkInteger(a);
+        b = checkInteger(b);
+
+        while (b != 0) {
+                var tmp = a;
+                a = b;
+                b = tmp % a;
+        }
+        return a;
 }
 
-MathEx.reduceFraction = function(a) {
-    /* Reduces a fraction of form a=[num, denom]. Returns [num, denom].*/
-    var gcd = MathEx.GCD(a[0], a[1]);
-    return [a[0]/gcd, a[1]/gcd];
+MathEx.reduceFraction = function (a) {
+        /* Reduces a fraction of form a=[num, denom]. Returns [num, denom].*/
+        var gcd = MathEx.GCD(a[0], a[1]);
+        return [a[0] / gcd, a[1] / gcd];
 }
 // ---------------------------------------------------------------------
 // Between ===START: stdlib.js=== and ===END: stdlib.js===, there is my
@@ -2882,31 +2906,31 @@ Stdlib.selectRect = function(t,l,b,r) {
 }
 // ===END: stdlib.js====================================================================================================================
 
-Object.prototype.clone = function() {
-  var newObj = (this instanceof Array) ? [] : {};
-  for (var i in this) {
-    //if(!this.hasOwnProperty(i)) continue;
-    if (this[i] && typeof this[i] == "object") {
-      newObj[i] = this[i].clone();
-    } else newObj[i] = this[i]
-  } return newObj;
-};
+Object.prototype.clone = function () {
+        var newObj = (this instanceof Array) ? [] : {};
+        for (var i in this) {
+                //if(!this.hasOwnProperty(i)) continue;
+                if (this[i] && typeof this[i] == "object") {
+                        newObj[i] = this[i].clone();
+                } else newObj[i] = this[i]
+        }
+        return newObj;
+}
 // ====================================================================================================================================
 
 app.bringToFront();
 try {
-   if ( app.documents.length == 0 )
-   {
-      var loc = localizator.getInstance();
-      throw new Error( loc.get('openB4Run') );
-   }
-   var oldRulerUnit = app.preferences.rulerUnits; // Save ruler unit
-   app.preferences.rulerUnits = Units.PIXELS;     // Set it to PIXEL
-   main();
-} catch ( e ) {
-   alert( e.message );
+        if (app.documents.length == 0) {
+                var loc = localizator.getInstance();
+                throw new Error(loc.get('openB4Run'));
+        }
+        var oldRulerUnit = app.preferences.rulerUnits; // Save ruler unit
+        app.preferences.rulerUnits = Units.PIXELS; // Set it to PIXEL
+        main();
+} catch (e) {
+        alert(e.message);
 } finally {
-   app.preferences.rulerUnits = oldRulerUnit; // Restore ruler unit
+        app.preferences.rulerUnits = oldRulerUnit; // Restore ruler unit
 }
 
 'Golden Crop by SzopeN';
