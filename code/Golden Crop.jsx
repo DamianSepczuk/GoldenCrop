@@ -175,6 +175,12 @@ localizator.prototype.initStrings = function() {
     str['basicRules'] = {en:'Basic rules', pl:'Podstawowe podziały', de:'Grundregeln', es:'Reglas Básicas', ru:'Основные правила', it:'Regole fondamentali'};
     str['lineThickness'] = {en:'Line thickness', pl:'Grubość linii', de:'Liniendicke', es:'Grosor de línea', ru:'Толщина линий', it:'Grossezza guida'};
     str['lineThicknessProm'] = {en:'Line thickness (‰ of shorter edge): ', pl:'Grubość linii (‰ krótszego boku)', de:'Liniendicke (‰ kurze Seite)', es:'Grosor de línea (‰ del borde más corto)', ru:'Толщина линий (‰ меньшей стороны): ', it:'Grossezza guida (‰ di taglio più corto): '};
+    str['cropMaskAspectRatio'] = {en:'Crop mask aspect ratio', pl: 'Proporcje maski kadrowania'};
+    str['sameAsPicture'] = {en:'As image (%1/%2)', pl: 'Jak obrazka (%1/%2)'};
+    str['arSameAsImage'] = {en:'Aspect Ratio as image', pl: 'Proporcje jak ma obrazek'};
+    str['arNumerator'] = {en:'Aspect Ratio: numerator', pl: 'Proporcje: licznik'};
+    str['arDenominator'] = {en:'Aspect Ratio: denominator', pl: 'Proporcje: mianownik'};
+    //str[''] = {en:'', pl: ''};
 }
 
 // Returns translations in CVS format
@@ -430,6 +436,7 @@ dialogMenu.prototype.show = function () {
 
 function dialogMenuMChoice( menuDesc ) {
     this.desc = menuDesc;
+    this.enableQuickKeyboardShortcuts = true;
 }
 
 dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
@@ -525,16 +532,19 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
        }
        if (hasCustomControl) {
            this.customControls = add('group', undefined, undefined, {name: 'customControls'});
+           this.customControls.alignment = 'fill';
        }
        var okBtn = add('button', undefined, this.desc.okTxt, {name: 'ok'});
        var cancelBtn = add('button', undefined, this.desc.cancelTxt, {name: 'cancel'});
        dlg.defaultElement = okBtn;
        dlg.cancelElement = cancelBtn;
        var allElements = cbElements.concat(msElements);
-       
+       var self = this;
        if ( isCS5() ) {
-           okBtn.active = true; // def element isn't ficused in CS5
+           okBtn.active = true; // def element isn't focused in CS5
            var f = function (e) {
+               if (!self.enableQuickKeyboardShortcuts) return;
+               
                for ( var i = 0; i<allElements.length; ++i )
                {
                    if ( e.keyName == allElements[i].key.toUpperCase() ) {
@@ -547,6 +557,7 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
            dlg.addEventListener('keydown', f, false); // Documentation doesn't mention that Window object implement keydown event. But it works, more or less... :)
        } else if ( isCS4() ) {
            addEventListener('keydown', function (e) {
+               if (!self.enableQuickKeyboardShortcuts) return;
                // Next funny thing about PS CS4
                // When user press 'Alt' to activate accelerators, no notify events are send despite calling notify() function
                // Most curious doing nothing (NOP) helps
@@ -580,7 +591,7 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
                     }
                 }
                 edShcut.text = 'Press a key';
-                edShcut.active = false; // on CS3 makes the event to occur one again, with
+                edShcut.active = false; // on CS3 makes the event to occur once again, with
 
                 if (isCS2() || !found) {
                     edShcut.active = true;  // edShcut.text == the single char last enetered (!)
@@ -869,9 +880,6 @@ function GoldenCrop( _doc ) {
     Stdlib.saveDoc = false;
 };
 
-/*
- * Basic configuration. In further versions it ill be user-interactive and action-recordable.
- */
 GoldenCrop.prototype.loadConfig = function() {
     var paramsID = {golden:{value:true, desc:'goldenRule'},
                     roth:{value:true, desc:'ruleOfThirds'},
@@ -882,7 +890,10 @@ GoldenCrop.prototype.loadConfig = function() {
                     gspiralTL:{value:false, desc:'goldenSpiralTL'},
                     gspiralTR:{value:false, desc:'goldenSpiralTR'},
                     gspiralBR:{value:false, desc:'goldenSpiralBR'},
-                    lthick:{value:5, desc:'lineThickness'}
+                    lthick:{value:5, desc:'lineThickness'},
+                    aratioAsImage: {value: true, desc:'arSameAsImage'},
+                    aratioNumerator: {value: 0, desc:'arNumerator'},
+                    aratioDenominator: {value: 0, desc:'arDenominator'}
                     /*{value:'', desc:''},*/
                     };
     this.conf = new configurator(paramsID, UUID);
@@ -899,7 +910,7 @@ GoldenCrop.prototype.loadConfig = function() {
                     gspiralBR: {create: this.conf.get('gspiralBR')}};
                     
     this.ifApplyFX = true;
-    this.ifSuspendHistory = true && isSC3plus();
+    this.ifSuspendHistory = isSC3plus();
     this.loc = localizator.getInstance();
     this.conf.setMessage(this.loc.get('GCbySzN'));
 }
@@ -928,21 +939,21 @@ GoldenCrop.prototype.loadConfig = function() {
  */
 GoldenCrop.prototype.makeStrips = function( position, stripSizePrc, color ) {
     const oneMinusPosition = 1 - position;
-    const docWidth  = this.docW,
-          docHeight = this.docH;
-    const stripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);
+    const cropMaskWidth  = this.cropMaskW,
+             cropMaskHeight = this.cropMaskH;
+    const stripSize = Math.max(1,Math.min(cropMaskWidth, cropMaskHeight) * stripSizePrc);
     var paths = [];
     // add horizontal strips
-    var tmp = docHeight*position;
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,docWidth,tmp,stripSize)));
-    tmp = docHeight*oneMinusPosition;
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,docWidth,tmp,stripSize)));
+    var tmp = cropMaskHeight*position;
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,cropMaskWidth,tmp,stripSize)));
+    tmp = cropMaskHeight*oneMinusPosition;
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(0,tmp,cropMaskWidth,tmp,stripSize)));
 
     // add vertical strips
-    tmp = docWidth*position;
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,docHeight,stripSize)));
-    tmp = docWidth*oneMinusPosition;
-    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,docHeight,stripSize)));
+    tmp = cropMaskWidth*position;
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,cropMaskHeight,stripSize)));
+    tmp = cropMaskWidth*oneMinusPosition;
+    paths.push(Stdlib.createSubPath(Stdlib.linePathAPI(tmp,0,tmp,cropMaskHeight,stripSize)));
     var GSPath = this.doc.pathItems.add('', paths);    
     var StripLayer = Stdlib.createSolidFillLayer(undefined, color, this.loc.get('stripAtPrc', Math.round(position*100)) );    
     GSPath.remove();
@@ -972,8 +983,8 @@ GoldenCrop.prototype.makeStrips = function( position, stripSizePrc, color ) {
  * thick, even if computed thickness is lower than 1px.
  */
 GoldenCrop.prototype.makeGoldenTriangle = function( direction, stripSize, color ) {
-    const docWidth  = this.docW,
-          docHeight = this.docH;
+    const docWidth  = this.cropMaskW,
+             docHeight = this.cropMaskH;
     const stripSizePx = Math.max(1,Math.min(docWidth, docHeight) * stripSize);
 
     var w = docWidth,
@@ -1019,8 +1030,8 @@ GoldenCrop.prototype.makeGoldenTriangle = function( direction, stripSize, color 
 
 GoldenCrop.prototype.makeDiagonalMethod = function( stripSizePrc, color ) {
     var paths = [];
-    const docWidth  = this.docW,
-          docHeight = this.docH;
+    const docWidth  = this.cropMaskW,
+          docHeight = this.cropMaskH;
     const stripSizePx = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);;
     var minWH = Math.min(docWidth,docHeight);
 
@@ -1041,8 +1052,8 @@ GoldenCrop.prototype.makeDiagonalMethod = function( stripSizePrc, color ) {
 
 GoldenCrop.prototype.createGoldenSpiralPath = function(numOfTurns, offset, w, h, startX, startY) {
     // Default values
-    if (!w) w = this.docW;
-    if (!h) h = this.docH;
+    if (!w) w = this.cropMaskW;
+    if (!h) h = this.cropMaskH;
     if (!startX) startX = 0;
     if (!startY) startY = h;
     if (!offset) offset = 0;
@@ -1115,8 +1126,8 @@ GoldenCrop.prototype.createGoldenSpiralPath = function(numOfTurns, offset, w, h,
 }
 
 GoldenCrop.prototype.makeGoldenSpiral = function( orientation, stripSizePrc, color ) {
-    const docWidth  = this.docW,
-          docHeight = this.docH;
+    const docWidth  = this.cropMaskW,
+          docHeight = this.cropMaskH;
     const stripSize = Math.max(1,Math.min(docWidth, docHeight) * stripSizePrc);
     
     var offsetPath = this.createGoldenSpiralPath(false, stripSize);
@@ -1175,22 +1186,6 @@ var id11 = cTID( "setd" );
                 desc34.putDouble( cTID( "Bl  " ), 255.000000 );
             desc33.putObject( cTID( "Clr " ), cTID( "RGBC" ), desc34 );
         desc6.putObject( idFrFX, cTID( "FrFX" ), desc33 );
-    /*
-        var id21 = cTID( "DrSh" );
-            var desc7 = new ActionDescriptor();
-            desc7.putBoolean( cTID( "enab" ), true );
-            desc7.putEnumerated( cTID( "Md  " ), cTID( "BlnM" ), cTID( "Scrn" ) );
-            var id26 = cTID( "Clr " );
-                var desc8 = new ActionDescriptor();
-                desc8.putDouble( cTID( "Rd  " ), 255 );
-                desc8.putDouble( cTID( "Grn " ), 255 );
-                desc8.putDouble( cTID( "Bl  " ), 255 );
-            desc7.putObject( id26, cTID( "RGBC" ), desc8 );
-            desc7.putBoolean( cTID( "uglg" ), false );
-            desc7.putUnitDouble( cTID( "Dstn" ), cTID( "#Pxl" ), 0 );
-            desc7.putUnitDouble( cTID( "Ckmt" ), cTID( "#Pxl" ), 0 );
-            desc7.putUnitDouble( cTID( "blur" ), cTID( "#Pxl" ), 3 );
-        desc6.putObject( id21, cTID( "DrSh" ), desc7 );*/
     desc5.putObject( id18, cTID( "Lefx" ), desc6 );
 executeAction( id11, desc5, DialogModes.NO );
 }
@@ -1249,7 +1244,7 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
     this.cropMask = Stdlib.createSolidFillLayer(undefined, colors[0], this.loc.get('cropMask'), maskOpacity);
     Stdlib.removeLayerMask();
     Stdlib.addVectorMask(true);
-    Stdlib.rectPath( ShapeOperation.SHAPESUBTRACT, Units.PERCENT, 0,0,100,100);
+    Stdlib.rectPath(ShapeOperation.SHAPESUBTRACT, Units.PIXELS, 0, 0, this.cropMaskH, this.cropMaskW);
     
     // Add dividing rules
     var anyGuidelines = false;
@@ -1355,6 +1350,7 @@ GoldenCrop.prototype.maskOutCrop = function() {
         this.doc.activeLayer = this.gCropDivRules;
         this.doc.activeLayer.visible = false
     }
+    this.doc.activeLayer = this.gCrop;
 }
 
 /*
@@ -1459,34 +1455,29 @@ GoldenCrop.prototype.doRotateCanvas = function() {
  * Revealing methods are member functions of GoldenCrop object instance.
  */
 GoldenCrop.prototype.chooseRevealAction = function() {
-    var cb = this.cropBounds;
-    var docW = this.docW,
-        docH = this.docW;
-          
+    // choose whether extend canvas before cropping
+    var menuDesc = {caption:this.loc.get('canvExtDet'), //Canvas extension detected.
+        question:this.loc.get('canvExtDetQ'), //What to do with canvas?
+        elements:[{key:'A', text:this.loc.get('extendCanvas'), def:true}, // Extend canvas
+                  {key:'Z', text:this.loc.get('dontExtCanv')}, // Crop without extension
+                  {key:'Esc', text:this.loc.get('retToCropping')} // Return to cropping
+                 ]
+       };
 
-        // choose whether extend canvas before cropping
-        var menuDesc = {caption:this.loc.get('canvExtDet'), //Canvas extension detected.
-            question:this.loc.get('canvExtDetQ'), //What to do with canvas?
-            elements:[{key:'A', text:this.loc.get('extendCanvas'), def:true}, // Extend canvas
-                      {key:'Z', text:this.loc.get('dontExtCanv')}, // Crop without extension
-                      {key:'Esc', text:this.loc.get('retToCropping')} // Return to cropping
-                     ]
-           };
-
-        var dlg = new dialogMenu(menuDesc);
-        var result = dlg.show();
-        switch ( result ) {
-            case 0:
-                return('EXTCANVAS')
-                break;
-            case 1:
-                return false; // Don't ctop
-                break;
-            case false:
-            default:
-                return 0; // Return to cropping
-                break;
-        }
+    var dlg = new dialogMenu(menuDesc);
+    var result = dlg.show();
+    switch (result) {
+        case 0:
+            return('EXTCANVAS')
+            break;
+        case 1:
+            return false; // Don't ctop
+            break;
+        case false:
+        default:
+            return 0; // Return to cropping
+            break;
+    }
 }
 
 GoldenCrop.prototype.findMainGCGroup = function () {
@@ -1675,6 +1666,7 @@ GoldenCrop.prototype.findCropToResume = function() {
 }
 
 GoldenCrop.prototype.showGuidelinesDialog = function () {
+    // Use generic multi option dialog creator to construct basic dialog (some controlls could be added afterwards)
     var menuDesc = {caption:this.loc.get('chCompMethod'),
                    question:this.loc.get('chCompMethodQ'),
                    okTxt:this.loc.get('ok'),
@@ -1697,20 +1689,133 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
                   };
     var dlg = new dialogMenuMChoice(menuDesc);
     dlg.construct(true);
-    // Add thickness slider
-    dlg.customControls.orientation = 'row';
+    
+    // Add custom controls to the dialog -- remember to read this values after closing the dialog box
+    dlg.customControls.orientation    = 'column';
     dlg.customControls.alignChildren = 'fill';
-    dlg.customControls.add('statictext', undefined, this.loc.get('lineThicknessProm'));
-    dlg.customControls.tSlider = dlg.customControls.add('slider', undefined, this.conf.get('lthick'), 1, 30, {name: 'thickness'});
-    dlg.customControls.tSlider.jumpdelta = 10;
-    dlg.customControls.tSlider.jump = 1;
-    dlg.customControls.tSlider.onChanging = function() {dlg.customControls.tValTxt.text = Math.round(dlg.customControls.tSlider.value);}
-    dlg.customControls.tSlider.onChange = function() {dlg.customControls.tSlider.value = Math.round(dlg.customControls.tSlider.value);}
-    dlg.customControls.tValTxt = dlg.customControls.add('statictext', undefined);
-    dlg.customControls.tValTxt.preferredSize = [20, -1];
-    dlg.customControls.tSlider.onChanging();
+    
+    // ---> add thickness slider
+    if (true) { /* code isolation + easy on/off */
+        dlg.customControls.add('group', undefined, {name: 'thkGrp'});
+            dlg.customControls.thkGrp.orientation = 'row';
+            dlg.customControls.thkGrp.add('statictext', undefined, this.loc.get('lineThicknessProm'));
+            dlg.customControls.thkGrp.tSlider = dlg.customControls.thkGrp.add('slider', undefined, this.conf.get('lthick'), 1, 30, {name: 'tSlider'});
+                dlg.customControls.thkGrp.tSlider.jumpdelta = 10;
+                dlg.customControls.thkGrp.tSlider.jump = 1;
+                dlg.customControls.thkGrp.tSlider.onChanging = function() {dlg.customControls.thkGrp.tValTxt.text = Math.round(dlg.customControls.thkGrp.tSlider.value);}
+                dlg.customControls.thkGrp.tSlider.onChange = function() {dlg.customControls.thkGrp.tSlider.value = Math.round(dlg.customControls.thkGrp.tSlider.value);}
+            dlg.customControls.thkGrp.tValTxt = dlg.customControls.thkGrp.add('statictext', undefined, {name: 'tValTxt'});
+            dlg.customControls.thkGrp.tValTxt.preferredSize = [20, -1];
+            dlg.customControls.thkGrp.tSlider.onChanging();
+    };
+
+     // ---> add custom aspect ratio
+    var quickAccessAspectRatios = [[2,3, '2/3: 4x6, 10x15, 20x30, 25x38, 30x45, 1.50, VistaVision'],
+                                                [5,7, '5/7: 5x7 (pro), 9x13, 13x18, 15x21, 18x25'],
+                                                [11,14, '11/14: 10x8, 11x14, 20x25'],
+                                                [1,1, '1/1: square middle format camera'],
+                                                ];
+    var supportedAspectRatios = [[3,4, '3/4: 30x40, videographic'],
+                                              [6,7, '6/7: 6x8 middle format camera'],
+                                              [9,16, '16/9: videographic, HD'],
+                                              [10,16, '16/10: 1.60 computer widescreen'],
+                                              [16,22, '16/22: video academy 1.37:1 aspect ratio'],
+                                              [100,143, '/: 1.43 IMAX format'],
+                                              [9,14, '9/14: 1.55... commercials format'],
+                                              [3,5, '15/9 = 5/3: Paramount Pictures ratio'],
+                                              [37,200, '1.85 US and UK widescreen theatrical, Universal Pictures'],
+                                              [1,2, '2/1: 2.00 SuperScope, Univisium, Red One' ],
+                                              [5,11, '5/11: 2.20 70 mm standard (Todd-AO)'],
+                                              [239,1000, '2.39 Bollywood']
+                                              ];
+     // scan above tables and choose proportion that falls within EPSILON from actual proportions
+     // for example image of size 746x497 has 0,666219839142:1 proportion which is very close to 2/3
+     //  | 2/3 - 0,666219839142... | = 0,00044682752... < EPSILON = 0,001
+    var currentProportions = (function (self){ 
+         var EPSILON = 0.001;
+         var doubleProportion = Math.min(self.docW, self.docH) / Math.max(self.docW, self.docH);
+         var allProp = [].concat( quickAccessAspectRatios ).concat( supportedAspectRatios );
+         for ( i in allProp ) {
+             if ( Math.abs(doubleProportion - (allProp[i][0]/allProp[i][1])) < EPSILON ) {
+                    return [allProp[i][0], allProp[i][1]];
+             }
+         }
+         return false;
+     })(this) || MathEx.reduceFraction([this.docW, this.docH]);
+     
+    
+    var radioButtonGroup = [];
+    if (true) {
+        dlg.customControls.add('panel', undefined, this.loc.get('cropMaskAspectRatio'), {name: 'arGrp'});
+        dlg.customControls.arGrp.orientation = 'column';
+        dlg.customControls.arGrp.alignChildren = 'left';
+        radioButtonGroup.push(dlg.customControls.arGrp.add('radiobutton', undefined, this.loc.get('sameAsPicture', currentProportions[0], currentProportions[1]), {name: 'arSameAsPicture'}));
+        
+        for (ar in quickAccessAspectRatios) {
+            radioButtonGroup.push(dlg.customControls.arGrp.add('radiobutton', undefined, quickAccessAspectRatios[ar][2]));
+        }
+        dlg.customControls.arGrp.otherGrp = dlg.customControls.arGrp.add('group', undefined, {name: 'otherGrp'});
+        radioButtonGroup.push(dlg.customControls.arGrp.otherGrp.add('radiobutton', undefined, 'Other', {name: 'otherARrb'}));
+        dlg.customControls.arGrp.otherGrp.arList = dlg.customControls.arGrp.otherGrp.add('dropdownlist', undefined, {name: 'arList'});
+        for (ar in supportedAspectRatios) {
+           dlg.customControls.arGrp.otherGrp.arList.add('item', supportedAspectRatios[ar][2]);
+        }
+        dlg.customControls.arGrp.otherGrp.arList.children[0].selected = true;
+    
+        dlg.customControls.arGrp.customGrp = dlg.customControls.arGrp.add('group', undefined, {name: 'customGrp'});
+        radioButtonGroup.push(dlg.customControls.arGrp.customGrp.add('radiobutton', undefined, 'Custom:', {name: 'customARrb'}));
+        dlg.customControls.arGrp.customGrp.add('edittext', undefined, '1', {name: 'customARnumerator'}).preferredSize = [40,-1];
+        dlg.customControls.arGrp.customGrp.add('statictext', undefined, '/');
+        dlg.customControls.arGrp.customGrp.add('edittext', undefined, '1', {name: 'customARdenominator'}).preferredSize = [40,-1];;
+
+        // BEGIN: Disable quick digit shortcuts while in textedit
+        dlg.customControls.arGrp.customGrp.customARnumerator.onActivate =
+        dlg.customControls.arGrp.customGrp.customARdenominator.onActivate = function() {
+            dlg.enableQuickKeyboardShortcuts = false;
+        }
+    //debugger;
+        dlg.dlg.ok.onActivate =
+        dlg.customControls.arGrp.customGrp.customARnumerator.onDeactivate =
+        dlg.customControls.arGrp.customGrp.customARdenominator.onDaactivate = function() {
+            dlg.enableQuickKeyboardShortcuts = true;
+            //alert('deact!');
+        }
+        // END: Disable quick digit shortcuts while in textedit
+         
+        // BEGIN: auto check 'other' on text changing        
+        dlg.customControls.arGrp.otherGrp.arList.onChange = function() {
+            dlg.customControls.arGrp.otherGrp.otherARrb.notify();
+        }
+        // END: auto check 'other' on text changing   
+        
+        // BEGIN: auto check 'custom' on text changing
+        dlg.customControls.arGrp.customGrp.customARnumerator.onChanging = 
+        dlg.customControls.arGrp.customGrp.customARdenominator.onChanging = function() {
+            dlg.customControls.arGrp.customGrp.customARrb.notify();
+        }
+        // END: auto check 'custom' on text changing
+        
+        // BEGIN: merge radiobuttons groups logic
+        radioButtonGroup[0].notify();
+        var maintainSingleRBCheckedHandler = function() {
+            if (!this.value) return; // event feedback safty
+            
+            for (rbIndex in radioButtonGroup) {
+                if (radioButtonGroup[rbIndex] != this) {
+                    radioButtonGroup[rbIndex].value = false; // should not fire the Click event
+                }
+            }
+        }
+        for (rbIndex in radioButtonGroup) {
+            radioButtonGroup[rbIndex].onClick = maintainSingleRBCheckedHandler;
+        }
+        // END: merge radiobuttons groups logic
+    }
+    
+    // Show dialog and store parameters if dialog was accepted
     var res = dlg.show();
     if (!res) return false;
+    
     this.conf.set('golden', res[0]);
     this.conf.set('roth', res[1]);
     this.conf.set('diagmethod', res[2]);
@@ -1720,29 +1825,55 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
     this.conf.set('gspiralTL', res[6]);
     this.conf.set('gspiralTR', res[7]);
     this.conf.set('gspiralBR', res[8]);
-    this.conf.set('lthick', Math.round(dlg.customControls.tSlider.value));
-
+    
+    // Read values of custom controls
+    this.conf.set('lthick', Math.round(dlg.customControls.thkGrp.tSlider.value));
+    
+    // Which aspect ratio has been selected?
+    // 0 -- current ratio
+    // 1, 2, ..., length of quickAccessAspectRatios
+    // quickAccessAspectRatios.length + 1 => other, check list
+    // quickAccessAspectRatios.length +2 => custom -- read values from user input
+    var aspectRatio = [0,0];
+    var quickAccessAspectRatios_length = quickAccessAspectRatios.length;
+    var iAspectRatioOption = (function(){for(i in radioButtonGroup) if (radioButtonGroup[i].value) return i;})();
+    if (iAspectRatioOption == 0) {
+        aspectRatio = [currentProportions[0], currentProportions[1]];
+    } else if (iAspectRatioOption <= quickAccessAspectRatios_length ) {
+        aspectRatio = [quickAccessAspectRatios[iAspectRatioOption-1][0],
+                             quickAccessAspectRatios[iAspectRatioOption-1][1]];
+    } else if (iAspectRatioOption == quickAccessAspectRatios_length+1 ) {
+        var iOtherAspectRatio = dlg.customControls.arGrp.otherGrp.arList.selection.index;
+        aspectRatio = [supportedAspectRatios[iOtherAspectRatio][0],
+                             supportedAspectRatios[iOtherAspectRatio][1]];
+    } else {
+        aspectRatio = [parseInt(dlg.customControls.arGrp.customGrp.customARnumerator.text) || 1,
+                             parseInt(dlg.customControls.arGrp.customGrp.customARdenominator.text) || 1];
+    }
+    aspectRatio = MathEx.reduceFraction(aspectRatio);
+    
+    this.conf.set('aratioAsImage', iAspectRatioOption == 0);
+    this.conf.set('aratioNumerator', aspectRatio[0]); // TODO: Check if config values could be asigned arrays [x, y]
+    this.conf.set('aratioDenominator', aspectRatio[1]); // and stored as appropriate ActionDescriptor
+    
+    alert(aspectRatio);
     // Save parameters; crop could be canceled, but the line remains, so save lines settings now
     this.conf.saveSettings();
     return true;
+}
+
+GoldenCrop.prototype.isImageHorizontal = function() {
+    /* Square is also considered horizontal */
+    return this.docW>=this.docH;
 }
 
 /*    
  * Logical heart of the script. Invoke each phase of script w/ or w/o suspending history.
  */
 GoldenCrop.prototype.go = function() {
-   var docW = this.docW = parseInt(this.doc.width.as("px"));
-   var docH = this.docH = parseInt(this.doc.height.as("px"));
+   var docW = this.docW = this.cropMaskW = parseInt(this.doc.width.as("px"));
+   var docH = this.docH = this.cropMaskH = parseInt(this.doc.height.as("px"));
 
-      
-   if ( confirm("Square?",1) ) {
-       if (docW > docH) {
-           docW = this.docW = docH;
-       } else {
-           docH = this.docH = docW;
-       }
-   }
-   
     // New action mechanizm
     // !== false   - indicates some method
     // x !== y <=> !(x === y) -- only the second form gives right value in CS2 and (CS3, CS4)
@@ -1763,6 +1894,32 @@ GoldenCrop.prototype.go = function() {
            }
         }
 
+        // BEGIN: custom crop mask aspect ratio
+        if ( !this.conf.get('aratioAsImage') ) { // if "image proportions" is checked -- do nothing
+            var ar = this.conf.get('aratioNumerator')/this.conf.get('aratioDenominator');
+            var newH, newW;
+            if(this.isImageHorizontal()) {
+                newH = ar*docW;
+                newW = docW;
+                if (newH > docH) {
+                    newW *= (docH/newH);
+                    newH = docH;
+                }
+                this.cropMaskW = newW;
+                this.cropMaskH = newH;
+            } else {
+                var newW = ar*docH;
+                var newH = docH;
+                if (newW > docW) {
+                    newH *= (docW/newW);
+                    newW = docW;
+                }
+            }
+            this.cropMaskW = newW;
+            this.cropMaskH = newH;
+        }
+        // END: custom crop mask aspect ratio
+        
         // TODO: When continuing this could be not consistent with actual state!
         // ^[\t ]+([^:]+)(...........) / this.guidelines.\1.create =
         this.guidelines.golden.create = this.conf.get('golden'); // history relict, to be integrated with config and dialog
@@ -1832,7 +1989,7 @@ GoldenCrop.prototype.go = function() {
                 eval('this.'+revealingFunction);
             }
         }
- 
+        this.doc.activeLayer = this.gCrop;
         if ( this.cropMethod ) {
             var cropFunction = cropFunctions[this.cropMethod];
             if ( this.ifSuspendHistory ) {
@@ -1842,7 +1999,7 @@ GoldenCrop.prototype.go = function() {
                 eval('this.'+cropFunction);
             }
         }
-        // save parameters one again (for shure)
+        // save parameters once again (for shure)
         this.conf.saveSettings();
     } else {
         // remove resize entry from history -- it does nothing
@@ -1855,7 +2012,7 @@ GoldenCrop.prototype.go = function() {
     }
 
     // TODO: is there a need to restore user parameters everytime? I think No (or only when [2] Crop mask was selected)
-    //       it is neccesary only if teh user canceled 'free transform' mode
+    //       it is neccesary only if the user canceled 'free transform' mode
     // this.restoreUserGCGroupSettings();
 }
 
@@ -1866,6 +2023,31 @@ function main() {
     gc.go();
 }
 
+// ---------------------------------------------------------------------
+function MathEx() {};
+
+MathEx.GCD = function(a, b) {
+    /* Computes and returns GCD(a, b). a, b has to be integers! */
+    var checkInteger = function( num ) {
+            if (num == parseInt(num)) return Math.abs(num);
+            throw new TypeError( num + "is not an Integer! Can't calculate GCD.");
+    };
+    a=checkInteger(a);
+    b=checkInteger(b);
+    
+    while (b != 0) {
+        var tmp = a;
+        a = b;
+        b = tmp%a;
+    }
+    return a;
+}
+
+MathEx.reduceFraction = function(a) {
+    /* Reduces a fraction of form a=[num, denom]. Returns [num, denom].*/
+    var gcd = MathEx.GCD(a[0], a[1]);
+    return [a[0]/gcd, a[1]/gcd];
+}
 // ---------------------------------------------------------------------
 // Between ===START: stdlib.js=== and ===END: stdlib.js===, there is my
 // modified (stripped and extended) version o xbytor's stdlib from xtools.
