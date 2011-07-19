@@ -1,11 +1,11 @@
 ﻿#target photoshop
 #strict on
 /**
-* @@@BUILDINFO@@@ Golden Crop.jsx 0.93 Tue Jul 19 2011 06:16:58 GMT+0200
+* @@@BUILDINFO@@@ Golden Crop.jsx 0.99 Tue Jul 19 2011 06:16:58 GMT+0200
 */
 
 /*****************************************
- * Golden crop script, v0.93 beta
+ * Golden crop script, v0.99 beta
  *
  * Copyright 2009-2010, Damian Sepczuk aka SzopeN <damian.sepczuk@o2.pl>
  *
@@ -178,6 +178,8 @@ localizator.prototype.initStrings = function() {
         str['arSameAsImage'] = {en:'Aspect Ratio as image', pl: 'Proporcje jak ma obrazek'};
         str['arNumerator'] = {en:'Aspect Ratio: numerator', pl: 'Proporcje: licznik'};
         str['arDenominator'] = {en:'Aspect Ratio: denominator', pl: 'Proporcje: mianownik'};
+        str['arNumerator_c'] = {en:'Aspect Ratio: numerator (custom)', pl: 'Proporcje: licznik (użytkownika)'};
+        str['arDenominator_c'] = {en:'Aspect Ratio: denominator (custom)', pl: 'Proporcje: mianownik (użytkownika)'};
         //str[''] = {en:'', pl: ''};
 }
 
@@ -886,7 +888,9 @@ GoldenCrop.prototype.loadConfig = function () {
                         lthick:{value:5, desc:'lineThickness'},
                         aratioAsImage: {value: true, desc:'arSameAsImage'},
                         aratioNumerator: {value: 0, desc:'arNumerator'},
-                        aratioDenominator: {value: 0, desc:'arDenominator'}
+                        aratioDenominator: {value: 0, desc:'arDenominator'},
+                        aratioNumerator_custom: {value: 123, desc:'arNumerator_c'},
+                        aratioDenominator_custom: {value: 189, desc:'arDenominator_c'}
                         /*{value:'', desc:''},*/
                         };
         this.conf = new configurator(paramsID, UUID);
@@ -1750,7 +1754,7 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
                                      [9, 16, '16/9: videographic, HD'],
                                      [10, 16, '16/10: 1.60 computer widescreen'],
                                      [16, 22, '16/22: video academy 1.37:1 aspect ratio'],
-                                     [100, 143, '/: 1.43 IMAX format'],
+                                     [100, 143, '1.43 IMAX format'],
                                      [9, 14, '9/14: 1.55... commercials format'],
                                      [3, 5, '15/9 = 5/3: Paramount Pictures ratio'],
                                      [37, 200, '1.85 US and UK widescreen theatrical, Universal Pictures'],
@@ -1796,16 +1800,18 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
 
                 dlg.customControls.arGrp.customGrp = dlg.customControls.arGrp.add('group', undefined, {name: 'customGrp'});
                 radioButtonGroup.push(dlg.customControls.arGrp.customGrp.add('radiobutton', undefined, 'Custom:', {name: 'customARrb'}));
-                dlg.customControls.arGrp.customGrp.add('edittext', undefined, '1', {name: 'customARnumerator'}).preferredSize = [40, -1];
+                dlg.customControls.arGrp.customGrp.add('edittext', undefined, this.conf.get('aratioNumerator_custom'), {name: 'customARnumerator'}).preferredSize = [40, -1];
                 dlg.customControls.arGrp.customGrp.add('statictext', undefined, '/');
-                dlg.customControls.arGrp.customGrp.add('edittext', undefined, '1', {name: 'customARdenominator'}).preferredSize = [40, -1];;
+                dlg.customControls.arGrp.customGrp.add('edittext', undefined, this.conf.get('aratioDenominator_custom'), {name: 'customARdenominator'}).preferredSize = [40, -1];;
 
                 // BEGIN: Disable quick digit shortcuts while in textedit
-                dlg.customControls.arGrp.customGrp.customARnumerator.onActivate = dlg.customControls.arGrp.customGrp.customARdenominator.onActivate = function () {
+                dlg.customControls.arGrp.customGrp.customARnumerator.onActivate =
+                dlg.customControls.arGrp.customGrp.customARdenominator.onActivate = function () {
                         dlg.enableQuickKeyboardShortcuts = false;
                 }
                 //debugger;
-                dlg.dlg.ok.onActivate = dlg.customControls.arGrp.customGrp.customARnumerator.onDeactivate = dlg.customControls.arGrp.customGrp.customARdenominator.onDaactivate = function () {
+                dlg.dlg.ok.onActivate = dlg.customControls.arGrp.customGrp.customARnumerator.onDeactivate =
+                dlg.customControls.arGrp.customGrp.customARdenominator.onDaactivate = function () {
                         dlg.enableQuickKeyboardShortcuts = true;
                 }
                 // END: Disable quick digit shortcuts while in textedit
@@ -1815,12 +1821,12 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
                 }
                 // END: auto check 'other' on text changing
                 // BEGIN: auto check 'custom' on text changing
-                dlg.customControls.arGrp.customGrp.customARnumerator.onChanging = dlg.customControls.arGrp.customGrp.customARdenominator.onChanging = function () {
+                dlg.customControls.arGrp.customGrp.customARnumerator.onChanging =
+                dlg.customControls.arGrp.customGrp.customARdenominator.onChanging = function () {
                         dlg.customControls.arGrp.customGrp.customARrb.notify();
                 }
                 // END: auto check 'custom' on text changing
                 // BEGIN: merge radiobuttons groups logic
-                radioButtonGroup[0].notify();
                 var maintainSingleRBCheckedHandler = function () {
                                 if (!this.value) return; // event feedback safty
                                 for (rbIndex in radioButtonGroup) {
@@ -1830,10 +1836,41 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
                                 }
                     }
 
-                for (rbIndex in radioButtonGroup) {
+                for (var rbIndex in radioButtonGroup) {
                         radioButtonGroup[rbIndex].onClick = maintainSingleRBCheckedHandler;
                 }
                 // END: merge radiobuttons groups logic
+                
+                // BEGIN: Select last used proportion (find suitable in list)
+                if (this.conf.get('aratioAsImage')) {
+                        radioButtonGroup[0].notify();
+                } else {
+                        var num = this.conf.get('aratioNumerator');
+                        var den = this.conf.get('aratioDenominator');
+                        (function(){
+                                var len = quickAccessAspectRatios.length;
+                                for( var i = 0; i < len; ++i ) {
+                                        if ( num == quickAccessAspectRatios[i][0] && den == quickAccessAspectRatios[i][1]) {
+                                                radioButtonGroup[i+1].notify();
+                                                return;
+                                        }
+                                }
+
+                                len = supportedAspectRatios.length;
+                                for( var i = 0; i < len; ++i ) {
+                                        if ( num == supportedAspectRatios[i][0] && den == supportedAspectRatios[i][1]) {
+                                                dlg.customControls.arGrp.otherGrp.otherARrb.notify();
+                                                dlg.customControls.arGrp.otherGrp.arList.children[i].selected = true;
+                                                return;
+                                        }
+                                }
+                        
+                                dlg.customControls.arGrp.customGrp.customARrb.notify();
+                                dlg.customControls.arGrp.customGrp.customARnumerator.text = num;
+                                dlg.customControls.arGrp.customGrp.customARdenominator.text = den;
+                        })();
+                }
+                // END: Select last used proportion (find suitable in list)
         }
 
         // Show dialog and store parameters if dialog was accepted
@@ -1875,12 +1912,16 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
         } else {
                 aspectRatio = [parseInt(dlg.customControls.arGrp.customGrp.customARnumerator.text) || 1,
                                parseInt(dlg.customControls.arGrp.customGrp.customARdenominator.text) || 1];
+                this.conf.set('aratioNumerator_custom', aspectRatio[0]); 
+                this.conf.set('aratioDenominator_custom', aspectRatio[1]); 
         }
-        aspectRatio = MathEx.reduceFraction(aspectRatio);
-
+        
+        // TODO: Check if config values could be asigned arrays [x, y]
+        // and stored as appropriate ActionDescriptor
+        
         this.conf.set('aratioAsImage', iAspectRatioOption == 0);
-        this.conf.set('aratioNumerator', aspectRatio[0]); // TODO: Check if config values could be asigned arrays [x, y]
-        this.conf.set('aratioDenominator', aspectRatio[1]); // and stored as appropriate ActionDescriptor
+        this.conf.set('aratioNumerator', aspectRatio[0]); 
+        this.conf.set('aratioDenominator', aspectRatio[1]); 
 
         // Save parameters; crop could be canceled, but the line remains, so save lines settings now
         this.conf.saveSettings();
