@@ -248,13 +248,7 @@ goldenSpiral = function(numOfTurns, offset, w, h, startX, startY) {
 			if ( dCD[0] < 0 ) pC[0] +=offset - (offset+dCD[0])*0.7;
 			if ( dDE[1] < 0 ) pD[1] +=offset - (offset+dDE[1])*0.7;
 			if ( dDE[0] < 0 ) pE[0] -=offset - (offset+dDE[0])*0.7;
-/*
-			if ( dAB[0] < 0 ) pA[0] = startPoint.anchor[0] += dAB[0]*1.1;
-			if ( dBC[1] < 0 ) pB[1] += dBC[1]*1.1;
-			if ( dCD[0] < 0 ) pC[0] -= dCD[0]*1.1;
-			if ( dDE[1] < 0 ) pD[1] -= dDE[1]*1.1;
-			if ( dDE[0] < 0 ) pE[0] += dDE[0]*1.1;
-*/
+
 			// recompute distances
 			dAB = [pB[0]-pA[0],pA[1]-pB[1]];
 			dBC = [pC[0]-pB[0],pC[1]-pB[1]];
