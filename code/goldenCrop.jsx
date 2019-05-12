@@ -30,7 +30,7 @@ var debug = true;
 // set to "en"   for English, 
 //        "pl"   for Polish
 //        "auto" to use Photoshop language
-var lang = "en";
+var lang = "auto";
 /************************
  *  END OF USER CONFIG  *
  ************************/
@@ -606,8 +606,8 @@ GoldenCrop.prototype.makeGrid = function(basicStripSize, maskOpacity, colors, st
  */
 GoldenCrop.prototype.freeTransform = function() {
     this.doc.activeLayer = this.gCrop;
-	this.doCrop = Stdlib.userGoToFreeTransform();
-	return;
+    this.doCrop = Stdlib.userGoToFreeTransform();
+    return;
 }
 
 /*
@@ -710,11 +710,11 @@ GoldenCrop.prototype.doRevealPopBackround = function() {
  */
 GoldenCrop.prototype.chooseOutsideCropAction = function() {
     var cb = this.cropBounds = Stdlib.getVectorMaskBounds_cornerPointsOnly(true, this.doc, this.outerFrame);
-	/*cb[0] = parseInt(cb[0]);
-	cb[1] = parseInt(cb[1]);
-	cb[2] = parseInt(cb[2]);
-	cb[3] = parseInt(cb[3]);
-	debugger;*/
+    /*cb[0] = parseInt(cb[0]);
+    cb[1] = parseInt(cb[1]);
+    cb[2] = parseInt(cb[2]);
+    cb[3] = parseInt(cb[3]);
+    debugger;*/
     var docW = parseInt(this.doc.width.as("px")),
         docH = parseInt(this.doc.height.as("px"));
     if ( cb[0] >= 0 && cb[1] >= 0 && cb[2] <= docW && cb[3] <= docH ) {
@@ -1128,49 +1128,49 @@ Stdlib.linePath = function( mode, unit, width, x1, y1, x2, y2 ) {
 }
 // by SzopeN
 Stdlib.userGoToFreeTransform = function() {
-	function preMove() {
-		var desc = new ActionDescriptor();
-		var lref = new ActionReference();
-		lref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
-		desc.putReference(cTID("null"), lref);
-		desc.putEnumerated(cTID("FTcs"), cTID("QCSt"), cTID("Qcsa"));
-			 var desc75 = new ActionDescriptor();
-			 desc75.putUnitDouble( cTID('Hrzn'), cTID('#Pxl'), 1.000000 );
-			 desc75.putUnitDouble( cTID('Vrtc'), cTID('#Pxl'), 1.000000 );
-		desc.putObject( cTID('Ofst'), cTID('Ofst'), desc75 );
-		executeAction(cTID("Trnf"), desc, DialogModes.NO);
-	}
-	function retPostMoveDesc() {
-		var desc = new ActionDescriptor();
-		var lref = new ActionReference();
-		lref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
-		desc.putReference(cTID("null"), lref);
-		desc.putEnumerated(cTID("FTcs"), cTID("QCSt"), cTID("Qcsa"));
-			 var desc75 = new ActionDescriptor();
-			 desc75.putUnitDouble( cTID('Hrzn'), cTID('#Pxl'), -1.000000 );
-			 desc75.putUnitDouble( cTID('Vrtc'), cTID('#Pxl'), -1.000000 );
-		desc.putObject( cTID('Ofst'), cTID('Ofst'), desc75 );
-		return desc;
-	}
-	var state = true;
-	preMove();
+        function preMove() {
+            var desc = new ActionDescriptor();
+            var lref = new ActionReference();
+            lref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
+            desc.putReference(cTID("null"), lref);
+            desc.putEnumerated(cTID("FTcs"), cTID("QCSt"), cTID("Qcsa"));
+                 var desc75 = new ActionDescriptor();
+                 desc75.putUnitDouble( cTID('Hrzn'), cTID('#Pxl'), 1.000000 );
+                 desc75.putUnitDouble( cTID('Vrtc'), cTID('#Pxl'), 1.000000 );
+            desc.putObject( cTID('Ofst'), cTID('Ofst'), desc75 );
+            executeAction(cTID("Trnf"), desc, DialogModes.NO);
+        }
+        function retPostMoveDesc() {
+            var desc = new ActionDescriptor();
+            var lref = new ActionReference();
+            lref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
+            desc.putReference(cTID("null"), lref);
+            desc.putEnumerated(cTID("FTcs"), cTID("QCSt"), cTID("Qcsa"));
+                 var desc75 = new ActionDescriptor();
+                 desc75.putUnitDouble( cTID('Hrzn'), cTID('#Pxl'), -1.000000 );
+                 desc75.putUnitDouble( cTID('Vrtc'), cTID('#Pxl'), -1.000000 );
+            desc.putObject( cTID('Ofst'), cTID('Ofst'), desc75 );
+            return desc;
+        }
+        var state = true;
+        preMove();
 
-	var lvl = $.level;
-    $.level = 0;
-    try {
-      executeAction(cTID("Trnf"), retPostMoveDesc(), DialogModes.ALL);///ALL
-    } catch (e) {
-	  state = false;
-	  // $.writeln('' + new Date() + '-------> ' + $.level);
-      if (e.number != 8007) { // if not "User cancelled"
-        throw e;
-      }
-      executeAction(cTID("Trnf"), retPostMoveDesc(), DialogModes.NO);
-    } finally {
-      $.level = lvl;
-	}
-	
-	return state;
+        var lvl = $.level;
+        $.level = 0;
+        try {
+          executeAction(cTID("Trnf"), retPostMoveDesc(), DialogModes.ALL);///ALL
+        } catch (e) {
+          state = false;
+          // $.writeln('' + new Date() + '-------> ' + $.level);
+          if (e.number != 8007) { // if not "User cancelled"
+            throw e;
+          }
+          executeAction(cTID("Trnf"), retPostMoveDesc(), DialogModes.NO);
+        } finally {
+          $.level = lvl;
+        }
+    
+    return state;
 }
 
 // by SzopeN
