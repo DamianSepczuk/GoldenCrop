@@ -1747,7 +1747,7 @@ GoldenCrop.prototype.showGuidelinesDialog = function () {
         var quickAccessAspectRatios = [[2, 3, '2/3: 4x6, 10x15, 20x30, 25x38, 30x45, 1.50, VistaVision'],
                                        [5, 7, '5/7: 5x7 (pro), 9x13, 13x18, 15x21, 18x25'],
                                        [11, 14, '11/14: 10x8, 11x14, 20x25'],
-                                       [1, 1, '1/1: square middle format camera'],
+                                       [1, 1, '1/1: square medium format camera'],
                                       ];
         var supportedAspectRatios = [[3, 4, '3/4: 30x40, videographic'],
                                      [6, 7, '6/7: 6x8 middle format camera'],
