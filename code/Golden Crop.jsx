@@ -361,7 +361,7 @@ dialogMenu.prototype.show = function () {
                         });
 
                         // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
-                        if (key != 'esc' && isCS5()) e.shortcutKey = '~';
+                        if (key != 'esc' && isCS5plus()) e.shortcutKey = '~';
 
                         if (btnName == 'ok' || !! elements[i].def) {
                                 defaultElement = e;
@@ -373,7 +373,7 @@ dialogMenu.prototype.show = function () {
                         }
                         elements[i].obj = e;
                 }
-                if (isCS5()) {
+                if (isCS5plus()) {
                         defaultElement.active = true; // def element isn't focused in CS5
                         var f = function (e) {
                                         for (var i = 0; i < elements.length; ++i) {
@@ -483,7 +483,7 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
                                                 name: cbName
                                         });
                                         // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
-                                        if (isCS5()) e.shortcutKey = '~';
+                                        if (isCS5plus()) e.shortcutKey = '~';
                                         e.value = !! cbElements[i].sel;
                                         cbElements[i].obj = e;
                                 }
@@ -511,7 +511,7 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
                                         var e = add('button', undefined, caption /*+ _repeatString(' ', (maxCaptionLen-capLen)*1.4)*/ , {
                                                 name: btnName
                                         });
-                                        if (isCS5()) e.shortcutKey = '~'; // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
+                                        if (isCS5plus()) e.shortcutKey = '~'; // CS5: use some dummy key to preserve underlined shotrcut letters AND prevent firing default shortcut action
                                         e.elements = msElements[i].elements;
                                         e.action = msElements[i].action;
                                         e.onClick = function () {
@@ -555,7 +555,7 @@ dialogMenuMChoice.prototype.construct = function (hasCustomControl) {
                 dlg.cancelElement = cancelBtn;
                 var allElements = cbElements.concat(msElements);
                 var self = this;
-                if (isCS5()) {
+                if (isCS5plus()) {
                         okBtn.active = true; // def element isn't focused in CS5
                         var f = function (e) {
                                         if (!self.enableQuickKeyboardShortcuts) return;
