@@ -2148,9 +2148,18 @@ try {
    delete lvl;
 }
 
-isCS5plus = function()  { return isCS5() };
-isCS4plus = function()  { return isCS4() || isCS5plus() };
-isSC3plus = function()  { return isCS3() || isCS4plus() };
+isCS5plus = function()  { return isCS5() || isPSVerAbove(12); };
+isCS4plus = function()  { return isCS4() || isCS5plus(); };
+isSC3plus = function()  { return isCS3() || isCS4plus(); };
+isPSVerAbove = function(v) { return parseInt(psVersion.substr(0, psVersion.indexOf('.'))) > v;}
+
+isCC2018 = function()  { return psVersion.match(/^19\./) != null; };
+isUnk_6 = function()  { return psVersion.match(/^18\./) != null; };
+isUnk_5 = function()  { return psVersion.match(/^17\./) != null; };
+isUnk_4 = function()  { return psVersion.match(/^16\./) != null; };
+isUnk_3 = function()  { return psVersion.match(/^15\./) != null; };
+isUnk_2 = function()  { return psVersion.match(/^14\./) != null; };
+isUnk_1 = function()  { return psVersion.match(/^13\./) != null; };
 isCS5 = function()  { return psVersion.match(/^12\./) != null; };
 isCS4 = function()  { return psVersion.match(/^11\./) != null; };
 isCS3 = function()  { return psVersion.match(/^10\./) != null; };
