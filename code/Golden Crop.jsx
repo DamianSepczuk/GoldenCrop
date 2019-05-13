@@ -1673,11 +1673,12 @@ GoldenCrop.prototype.findCropToResume = function () {
                                         cropMask: [this.cropMask.visible, Math.min(this.cropMask.opacity, 100)]
                                 }
                                 if (this.gCropDivRules) this.userSettings.divRUles = [this.gCropDivRules.visible, Math.min(this.gCropDivRules.opacity, 100)];
-                                this.gCrop.opacity = 100;
-                                this.gCrop.visible = true;
 
-                                this.cropMask.opacity = 70;
+                                this.gCrop.visible = true;
+                                this.gCrop.opacity = 100;
+
                                 this.cropMask.visible = true;
+                                this.cropMask.opacity = 70;
 
                                 if (this.gCropDivRules && this.gCropDivRules.layers.length) {
                                         this.gCropDivRules.visible = true;
