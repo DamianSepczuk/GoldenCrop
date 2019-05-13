@@ -1358,11 +1358,11 @@ GoldenCrop.prototype.chooseCropMethod = function () {
                 question: this.loc.get('chCropMethodQ'),
                 elements: [{
                         key: '1',
-                        text: this.loc.get('cropCanvas'),
-                        def: true
+                        text: this.loc.get('cropCanvas')
                 }, {
                         key: '2',
-                        text: this.loc.get('mkCropMask')
+                        text: this.loc.get('mkCropMask'),
+                        def: true
                 }, {
                         key: 'Esc',
                         text: this.loc.get('cancel')
